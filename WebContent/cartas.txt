@@ -1,0 +1,47 @@
+//Ideias de cartas
+
+-------- Herois --------
+
+Troy, o Regicida
+Épica
+Dark
+Rank 3
+HP 13 / Mana 6
+Str 6 / Mgc 3
+Def 2 / Res 2
+Matador de reis: Quando ataca, esta carta ganha Str igual ao Rank do alvo.
+
+Mephisto, o Soberano
+Lendária
+Dark
+Rank 5
+HP  15 / Mana 25
+Str 4 / Mgc 13
+Def 1 / Res 4
+... : ...
+
+-------- Magias --------
+Oxidação
+Rara
+Water
+Mana 3
+Pode atacar
+CD 6
+Destrua uma arma equipada a um herói inimigo.
+
+Calor excessivo
+Comum
+Fire
+Mana 2
+Pode atacar
+CD 5
+Destrua um equipamento equipado a um herói inimigo.
+
+Bola de fogo
+Rara
+Fire
+Mana 3
+Não pode atacar
+CD 4
+Causa 2 + Mgc do usuário de dano mágico a um herói inimigo
+

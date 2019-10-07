@@ -9,10 +9,12 @@
 </head>
 <body>
 
-	<img src="img/ayra.png" id="hero-left">	
-	<img src="img/robin.png" id="hero-right">
-	
-	<div id="centro"></div>
+	<div id="fundo1">
+		<img src="img/ayra.png" id="hero-left"> 
+		<img src="img/robin.png" id="hero-right">
+
+		<div id="centro"></div>
+	</div>
 
 </body>
 </html>

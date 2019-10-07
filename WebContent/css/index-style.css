@@ -4,8 +4,16 @@
 	margin: 0px;
 	padding: 0px;
 }
+
 body{
 	background: url(../img/bg-index.jpg) no-repeat;
+}
+
+#fundo1{
+	position:absolute;
+	width:100%;
+	height:100%;
+	/*background-color: rgba(85,210,235,0.5);*/
 }
 
 @keyframes invoca {
@@ -22,7 +30,7 @@ body{
 	animation-name: invoca;
 	animation-duration: 3s;
 	animation-fill-mode: backwards;
-	z-index: -1;
+	z-index: 5;
 }
 
 #hero-right{
@@ -35,12 +43,12 @@ body{
 	animation-duration: 3s;
 	animation-delay: 1s;
 	animation-fill-mode: backwards;
-	z-index: -1;
+	z-index: 5;
 }
 
 @keyframes brilhoca{
 	0% {opacity: 0; filter: brightness(200%);}
-	50% {opacity: 1;}
+	66% {opacity: 1;}
 	100% {filter: brightness(100%);}
 }
 
@@ -50,9 +58,9 @@ body{
 	background-color:rgba(177,177,177,0.75);
 	margin-left:35%;
 	margin-top:50px;
-	z-index: 2;
+	z-index: 10;
 	animation-name: brilhoca;
-	animation-duration: 2s;
+	animation-duration: 3s;
 	animation-delay: 2s;
 	animation-fill-mode: backwards;
 }
