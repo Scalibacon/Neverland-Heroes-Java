@@ -26,7 +26,7 @@ Rara
 Water
 Mana 3
 Pode atacar
-CD 6
+CD 5
 Destrua uma arma equipada a um herói inimigo.
 
 Calor excessivo
@@ -34,7 +34,7 @@ Comum
 Fire
 Mana 2
 Pode atacar
-CD 5
+CD 4
 Destrua um equipamento equipado a um herói inimigo.
 
 Bola de fogo
@@ -42,6 +42,6 @@ Rara
 Fire
 Mana 3
 Não pode atacar
-CD 4
+CD 2
 Causa 2 + Mgc do usuário de dano mágico a um herói inimigo
 
