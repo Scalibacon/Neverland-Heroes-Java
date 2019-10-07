@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+*{
+	margin: 0px;
+	padding: 0px;
+}
+body{
+	background: url(../img/bg-index.jpg) no-repeat;
+}
+
+@keyframes invoca {
+	from {opacity: 0;}
+	to {opacity: 1;}
+}
+
+#hero-left{
+	width: 400px;
+	position: absolute;
+	left: 0px;
+	bottom: 25px;
+	opacity: 1;
+	animation-name: invoca;
+	animation-duration: 3s;
+	animation-fill-mode: backwards;
+	z-index: -1;
+}
+
+#hero-right{
+	width: 400px;
+	position: absolute;
+	right: 25px;
+	bottom: 0px;
+	opacity: 1;
+	animation-name: invoca;
+	animation-duration: 3s;
+	animation-delay: 1s;
+	animation-fill-mode: backwards;
+	z-index: -1;
+}
+
+@keyframes brilhoca{
+	0% {opacity: 0; filter: brightness(200%);}
+	50% {opacity: 1;}
+	100% {filter: brightness(100%);}
+}
+
+#centro{
+	width:33%;
+	height:350px;
+	background-color:rgba(177,177,177,0.75);
+	margin-left:35%;
+	margin-top:50px;
+	z-index: 2;
+	animation-name: brilhoca;
+	animation-duration: 2s;
+	animation-delay: 2s;
+	animation-fill-mode: backwards;
+}
