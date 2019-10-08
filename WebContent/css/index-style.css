@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Staatliches&display=swap');
 
 *{
 	margin: 0px;
@@ -24,7 +25,7 @@ body{
 }
 
 #hero-left{
-	width: 400px;
+	width: 30%;
 	position: absolute;
 	left: 0px;
 	bottom: 25px;
@@ -36,7 +37,7 @@ body{
 }
 
 #hero-right{
-	width: 400px;
+	width: 30%;
 	position: absolute;
 	right: 25px;
 	bottom: 0px;
@@ -55,11 +56,11 @@ body{
 }
 
 #centro{
-	width:30%;
+	width:410px;
 	height:auto;
-	background-color:rgba(177,177,177,0.75);
+	/*background-color:rgba(177,177,177,0.75);*/
 	margin-left:35%;
-	margin-top:50px;
+	margin-top:5px;
 	z-index: 10;
 	position:relative;
 	/*animation-name: brilhoca;*/
@@ -68,35 +69,67 @@ body{
 	animation-fill-mode: backwards;
 }
 
+#logo1{
+	width:100%;
+	position:relative;	
+}
+
+#cont-form{
+	/*background-color:snow;*/
+	height:250px;
+	border:solid 4px rgba(83,113,255,1);
+}
 
 #form-top{
 	width:100%;
 	height:50px;
-	background-color:rgba(85,245,221,1);
+	background-color:rgba(85,245,221,0.75);
+	position:relative;
 }
 
 .form-top-aba{
-	width:50%;
-	height:300px;
+	width:200px;
+	height:50px;
 	line-height:50px;
 	text-align:center;
 	float:left;
 	cursor:pointer;
+	/*font-family:'Staatliches', cursive;*/
+	font-family: 'Fredericka the Great', cursive;
+	font-weight:600;
+	font-size:120%;
+}
+
+#aba-index{
+	width:170px;
+	border-bottom:solid 3px blue;
+	position:absolute;
+	left:15px;
+	top:50px;
+	z-index:11;
+	transition: left 0.3s, right 0.3s; 
+}
+
+#cont-form-pages{
+	position:relative;
+	width:100%;
+	height:200px;
 }
 
 .form{
 	width:100%;
-	height:300px;
+	height:200px;
 	float:left;
 	position:absolute;
-	left:0%;	
+	background-color:rgba(240,255,255,0.75);
+	left:0;	
 }
 
 #form-login{
-	background-color: green;
+	
 }
 
 #form-registro{
-	background-color: red;
+	height:250px;
 	display:none;
 }

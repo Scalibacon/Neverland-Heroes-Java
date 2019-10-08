@@ -15,13 +15,19 @@
 		<img src="img/robin.png" id="hero-right">
 
 		<div id="centro">
-			<div id="form-top">
-				<div class="form-top-aba" id="aba1" onclick='trocaForm("#aba1", "#form-login")'>Login</div>
-				<div class="form-top-aba" id="aba2" onclick='trocaForm("#aba2", "#form-registro")'>Registrar</div>
-			</div>
-			<div class="form" id="form-login">			
-			</div>
-			<div class="form" id="form-registro">			
+			<img src="img/logo1.png" id="logo1">
+			<div id="cont-form">
+				<div id="form-top">
+					<div class="form-top-aba" id="aba1" onclick='trocaForm("#aba1", "#form-login")'>Login</div>
+					<div class="form-top-aba" id="aba2" onclick='trocaForm("#aba2", "#form-registro")'>Registrar</div>
+					<div id="aba-index"></div>
+				</div>
+				<div id="cont-form-pages">
+				<div class="form" id="form-registro">							
+					</div>
+					<div class="form" id="form-login">			
+					</div>					
+				</div>
 			</div>
 		</div>
 	</div>
