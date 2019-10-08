@@ -8,6 +8,6 @@ function trocaForm(clicado, form){
 		$("#cont-form").css({height:"250px"});
 	}else{
 		$("#aba-index").css({left:215});
-		$("#cont-form").css({height:"300px"});
+		$("#cont-form").css({height:"350px"});
 	}
 }

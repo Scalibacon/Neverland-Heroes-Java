@@ -23,9 +23,29 @@
 					<div id="aba-index"></div>
 				</div>
 				<div id="cont-form-pages">
-				<div class="form" id="form-registro">							
+					<div class="form" id="form-registro">	
+						<form action="" method="post">
+							<div class="form-linha">
+								Usuário
+								<br><input type="text" class="form-input" name="usuario" placeholder="Crie um nome de usuário ..."/>
+								<div class="form-belezinha"></div>
+							</div>
+						</form>						
 					</div>
-					<div class="form" id="form-login">			
+					<div class="form" id="form-login">	
+						<form action="" method="post">
+							<div class="form-linha">
+								Usuário
+								<br><input type="text" class="form-input" name="usuario" placeholder="Insira seu nome de usuário..."/>
+							</div>
+							<div class="form-linha">
+								Senha <a href="" id="form-forgot-pass">Esqueceu sua senha?</a>
+								<br><input type="password" class="form-input" name="senha" placeholder="Insira sua senha..."/>								
+							</div>
+							<div class="form-linha">
+								<input class="form-button" type="submit" value="Logar"/>
+							</div>
+						</form>		
 					</div>					
 				</div>
 			</div>
