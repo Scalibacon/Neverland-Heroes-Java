@@ -10,7 +10,17 @@
 <title>Bem-vindo ao CardGame</title>
 </head>
 <body>
-
+	<%
+		String dialog = (String) session.getAttribute("dialog");
+		if(dialog != null && dialog.equals("deu_ruim")){
+	%>
+		<script>
+			alert("teste se deu ruim");
+		</script>
+	<%	
+			session.removeAttribute("dialog");
+		}
+	%>
 	<div id="fundo1">
 		<img src="img/ayra.png" id="hero-left"> 
 		<img src="img/robin.png" id="hero-right">
