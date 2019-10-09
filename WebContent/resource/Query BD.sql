@@ -52,7 +52,6 @@ id int not null,
 afinidade int not null,
 custo int not null,
 tempo_recarga int not null,
-permite_atacar boolean not null,
 foreign key (id) references carta(id),
 primary key (id)
 )
@@ -62,12 +61,13 @@ id int not null,
 rank_ int not null,
 afinidade int not null,
 hp int not null,
-energia int not null,
+mana int not null,
 ataque int not null,
-poder_magico int not null,
+poder int not null,
+defesa int not null,
 resistencia int not null,
-agilidade int not null,
-precisao int not null,
+pericia int not null,
+ganho_pericia int,
 foreign key (id) references carta(id),
 primary key (id)
 )
@@ -82,13 +82,14 @@ foreign key (id_material) references carta(id)
 )
 
 create table jogador(
-id int not null,
+id int identity(1,1) not null,
 usuario varchar(100) not null,
 senha varchar(max) not null,
 email varchar(max) not null,
 nivel int not null,
 experiencia int not null,
 dinheiro int not null,
+tipo int not null,
 primary key (id)
 )
 
@@ -155,6 +156,15 @@ foreign key (id_oponente) references oponente(id),
 foreign key (id_drop) references carta(id)
 )
 
+INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro)
+	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,200)
+
+-- Retorna jogador baseado no usuario/senha --
+SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
+WHERE j.usuario = 'usuario' and j.senha = 'senha'
+
+-- Retorna tipo jogador --
+SELECT count(id_jogador) FROM 
 
 -- Retorna a coleção do jogador --
 SELECT c.id, c.nome FROM carta c
