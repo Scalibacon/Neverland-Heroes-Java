@@ -4,4 +4,5 @@ import model.Jogador;
 
 public interface JogadorDAO {
 	Jogador buscaJogadorLogin(String usuario, String senha);
+	boolean cadastrarJogador(Jogador jogador);
 }

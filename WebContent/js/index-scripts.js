@@ -25,35 +25,72 @@ function trocaForm(clicado, form) {
 	}
 }
 
-function loginSubmit(){
+function loginSubmit() {
 	var usuario = $("#usuario-login").val();
 	var senha = $("#senha-login").val();
 	if (usuario == "" || senha == "") {
-		Swal.fire({
-			type : 'error',
-			title : 'Oops...',
-			text : 'Não é possível logar se não preencher os campos adequadamente :(',
-			footer : 'Preenche lá e bora jogar <3'
-		});
-	}else{
+		Swal
+				.fire({
+					type : 'error',
+					title : 'Oops...',
+					text : 'Não é possível logar se não preencher os campos adequadamente :(',
+					footer : 'Preenche lá e bora jogar <3'
+				});
+	} else {
 		$("#form-login").submit();
 	}
 }
 
-function registroSubmit(){
+function registroSubmit() {
 	var usuario = $("#usuario-registro").val();
 	var senha = $("#senha-registro").val();
 	var email = $("#email-registro").val();
 	
 	if (usuario == "" || senha == "" || email == "") {
 		Swal.fire({
+					type : 'error',
+					title : 'Oops...',
+					text : 'Não é possível se registrar se não preencher os campos adequadamente :(',
+					footer : 'Preenche lá e bora começar sua jornada <3'
+				});
+		// if usuarioDisponivel() && emailDisponivel()
+	} else if (!document.getElementById('termos-registro').checked) {
+		Swal.fire({
 			type : 'error',
 			title : 'Oops...',
-			text : 'Não é possível se registrar se não preencher os campos adequadamente :(',
-			footer : 'Preenche lá e bora começar sua jornada <3'
+			text : 'Pra se registrar precisamos que aceite nossos termos de uso ^^',
+			footer : 'Dê uma lida (ou não) e marque a caixinha :)'
 		});
-	//if usuarioDisponivel() && emailDisponivel()
-	}else{
+	} else {
 		$("#form-registro").submit();
 	}
+}
+
+function chamaErroAutenticacao(titulo, texto) {
+	Swal.fire({
+		type : 'error',
+		title : titulo,
+		text : texto,
+		footer : 'Verifique se digitou tudo certinho e tente novamente'
+	});
+}
+
+$(document).ready(function() {
+	criaKeyupsForms();
+});
+
+function criaKeyupsForms() {
+	var input_login_senha = document.getElementById("senha-login");
+	input_login_senha.addEventListener("keyup", function(event) {
+		if (event.keyCode === 13) {
+			document.getElementById("submit-login").click();
+		}
+	});
+
+	var input_registro_senha = document.getElementById("senha-registro");
+	input_registro_senha.addEventListener("keyup", function(event) {
+		if (event.keyCode === 13) {
+			document.getElementById("submit-registro").click();
+		}
+	});
 }

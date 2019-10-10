@@ -83,7 +83,7 @@ foreign key (id_material) references carta(id)
 
 create table jogador(
 id int identity(1,1) not null,
-usuario varchar(100) not null,
+usuario varchar(100) not null unique,
 senha varchar(max) not null,
 email varchar(max) not null,
 nivel int not null,
@@ -156,12 +156,25 @@ foreign key (id_oponente) references oponente(id),
 foreign key (id_drop) references carta(id)
 )
 
-INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro)
-	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,200)
+create table novidade(
+id int identity(1,1) not null,
+titulo varchar(max) not null,
+texto varchar(max),
+id_autor int not null,
+data_postagem datetime not null,
+primary key (id),
+foreign key (id_autor) references jogador(id)
+)
 
+INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo)
+	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,200,2)
+
+
+DELETE FROM jogador WHERE usuario = 'Tethys'
+SELECT * FROM jogador
 -- Retorna jogador baseado no usuario/senha --
 SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
-WHERE j.usuario = 'usuario' and j.senha = 'senha'
+WHERE j.usuario = 'Scalibacon' and j.senha = 'senha'
 
 -- Retorna tipo jogador --
 SELECT count(id_jogador) FROM 

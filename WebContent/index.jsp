@@ -10,19 +10,29 @@
 <title>Bem-vindo ao CardGame</title>
 </head>
 <body>
+	<!-- Depois verificar se a sessão tá ativa -->
 	<%
 		String dialog = (String) session.getAttribute("dialog");
-		if(dialog != null && dialog.equals("deu_ruim")){
+		if(dialog != null){
+			if(dialog.equals("nao_logou")){
 	%>
 		<script>
-			alert("teste se deu ruim");
+			chamaErroAutenticacao("Usuário ou Senha incorreto", "Não encontramos esses dados em nosso sistema :(");
 		</script>
-	<%	
+	<%					
+			} else if(dialog.equals("nao_registrou")){
+	%>
+		<script>
+			chamaErroAutenticacao("Erro ao Cadastrar", "Não foi possível te cadastrar com esses dados :(");
+		</script>
+	<%			
+			}
 			session.removeAttribute("dialog");
 		}
 	%>
 	<div id="fundo1">
-		<img src="img/ayra.png" id="hero-left"> 
+		
+		<img src="img/ayra.png" id="hero-left"> 		
 		<img src="img/robin.png" id="hero-right">
 
 		<div id="centro">
@@ -35,7 +45,7 @@
 				</div>
 				<div id="cont-form-pages">
 					<div class="form" id="form-page-registro">	
-						<form action="" method="post" id="form-registro">
+						<form action="registerServlet" method="post" id="form-registro">
 							<div class="form-linha">
 								<div class="form-belezinha"></div>
 								Usuário

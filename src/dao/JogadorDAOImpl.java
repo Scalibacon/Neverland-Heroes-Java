@@ -37,4 +37,23 @@ public class JogadorDAOImpl implements JogadorDAO {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean cadastrarJogador(Jogador jogador) {
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			String sql = "INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo) "
+					+ "VALUES(?,?,?,1,0,200,0)";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setString(1, jogador.getUsuario());
+			stm.setString(2, Md5.getMd5(jogador.getSenha()));
+			stm.setString(3, jogador.getEmail());
+			if(stm.executeUpdate() == 1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return false;
+	}
 }

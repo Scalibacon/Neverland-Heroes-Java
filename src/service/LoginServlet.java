@@ -37,11 +37,11 @@ public class LoginServlet extends HttpServlet {
 			out.println("<p style='color:red;'>Testando o redirect em 3s :)</p>");
 			out.println("</body>");
 			out.println("</html>");
-		} else /* ... até aqui */ {
+		} else { /* ... até aqui */
 			JogadorDAO jDao = new JogadorDAOImpl();
 			Jogador jogador = jDao.buscaJogadorLogin(usuario, senha);
 			if (jogador == null) {
-				session.setAttribute("dialog", "deu_ruim");
+				session.setAttribute("dialog", "nao_logou");
 				response.sendRedirect("index.jsp");
 			} else {
 				session.setAttribute("id", jogador.getId());
@@ -50,6 +50,11 @@ public class LoginServlet extends HttpServlet {
 				response.sendRedirect("novidades.jsp");
 			}
 		}
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		doPost(request, response);
 	}
 
 }
