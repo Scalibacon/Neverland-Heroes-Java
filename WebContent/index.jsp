@@ -11,25 +11,7 @@
 </head>
 <body>
 	<!-- Depois verificar se a sessão tá ativa -->
-	<%
-		String dialog = (String) session.getAttribute("dialog");
-		if(dialog != null){
-			if(dialog.equals("nao_logou")){
-	%>
-		<script>
-			chamaErroAutenticacao("Usuário ou Senha incorreto", "Não encontramos esses dados em nosso sistema :(");
-		</script>
-	<%					
-			} else if(dialog.equals("nao_registrou")){
-	%>
-		<script>
-			chamaErroAutenticacao("Erro ao Cadastrar", "Não foi possível te cadastrar com esses dados :(");
-		</script>
-	<%			
-			}
-			session.removeAttribute("dialog");
-		}
-	%>
+	<jsp:include page="index_alerts.jsp" />
 	<div id="fundo1">
 		
 		<img src="img/ayra.png" id="hero-left"> 		

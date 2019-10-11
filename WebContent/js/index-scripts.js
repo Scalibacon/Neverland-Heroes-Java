@@ -66,12 +66,12 @@ function registroSubmit() {
 	}
 }
 
-function chamaErroAutenticacao(titulo, texto) {
+function chamaErroAutenticacao(titulo, texto, footer) {
 	Swal.fire({
 		type : 'error',
 		title : titulo,
 		text : texto,
-		footer : 'Verifique se digitou tudo certinho e tente novamente'
+		footer : footer
 	});
 }
 

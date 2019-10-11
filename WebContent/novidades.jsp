@@ -8,6 +8,7 @@
 <title>Bem-vindo ao Neverland Heroes</title>
 </head>
 <body>
-	<jsp:include page="header.jsp" /> 
+	<jsp:include page="header.jsp" />	
+	
 </body>
 </html>
