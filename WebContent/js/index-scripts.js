@@ -1,4 +1,4 @@
-//sweetalert2.github.io
+document.write("<script type='text/javascript' src='js/sweetalert2.all.min.js'></script>");
 function trocaForm(clicado, form) {
 
 	$(".form").css({

@@ -3,8 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="js/sweetalert2.all.min.js"></script>
+<script type='text/javascript' src='js/jquery-3.4.1.min.js'></script>
 <script type="text/javascript" src="js/index-scripts.js"></script>
 <link rel="stylesheet" type="text/css" href="css/index-style.css">
 <title>Bem-vindo ao CardGame</title>

@@ -1,9 +1,16 @@
 @charset "UTF-8";
 
-@import
-	url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Roboto|Staatliches&display=swap')
-	;
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Roboto|Staatliches&display=swap');
 
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
+a{
+	text-decoration:none;
+	color:white;
+}
 #header {
 	position: relative;
 	width: 100%;
@@ -12,8 +19,8 @@
 }
 
 #header-logo {
-	float: left;
-	margin-left: 10px;
+	position:absolute;
+	left:10px;
 	width: 75px;
 	margin-right: 50px;
 }
@@ -67,6 +74,10 @@
 
 #perfil-logout{
 	color:rgba(220,116,132,1);
+}
+
+#header-adm{
+	color:rgba(207,181,59,1);
 }
 
 #header-btnjogar {

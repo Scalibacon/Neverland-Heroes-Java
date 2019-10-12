@@ -1,0 +1,83 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Roboto|Staatliches&display=swap');
+
+body{
+	background: url(../img/bg2.jpg) no-repeat;
+	background-size: 100%;
+}
+
+#big-container{
+	position:relative;
+	margin-top:20px;
+	width:90%;
+	height:570px;
+	margin-left:5%;
+	box-sizing: border-box;
+	background-color:rgba(240,255,255,0.75);
+	box-shadow: 2px 2px 3px rgba(121,121,121,0.66);
+	border:solid 2px rgba(0,149,255,1);
+}
+
+.bem-na-dividida{
+	position:relative;
+	width:50%;
+	height:100%;
+	box-sizing: border-box;
+	font-family: 'Fredericka the Great', cursive;
+	font-weight:800;
+	/*background-color:rgba(128,0,128,0.33);*/
+	float:left;
+}
+
+#card-container{
+	border-right:solid 2px rgba(0,149,255,1);
+	width:40%;
+}
+#settings-container{
+	width:60%;
+}
+
+.container-settings{
+	background-color:rgba(255,255,0,0.33);
+	float:left;
+	width:50%;
+	height:375px;
+	box-sizing: border-box;
+	line-height:30px;
+	padding:25px;
+	position:relative;
+	border-bottom:solid 2px rgba(0,149,255,1);
+}
+
+.txt-auxiliar{
+	float:left;
+}
+
+.settings-input{
+	padding:3px;
+	margin-top:5px;
+	border:solid 1px transparent;
+	float:right;
+	width:70%;
+	box-sizing: border-box;
+}
+
+.settings-area{
+	padding:3px;
+	margin-top:5px;
+	border:solid 1px transparent;
+	float:right;
+	width:70%;
+	height:100px;
+	box-sizing: border-box;
+	resize:none;
+	font-family: arial;
+}
+
+.combobox{
+	padding:2px;
+	width:120px;
+	float:right;
+	width:70%;
+	margin-top:5px;
+}
