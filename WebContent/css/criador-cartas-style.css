@@ -27,12 +27,9 @@ body{
 	font-weight:800;
 	/*background-color:rgba(128,0,128,0.33);*/
 	float:left;
+	overflow:auto;
 }
 
-#card-container{
-	border-right:solid 2px rgba(0,149,255,1);
-	width:40%;
-}
 #settings-container{
 	width:60%;
 }
@@ -68,7 +65,7 @@ body{
 	border:solid 1px transparent;
 	float:right;
 	width:70%;
-	height:100px;
+	height:140px;
 	box-sizing: border-box;
 	resize:none;
 	font-family: arial;
@@ -81,3 +78,161 @@ body{
 	width:70%;
 	margin-top:5px;
 }
+
+#container-materiais{
+	float:left;
+	width:100%;
+	height:200px;
+	box-sizing: border-box;
+	background-color:rgba(128,0,128,0.66);
+}
+/* ---------- Parte da carta ---------- */
+#card-container{
+	border-right:solid 2px rgba(0,149,255,1);
+	width:40%;
+}
+
+#card-base{
+	width:340px;
+	height:500px;
+	background-color:snow;
+	margin-left: calc(340px - 55%);
+	margin-top:10px;
+	border:solid 15px rgb(75,75,75,1);
+	position: relative;
+}
+
+.card-gem{
+	width:calc(91px / 2);
+	height:calc(93px / 2);
+	position:absolute;
+	text-align:center;
+	font-family:'Roboto', sans serif;
+	font-size: 175%;
+	font-weight:800;
+	letter-spacing:1px;
+	color:white;	
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+	line-height:46px;
+}
+
+#card-hp{
+	background: url(../img/hp.png) no-repeat;
+	background-size: 100%; 
+	left:-7px;
+	top:-7px;
+}
+#card-mana{
+	background: url(../img/mana.png) no-repeat;
+	background-size: 100%; 
+	left:-7px;
+	top:37px;
+}
+#card-attack{
+	background: url(../img/attack.png) no-repeat;
+	background-size: 100%;
+	left:-7px; 
+	top:330px;
+}
+#card-power{
+	background: url(../img/power.png) no-repeat;
+	background-size: 100%;
+	right:-7px; 
+	top:330px;
+}
+#card-def{
+	background: url(../img/def.png) no-repeat;
+	background-size: 100%;
+	left:-8.5px; 
+	bottom:-8.5px;
+}
+#card-res{
+	background: url(../img/res.png) no-repeat;
+	background-size: 100%;
+	right:-7px; 
+	bottom:-7px;
+}
+#card-afinidade{
+	width:50px;
+	height:50px;
+	position:absolute;
+	right:-7px;
+	top:-7px;
+	background: url(../img/afinidade0.png) no-repeat;
+	background-size: 100%;
+}
+#card-pericia{
+	width: calc(72px / 1.5);
+	height: calc(73px / 1.5);
+	background: url(../img/arma0.png) no-repeat;
+	background-size: 100%;
+	right:-7px;
+	top:45px;
+	position:absolute;
+	text-align:center;
+	font-family:'Roboto', sans serif;
+	font-size: 150%;
+	font-weight:800;
+	letter-spacing:1px;
+	color:white;	
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+	line-height:100px;
+}
+#card-name{
+	top:2px;
+	width:300px;
+	height:30px;
+	left:20px;
+	right:20px;;
+	border:solid 1px rgba(121,121,121,1);	
+	border-bottom: solid 2px rgba(121,121,121,1);	
+	position:absolute;
+	text-align:center;
+	font-size:85%;
+	/*font-family: 'Staatliches', cursive;*/
+	font-family:'Roboto', sans serif;
+	line-height:30px;
+}
+#card-image{
+	position:absolute;
+	width:300px;
+	height:310px;
+	background-color:goldenrod;
+	left:20px;
+	top:40px;
+	box-sizing: border-box;
+	border:solid 3px rgb(75,75,75,1);
+	background: url(../img/back-card.png) no-repeat;
+	background-size: cover;
+	background-position:center;
+	opacity:0.75;	
+}
+#card-rank-container{
+	position:absolute;
+	height:35px;
+	/*background-color:rgba(121,121,121,0.33);*/
+	bottom:123px;
+	left:155px;
+}
+.card-rank{
+	height:35px;
+	margin-left: auto;
+  	margin-right: auto;
+  	text-align:center;
+}
+#card-text{
+	position:absolute;
+	width:300px;
+	height:115px;
+	background-color:rgba(200,200,200,0.5);
+	left:20px;
+	top:370px;
+	box-sizing: border-box;
+	border:solid 3px rgb(75,75,75,1);
+	padding:5px;
+	white-space:pre-wrap;
+	font-size:85%;
+	font-family:'Roboto', sans serif;
+	line-height:15px;
+}
+
