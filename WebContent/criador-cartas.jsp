@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="css/criador-cartas-style.css">
 <script type='text/javascript' src='js/jquery-3.4.1.min.js'></script>
-<script type="text/javascript" src="js/criador-cartas-scripts.js"></script>
 <title>Criador de Cartas - Neverland Heroes</title>
 </head>
 <body>
@@ -15,19 +14,23 @@
 		<div class="bem-na-dividida" id="card-container">
 			<div id="card-base">
 				<div id="card-name"></div>
-				<div id="card-image"></div>
+				<div id="card-image">
+					<div id="image-background"></div>
+					<img src="" id="true-image">
+				</div>
 				<div id="card-text"></div>
-				<div class="card-gem" id="card-hp">9</div>
-				<div class="card-gem" id="card-mana">15</div>
-				<div class="card-gem" id="card-attack">2</div>
-				<div class="card-gem" id="card-power">9</div>
-				<div class="card-gem" id="card-def">1</div>
-				<div class="card-gem" id="card-res">4</div>
+				<div class="card-gem" id="card-hp"></div>
+				<div class="card-gem" id="card-mana"></div>
+				<div class="card-gem" id="card-attack"></div>
+				<div class="card-gem" id="card-power"></div>
+				<div class="card-gem" id="card-def"></div>
+				<div class="card-gem" id="card-res"></div>				
 				<div id="card-rank-container">
 					<img src="img/rank.png" class="card-rank">				
 				</div>
+				<div class="card-gem" id="card-cd"></div>
 				<div id="card-afinidade"></div>
-				<div id="card-pericia">+3</div>								
+				<div id="card-pericia"><span id="card-pericia-number"></span></div>								
 			</div>
 		</div>
 		
@@ -61,6 +64,8 @@
 					<span class="txt-auxiliar">Preço (C):</span><input type="number" class="settings-input" name="compra">
 					<br>
 					<span class="txt-auxiliar">Descrição:</span><textarea class="settings-area" name="descricao" id="form-descricao" onkeyup='atualizaTexto("form-descricao", "card-text")'></textarea>				
+					<br>
+					<input type="file" id="upload-imagem" name="imagem"/>
 				</div>
 				<div class="container-settings">
 					<span class="txt-auxiliar">Afinidade:</span> <select name="afinidade" class="combobox" id="afinidade" onchange="atualizaAfinidade()">
@@ -91,7 +96,7 @@
 					<br>
 					<span class="txt-auxiliar">Defesa:</span><input type="number" class="settings-input" name="defesa" id="defesa" onkeyup='atualizaTexto("defesa", "card-def")'>
 					<br>
-					<span class="txt-auxiliar">Resistência:</span><input type="number" class="settings-input" name="resistencia" id="resistencia" onkeyup='atualizaTexto("resistencia", "card-res")'>
+					<span class="txt-auxiliar">Resist.:</span><input type="number" class="settings-input" name="resistencia" id="resistencia" onkeyup='atualizaTexto("resistencia", "card-res")'>
 					<br>
 					<span class="txt-auxiliar" id="txt-tipo-arma">Perícia:</span> <select name="pericia" class="combobox" id="pericia" onchange="atualizaArma()">
 						<option value="0">Espada</option>
@@ -104,10 +109,10 @@
 						<option value="7">Cajado</option>					
 					</select>
 					<br>
-					<span class="txt-auxiliar">Ganho P.:</span><input type="number" class="settings-input" name="ganho_per" id="ganho" onkeyup='atualizaTexto("ganho", "card-pericia")'>
+					<span class="txt-auxiliar">Ganho P.:</span><input type="number" class="settings-input" name="ganho_per" id="ganho" onkeyup='atualizaTexto("ganho", "card-pericia-number")'>
 					<br>
-					<span class="txt-auxiliar">Recarga:</span><input type="number" class="settings-input" name="ganho_per" id="recarga" disabled>
-					<br>
+					<span class="txt-auxiliar">Recarga:</span><input type="number" class="settings-input" name="recarga" id="recarga" disabled onkeyup='atualizaTexto("recarga", "card-cd")'>
+					<br>					
 				</div>
 				
 				<div id="container-materiais">
@@ -117,11 +122,9 @@
 		</div>
 	</div>
 		
-		<br>
-		<form action="fileUploadservlet" method="post" enctype="multipart/form-data">
-             	<input type="file" name="file" onchange="atualizaImagem(this)"/>
-             	<input type="submit" value="upload" />
-         </form> 
-				
+		<br>             	
+		<output id="list"></output>        
+         
+	<script type="text/javascript" src="js/criador-cartas-scripts.js"></script>		
 </body>
 </html>

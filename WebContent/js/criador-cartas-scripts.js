@@ -14,20 +14,38 @@ function atualizaSettingsValidos() {
 	document.getElementById("ganho").disabled = true;
 	document.getElementById("recarga").disabled = true;
 	document.getElementById("txt-mana").innerHTML = "Mana:";
-	document.getElementById("txt-tipo-arma").innerHTML = "Tipo Arma";
+	document.getElementById("txt-tipo-arma").innerHTML = "Tipo Arma";	
+	
+	$(".card-gem").css({display:'none'});
+	$("#card-rank-container").css({display:'none'});
+	$("#card-cd").css({display:'none'});
+	$("#card-afinidade").css({display:'none'});
+	$("#card-pericia").css({display:'none', top:'45px'});
+	$("#card-pericia-number").css({display:'none'});
 
 	if (tipo == 3) {
 		document.getElementById("pericia").disabled = false;
+		
+		$("#card-pericia").css({display:'block', top:'-7px'});
 	} else if (tipo == 4) {
 		document.getElementById("pericia").disabled = false;
 		document.getElementById("txt-mana").innerHTML = "Custo:";
 		document.getElementById("mana").disabled = false;
-		document.getElementById("recarga").disabled = false;
+		document.getElementById("recarga").disabled = false;		
+		document.getElementById("pericia").disabled = false;
+		;
+		$("#card-pericia").css({display:'block', top:'-7px'});
+		$("#card-cd").css({display:'block'});
+		$("#card-mana").css({display:'block', top:"-7px"});
 	} else if (tipo == 5) {
 		document.getElementById("afinidade").disabled = false;
 		document.getElementById("txt-mana").innerHTML = "Custo:";
 		document.getElementById("mana").disabled = false;
 		document.getElementById("recarga").disabled = false;
+		
+		$("#card-cd").css({display:'block'});
+		$("#card-mana").css({display:'block', top:"-7px"});
+		$("#card-afinidade").css({display:'block'});
 	} else if (tipo == 6) {
 		document.getElementById("rank").disabled = false;
 		document.getElementById("afinidade").disabled = false;
@@ -39,6 +57,14 @@ function atualizaSettingsValidos() {
 		document.getElementById("resistencia").disabled = false;
 		document.getElementById("pericia").disabled = false;
 		document.getElementById("ganho").disabled = false;
+		
+		$(".card-gem").css({display:'block'});
+		$("#card-mana").css({display:'block', top:"37px"});
+		$("#card-cd").css({display:'none'});
+		$("#card-rank-container").css({display:'block'});
+		$("#card-afinidade").css({display:'block'});
+		$("#card-pericia").css({display:'block'});
+		$("#card-pericia-number").css({display:'block'});
 	}
 }
 
@@ -85,29 +111,29 @@ function atualizaArma(){
 	var pericia = combo_pericia.options[combo_pericia.selectedIndex].value;
 	
 	switch (pericia){
-		case 0:
-			$("#card-pericia").css({width:"72px", height:"71px"});
+		case '0':
+			$("#card-pericia").css({width:"calc(72px/1.5)", height:"calc(71px/1.5)"});
 			break;
-		case 1:
-			$("#card-pericia").css({width:"50px", height:"52px"});
+		case '1':
+			$("#card-pericia").css({width:"calc(50px/1.2)", height:"calc(52px/1.2)"});
 			break;
-		case 2:
-			$("#card-pericia").css({width:"67px", height:"65px"});
+		case '2':
+			$("#card-pericia").css({width:"calc(67px/1.5)", height:"calc(65px/1.5)"});
 			break;
-		case 3:
-			$("#card-pericia").css({width:"62px", height:"63px"});
+		case '3':
+			$("#card-pericia").css({width:"calc(62px/1.5)", height:"calc(63px/1.5)"});
 			break;
-		case 4:
-			$("#card-pericia").css({width:"50px", height:"52px"});
+		case '4':
+			$("#card-pericia").css({width:"calc(50px/1.2)", height:"calc(52px/1.2)"});
 			break;
-		case 5:
-			$("#card-pericia").css({width:"55px", height:"61px"});
+		case '5':
+			$("#card-pericia").css({width:"calc(55px/1.3)", height:"calc(61px/1.3)"});
 			break;
-		case 6:
-			$("#card-pericia").css({width:"72px", height:"73px"});
+		case '6':
+			$("#card-pericia").css({width:"calc(72px/1.5)", height:"calc(73px/1.5)"});
 			break;
-		case 7:
-			$("#card-pericia").css({width:"62px", height:"63px"});
+		case '7':
+			$("#card-pericia").css({width:"calc(62px/1.5)", height:"calc(63px/1.5)"});
 			break;
 	}
 	
@@ -123,6 +149,7 @@ function atualizaAfinidade(){
 function atualizaTexto(origem, destino){
 	var reader = new FileReader();
 	var texto = document.getElementById(origem).value;
+	
 	if(origem == "ganho"){
 		document.getElementById(destino).innerHTML = "+" + texto;
 	} else {
@@ -134,11 +161,34 @@ function atualizaImagem(input){
 	var reader = new FileReader();
 
     reader.onload = function (e) {
+    	console.log('aqui');
         alert(e.target.result);
-            .attr('src', e.target.result)
-            .width(150)
-            .height(200);
     };
 
-    reader.readAsDataURL(input.files[0]);
+    //reader.readAsDataURL(input.files[0]);
 }
+
+function trocaImagem(evt) {
+    var files = evt.target.files; //FileList de quem chamou a função
+    var f = files[0]; //Pega a primeira ocorrência, já que não tá multiple
+
+	// Apenas processa imagens
+    if (!f.type.match('image.*')) {
+    	return;
+	}
+	
+	var reader = new FileReader();
+	
+	//IIFE para capturar as informações do arquivo.
+	reader.onload = (function(theFile) {
+		return function(e) {
+			//Joga a imagem pro src
+			document.getElementById("true-image").src = e.target.result;
+		};
+	})(f);
+
+	// Lê a imagem como uma URL de dados
+	reader.readAsDataURL(f);
+}
+
+  document.getElementById('upload-imagem').addEventListener('change', trocaImagem, false);
