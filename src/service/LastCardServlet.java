@@ -18,8 +18,11 @@ public class LastCardServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CartaDAO cDao = new CartaDAOImpl();
-		int id = cDao.ultimoId();
+		int id = 0;
+		
+		/* Depois arrumar os comentários */		
+//		CartaDAO cDao = new CartaDAOImpl();
+//		id = cDao.ultimoId();
 		PrintWriter out = response.getWriter();
 		out.println(id);
 	}
