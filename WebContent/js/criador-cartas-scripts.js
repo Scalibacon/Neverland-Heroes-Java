@@ -190,5 +190,22 @@ function trocaImagem(evt) {
 	// Lê a imagem como uma URL de dados
 	reader.readAsDataURL(f);
 }
+document.getElementById('upload-imagem').addEventListener('change', trocaImagem, false);
 
-  document.getElementById('upload-imagem').addEventListener('change', trocaImagem, false);
+function testandoAjax(){
+	$.ajax({
+        url:'lastCardServlet',
+        data:{teste:'vazio'},
+        type:'post',
+        cache:false,
+        success:function(data){
+        	var id = parseInt(data) + 1;
+        	document.getElementById("id").value = id;
+        },
+        error:function(){
+          alert('error');
+        }
+     });
+}
+
+testandoAjax();

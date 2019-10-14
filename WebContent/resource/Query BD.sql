@@ -211,3 +211,6 @@ SELECT c.id, c.nome, cm.quantidade FROM carta c
 INNER JOIN carta_material cm
 on cm.id_material = c.id
 WHERE cm.id_carta = 1
+
+-- Retorna o último ID de card cadastrado --
+SELECT MAX(id) AS id FROM carta

@@ -38,7 +38,7 @@
 		<div class="bem-na-dividida" id="settings-container">
 			<form action="" method="POST" id="form-cria-carta">
 				<div class="container-settings">
-					<span class="txt-auxiliar">ID:</span><input type="text" class="settings-input" name="id" disabled>
+					<span class="txt-auxiliar">ID:</span><input type="text" class="settings-input" id="id" name="id" disabled>
 					<br>
 					<span class="txt-auxiliar">Raridade:</span> <select name="raridade" class="combobox" id="raridade" onchange="atualizaBordaRaridade()">
 						<option value="0">Comum</option>
