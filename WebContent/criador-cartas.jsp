@@ -115,7 +115,7 @@
 					<br>					
 				</div>
 				
-				<div id="container-button"><input type="button" id="button-gravar" value="Gravar"></div>
+				<div id="container-button"><input type="button" id="button-gravar" value="Gravar" onclick="adicionaCarta()"></div>
 					
 				<div id="container-materiais">
 				</div>				

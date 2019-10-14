@@ -1,3 +1,5 @@
+document.write("<script type='text/javascript' src='js/sweetalert2.all.min.js'></script>");
+
 function atualizaSettingsValidos() {
 	var combo_tipo = document.getElementById("tipo");
 	var tipo = combo_tipo.options[combo_tipo.selectedIndex].value;
@@ -192,7 +194,7 @@ function trocaImagem(evt) {
 }
 document.getElementById('upload-imagem').addEventListener('change', trocaImagem, false);
 
-function testandoAjax(){
+function retornaId(){
 	$.ajax({
         url:'lastCardServlet',
         data:{teste:'vazio'},
@@ -207,5 +209,21 @@ function testandoAjax(){
         }
      });
 }
+retornaId();
 
-testandoAjax();
+function adicionaCarta(){
+	Swal.fire({
+		  title: 'Confirma a criação dessa carta no sistema?',
+		  text: "Pode ser que dados sejam perdidos :O",
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Confirmar',
+		  cancelButtonText: 'Cancelar'
+		}).then((result) => {
+		  if (result.value) {
+			  window.location = "logoutServlet"
+		  }
+		})
+}
