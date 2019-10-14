@@ -35,7 +35,7 @@
 		</div>
 		
 		
-		<div class="bem-na-dividida" id="settings-container">
+		<div class="bem-na-dividida" id="big-settings-container">
 			<form action="" method="POST" id="form-cria-carta">
 				<div class="container-settings">
 					<span class="txt-auxiliar">ID:</span><input type="text" class="settings-input" id="id" name="id" disabled>
@@ -115,8 +115,9 @@
 					<br>					
 				</div>
 				
+				<div id="container-button"><input type="button" id="button-gravar" value="Gravar"></div>
+					
 				<div id="container-materiais">
-				
 				</div>				
 			</form>
 		</div>

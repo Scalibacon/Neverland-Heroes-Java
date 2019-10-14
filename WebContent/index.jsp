@@ -9,6 +9,15 @@
 <title>Bem-vindo ao CardGame</title>
 </head>
 <body>
+	<%
+	if (session.getAttribute("usuario") != null) {
+		
+	%>
+		<script>window.location = "novidades.jsp";</script>
+	<%	
+	}
+		
+	%>
 	<!-- Depois verificar se a sessão tá ativa -->
 	<jsp:include page="index_alerts.jsp" />
 	<div id="fundo1">
