@@ -13,19 +13,7 @@ tipo int not null,
 primary key (id)
 )
 
-create table recurso(
-id int not null,
-foreign key (id) references carta(id),
-primary key (id)
-)
-
 create table consumivel(
-id int not null,
-foreign key (id) references carta(id),
-primary key (id)
-)
-
-create table equipamento(
 id int not null,
 foreign key (id) references carta(id),
 primary key (id)
@@ -71,7 +59,7 @@ ganho_pericia int,
 foreign key (id) references carta(id),
 primary key (id)
 )
-
+ /*
 create table carta_material(
 id_carta int not null,
 id_material int not null,
@@ -80,7 +68,7 @@ primary key (id_carta, id_material),
 foreign key (id_carta) references carta(id),
 foreign key (id_material) references carta(id)
 )
-
+*/
 create table jogador(
 id int identity(1,1) not null,
 usuario varchar(100) not null unique,
@@ -200,7 +188,7 @@ WHERE b.id_jogador = 1 AND b.nome_baralho = 'Default'
 -- Retorna as cartas a venda --
 SELECT c.id, c.nome FROM carta c
 WHERE c.preco_compra > 0
-
+/*
 -- Retorna as cartas forjáveis --
 SELECT c.id, c.nome FROM carta c
 INNER JOIN carta_material cm
@@ -211,6 +199,6 @@ SELECT c.id, c.nome, cm.quantidade FROM carta c
 INNER JOIN carta_material cm
 on cm.id_material = c.id
 WHERE cm.id_carta = 1
-
+*/
 -- Retorna o último ID de card cadastrado --
 SELECT MAX(id) AS id FROM carta
