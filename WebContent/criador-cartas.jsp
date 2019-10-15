@@ -36,7 +36,7 @@
 		
 		
 		<div class="bem-na-dividida" id="big-settings-container">
-			<form action="" method="POST" id="form-cria-carta">
+			<form action="addCardServlet" method="POST" id="form-cria-carta">
 				<div class="container-settings">
 					<span class="txt-auxiliar">ID:</span><input type="text" class="settings-input" id="id" name="id" disabled>
 					<br>

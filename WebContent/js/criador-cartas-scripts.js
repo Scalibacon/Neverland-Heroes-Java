@@ -214,7 +214,7 @@ retornaId();
 function adicionaCarta(){
 	Swal.fire({
 		  title: 'Confirma a criação dessa carta no sistema?',
-		  text: "Pode ser que dados sejam perdidos :O",
+		  text: "Tenha certeza de que os dados estejam certinhos",
 		  type: 'warning',
 		  showCancelButton: true,
 		  confirmButtonColor: '#3085d6',
@@ -223,7 +223,7 @@ function adicionaCarta(){
 		  cancelButtonText: 'Cancelar'
 		}).then((result) => {
 		  if (result.value) {
-			  window.location = "logoutServlet"
+			  $("#form-cria-carta").submit();
 		  }
 		})
 }
