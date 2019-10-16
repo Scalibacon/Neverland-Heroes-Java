@@ -48,20 +48,16 @@
 					</select>
 					<br>
 					<span class="txt-auxiliar">Tipo:</span> <select name="tipo" class="combobox" id="tipo" onchange="atualizaSettingsValidos()">
-						<option value="0">Recurso</option>
-						<option value="1">Consumível</option>
-						<option value="2">Equipamento</option>
-						<option value="3">Arma</option>
-						<option value="4">Postura</option>
-						<option value="5">Magia</option>
-						<option value="6" selected>Herói</option>				
+						<option value="0">Consumível</option>
+						<option value="1">Arma</option>
+						<option value="2">Postura</option>
+						<option value="3">Magia</option>
+						<option value="4" selected>Herói</option>				
 					</select>
 					<br>
 					<span class="txt-auxiliar">Nome:</span><input type="text" class="settings-input" name="nome" id="form-nome" onkeyup='atualizaTexto("form-nome", "card-name")'>
 					<br>
 					<span class="txt-auxiliar">Preço (V):</span><input type="number" class="settings-input" name="venda">
-					<br>
-					<span class="txt-auxiliar">Preço (C):</span><input type="number" class="settings-input" name="compra">
 					<br>
 					<span class="txt-auxiliar">Descrição:</span><textarea class="settings-area" name="descricao" id="form-descricao" onkeyup='atualizaTexto("form-descricao", "card-text")'></textarea>				
 					<br>

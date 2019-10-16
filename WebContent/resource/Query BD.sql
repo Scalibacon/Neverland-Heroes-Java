@@ -6,9 +6,7 @@ create table carta(
 id int not null,
 nome varchar(100) not null,
 raridade int not null,
-imagem varchar(max) not null,
 preco_venda int not null,
-preco_compra int,
 tipo int not null,
 primary key (id)
 )
@@ -155,9 +153,10 @@ foreign key (id_autor) references jogador(id)
 )
 
 INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo)
-	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,200,2)
+	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,100,2)
 
 
+-- ***************** Querys de teste ***************** --
 DELETE FROM jogador WHERE usuario = 'Tethys'
 SELECT * FROM jogador
 -- Retorna jogador baseado no usuario/senha --

@@ -25,11 +25,11 @@ function atualizaSettingsValidos() {
 	$("#card-pericia").css({display:'none', top:'45px'});
 	$("#card-pericia-number").css({display:'none'});
 
-	if (tipo == 3) {
+	if (tipo == 1) {
 		document.getElementById("pericia").disabled = false;
 		
 		$("#card-pericia").css({display:'block', top:'-7px'});
-	} else if (tipo == 4) {
+	} else if (tipo == 2) {
 		document.getElementById("pericia").disabled = false;
 		document.getElementById("txt-mana").innerHTML = "Custo:";
 		document.getElementById("mana").disabled = false;
@@ -39,7 +39,7 @@ function atualizaSettingsValidos() {
 		$("#card-pericia").css({display:'block', top:'-7px'});
 		$("#card-cd").css({display:'block'});
 		$("#card-mana").css({display:'block', top:"-7px"});
-	} else if (tipo == 5) {
+	} else if (tipo == 3) {
 		document.getElementById("afinidade").disabled = false;
 		document.getElementById("txt-mana").innerHTML = "Custo:";
 		document.getElementById("mana").disabled = false;
@@ -48,7 +48,7 @@ function atualizaSettingsValidos() {
 		$("#card-cd").css({display:'block'});
 		$("#card-mana").css({display:'block', top:"-7px"});
 		$("#card-afinidade").css({display:'block'});
-	} else if (tipo == 6) {
+	} else if (tipo == 4) {
 		document.getElementById("rank").disabled = false;
 		document.getElementById("afinidade").disabled = false;
 		document.getElementById("hp").disabled = false;

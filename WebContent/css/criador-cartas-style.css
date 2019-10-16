@@ -8,7 +8,7 @@ body{
 
 #big-container{
 	position:relative;
-	margin-top:20px;
+	margin-top:15px;
 	width:90%;
 	height:570px;
 	margin-left:5%;
@@ -31,7 +31,7 @@ body{
 }
 
 #big-settings-container{
-	width:60%;
+	width:63%;
 }
 
 .container-settings{
@@ -65,7 +65,7 @@ body{
 	border:solid 1px transparent;
 	float:right;
 	width:70%;
-	height:115px;
+	height:140px;
 	box-sizing: border-box;
 	resize:none;
 	font-family: arial;
@@ -109,21 +109,21 @@ body{
 #container-materiais{
 	float:left;
 	width:100%;
-	height:200px;
+	height:156px;
 	box-sizing: border-box;
 	background-color:rgba(128,0,128,0.66);
 }
 /* ---------- Parte da carta ---------- */
 #card-container{
 	border-right:solid 2px rgba(0,149,255,1);
-	width:40%;
+	width:37%;
 }
 
 #card-base{
 	width:340px;
 	height:500px;
 	background-color:snow;
-	margin-left: calc(340px - 55%);
+	margin-left: calc(340px - 68%);
 	margin-top:10px;
 	border:solid 15px rgb(75,75,75,1);
 	position: relative;
