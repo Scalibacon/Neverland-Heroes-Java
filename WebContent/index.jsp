@@ -10,13 +10,11 @@
 </head>
 <body>
 	<%
-	if (session.getAttribute("usuario") != null) {
-		
+	if (session.getAttribute("usuario") != null) {		
 	%>
 		<script>window.location = "novidades.jsp";</script>
 	<%	
-	}
-		
+	}		
 	%>
 	<!-- Depois verificar se a sessão tá ativa -->
 	<jsp:include page="index_alerts.jsp" />
