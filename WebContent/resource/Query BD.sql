@@ -155,7 +155,15 @@ foreign key (id_autor) references jogador(id)
 )
 
 INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo)
-	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,100,2)
+	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,100,2,0,0)
+
+-- ***************** Triggers ***************** --
+go
+create trigger t_cartas_padrao
+on jogador
+after insert
+as
+	print eae
 
 
 -- ***************** Querys de teste ***************** --
