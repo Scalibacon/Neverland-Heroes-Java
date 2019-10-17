@@ -38,10 +38,10 @@
 		<div class="bem-na-dividida" id="big-settings-container">
 			<form action="addCardServlet" method="POST" id="form-cria-carta">
 				<div class="container-settings">
-					<span class="txt-auxiliar">ID:</span><input type="text" class="settings-input" id="id" name="id" disabled>
+					<span class="txt-auxiliar">ID:</span><input type="number" class="settings-input" id="id" name="id" readonly="readonly">
 					<br>
 					<span class="txt-auxiliar">Raridade:</span> <select name="raridade" class="combobox" id="raridade" onchange="atualizaBordaRaridade()">
-						<option value="0">Comum</option>
+						<option value="0" selected>Comum</option>
 						<option value="1">Rara</option>
 						<option value="2">Épica</option>
 						<option value="3">Lendária</option>
@@ -65,7 +65,7 @@
 				</div>
 				<div class="container-settings">
 					<span class="txt-auxiliar">Afinidade:</span> <select name="afinidade" class="combobox" id="afinidade" onchange="atualizaAfinidade()">
-						<option value="0">Neutro</option>
+						<option value="0" selected>Neutro</option>
 						<option value="1">Luz</option>
 						<option value="2">Trevas</option>
 						<option value="3">Fogo</option>
@@ -75,7 +75,7 @@
 					</select>
 					<br>
 					<span class="txt-auxiliar">Rank:</span> <select name="rank" class="combobox" id="rank" onchange="atualizaRank()">
-						<option value="1">1</option>
+						<option value="1" selected>1</option>
 						<option value="2">2</option>
 						<option value="3">3</option>
 						<option value="4">4</option>
@@ -86,7 +86,7 @@
 					<br>
 					<span class="txt-auxiliar" id="txt-mana">Mana:</span><input type="number" class="settings-input" name="mana" id="mana" onkeyup='atualizaTexto("mana", "card-mana")'>
 					<br>
-					<span class="txt-auxiliar">Ataque:</span><input type="number" class="settings-input" name="ataque" id="ataque" onkeyup='atualizaTexto("ataque", "card-attack")'>
+					<span class="txt-auxiliar">Força:</span><input type="number" class="settings-input" name="forca" id="ataque" onkeyup='atualizaTexto("ataque", "card-attack")'>
 					<br>
 					<span class="txt-auxiliar">Poder:</span><input type="number" class="settings-input" name="poder" id="poder" onkeyup='atualizaTexto("poder", "card-power")'>
 					<br>
@@ -95,7 +95,7 @@
 					<span class="txt-auxiliar">Resist.:</span><input type="number" class="settings-input" name="resistencia" id="resistencia" onkeyup='atualizaTexto("resistencia", "card-res")'>
 					<br>
 					<span class="txt-auxiliar" id="txt-tipo-arma">Perícia:</span> <select name="pericia" class="combobox" id="pericia" onchange="atualizaArma()">
-						<option value="0">Espada</option>
+						<option value="0" selected>Espada</option>
 						<option value="1">Lança</option>
 						<option value="2">Machado</option>
 						<option value="3">Adaga</option>
@@ -105,7 +105,7 @@
 						<option value="7">Cajado</option>					
 					</select>
 					<br>
-					<span class="txt-auxiliar">Ganho P.:</span><input type="number" class="settings-input" name="ganho_per" id="ganho" onkeyup='atualizaTexto("ganho", "card-pericia-number")'>
+					<span class="txt-auxiliar">Ganho P.:</span><input type="number" class="settings-input" name="ganho_pericia" id="ganho" onkeyup='atualizaTexto("ganho", "card-pericia-number")'>
 					<br>
 					<span class="txt-auxiliar">Recarga:</span><input type="number" class="settings-input" name="recarga" id="recarga" disabled onkeyup='atualizaTexto("recarga", "card-cd")'>
 					<br>					

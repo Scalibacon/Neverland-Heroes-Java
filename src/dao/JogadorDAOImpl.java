@@ -41,8 +41,8 @@ public class JogadorDAOImpl implements JogadorDAO {
 	@Override
 	public boolean cadastrarJogador(Jogador jogador) {
 		try (Connection con = DBConnection.getInstancia().conectar();) {
-			String sql = "INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo) "
-					+ "VALUES(?,?,?,1,0,200,0)";
+			String sql = "INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,quantidade_jogos,vitorias) "
+					+ "VALUES(?,?,?,1,0,200,0,0,0)";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setString(1, jogador.getUsuario());
 			stm.setString(2, Md5.getMd5(jogador.getSenha()));

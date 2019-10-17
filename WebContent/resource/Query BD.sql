@@ -13,14 +13,14 @@ primary key (id)
 
 create table consumivel(
 id int not null,
-foreign key (id) references carta(id),
+foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
 
 create table arma(
 id int not null,
 tipo int not null,
-foreign key (id) references carta(id),
+foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
 
@@ -29,7 +29,7 @@ id int not null,
 tipo_arma int not null,
 custo int not null,
 tempo_recarga int not null,
-foreign key (id) references carta(id),
+foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
 
@@ -38,7 +38,7 @@ id int not null,
 afinidade int not null,
 custo int not null,
 tempo_recarga int not null,
-foreign key (id) references carta(id),
+foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
 
@@ -48,13 +48,13 @@ rank_ int not null,
 afinidade int not null,
 hp int not null,
 mana int not null,
-ataque int not null,
+forca int not null,
 poder int not null,
 defesa int not null,
 resistencia int not null,
 pericia int not null,
 ganho_pericia int,
-foreign key (id) references carta(id),
+foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
  /*
@@ -76,6 +76,8 @@ nivel int not null,
 experiencia int not null,
 dinheiro int not null,
 tipo int not null,
+quantidade_jogos int not null,
+vitorias int not null,
 primary key (id)
 )
 
@@ -157,14 +159,16 @@ INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo)
 
 
 -- ***************** Querys de teste ***************** --
+select * from carta
+select * from postura
+select * from magia
+select * from heroi
+
 DELETE FROM jogador WHERE usuario = 'Tethys'
 SELECT * FROM jogador
 -- Retorna jogador baseado no usuario/senha --
 SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
 WHERE j.usuario = 'Scalibacon' and j.senha = 'senha'
-
--- Retorna tipo jogador --
-SELECT count(id_jogador) FROM 
 
 -- Retorna a coleção do jogador --
 SELECT c.id, c.nome FROM carta c

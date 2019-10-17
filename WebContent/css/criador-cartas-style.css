@@ -182,11 +182,11 @@ body{
 #card-cd{
 	background: url(../img/time.png) no-repeat;
 	background-size:100%;
-	bottom:115px;
-	left:150px;
-	width:calc(250px / 5.5);
-	height:calc(290px / 5.5);
-	line-height:52px;
+	bottom:120px;
+	left:155px;
+	width:calc(250px / 6);
+	height:calc(290px / 6);
+	line-height:48px;
 	display:none;
 }
 #card-afinidade{

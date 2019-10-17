@@ -21,8 +21,9 @@ public class LastCardServlet extends HttpServlet{
 		int id = 0;
 		
 		/* Depois arrumar os comentários */		
-//		CartaDAO cDao = new CartaDAOImpl();
-//		id = cDao.ultimoId();
+		CartaDAO cDao = new CartaDAOImpl();
+		id = cDao.ultimoId();
+		/* ----------------------------- */
 		PrintWriter out = response.getWriter();
 		out.println(id);
 	}

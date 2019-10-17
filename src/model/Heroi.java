@@ -1,6 +1,6 @@
 package model;
 
-public class Heroi {
+public class Heroi extends Carta{
 	private int rank;
 	private TipoAfinidade afinidade;
 	private int hp;
@@ -66,10 +66,10 @@ public class Heroi {
 	public void setPericia(TipoArma pericia) {
 		this.pericia = pericia;
 	}
-	public int getGanho_pericia() {
+	public int getGanhoPericia() {
 		return ganho_pericia;
 	}
-	public void setGanho_pericia(int ganho_pericia) {
+	public void setGanhoPericia(int ganho_pericia) {
 		this.ganho_pericia = ganho_pericia;
 	}
 }
