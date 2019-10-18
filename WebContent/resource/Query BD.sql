@@ -4,10 +4,11 @@ use cardgame
 
 create table carta(
 id int not null,
-nome varchar(100) not null,
+nome varchar(100) not null unique,
 raridade int not null,
 preco_venda int not null,
 tipo int not null,
+descricao varchar(max),
 primary key (id)
 )
 
@@ -154,7 +155,7 @@ primary key (id),
 foreign key (id_autor) references jogador(id)
 )
 
-INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo)
+INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,quantidade_jogos,vitorias)
 	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,100,2,0,0)
 
 -- ***************** Triggers ***************** --

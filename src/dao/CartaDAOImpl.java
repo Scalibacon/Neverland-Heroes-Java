@@ -35,13 +35,14 @@ public class CartaDAOImpl implements CartaDAO{
 	@Override
 	public boolean adicionarCartaBase(Carta carta) {
 		try (Connection con = DBConnection.getInstancia().conectar();) {
-			String sql = "INSERT INTO carta VALUES(?,?,?,?,?)";
+			String sql = "INSERT INTO carta VALUES(?,?,?,?,?,?)";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, carta.getId());
 			stm.setString(2, carta.getNome());
 			stm.setInt(3, carta.getRaridade().getValor());
 			stm.setInt(4, carta.getPrecoVenda());
 			stm.setInt(5, carta.getTipoCarta().getValor());
+			stm.setString(6, carta.getDescricao());
 			stm.executeUpdate();
 			return true;
 		} catch (SQLException e) {
