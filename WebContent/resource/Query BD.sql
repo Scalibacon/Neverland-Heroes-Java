@@ -172,9 +172,11 @@ select * from carta
 select * from postura
 select * from magia
 select * from heroi
+select * from arma
 
-DELETE FROM jogador WHERE usuario = 'Tethys'
-SELECT * FROM jogador
+BACKUP DATABASE cardgame
+TO DISK = 'C:\Users\mathe\eclipse-workspace\LES-CardGame\WebContent\resource\cardgameDB.bak';
+
 -- Retorna jogador baseado no usuario/senha --
 SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
 WHERE j.usuario = 'Scalibacon' and j.senha = 'senha'
