@@ -58,16 +58,7 @@ ganho_pericia int,
 foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
- /*
-create table carta_material(
-id_carta int not null,
-id_material int not null,
-quantidade int not null,
-primary key (id_carta, id_material),
-foreign key (id_carta) references carta(id),
-foreign key (id_material) references carta(id)
-)
-*/
+
 create table jogador(
 id int identity(1,1) not null,
 usuario varchar(100) not null unique,
@@ -159,23 +150,35 @@ INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,quantida
 	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,100,2,0,0)
 
 -- ***************** Triggers ***************** --
+
+-- Dá as cartas padrões pro jogador depois que for cadastrado --
 go
 create trigger t_cartas_padrao
 on jogador
 after insert
 as
-	print eae
-
+	declare @cont int,
+			@id int
+	set @cont = 2
+	set @id = (select id from inserted)
+	while(@cont <= 21)
+	begin
+		insert into colecao_carta values(@id, @cont, 1)
+		set @cont = @cont + 1
+	end
 
 -- ***************** Querys de teste ***************** --
+select * from colecao_carta where id_jogador = 1
+select * from jogador
 select * from carta
 select * from postura
 select * from magia
 select * from heroi
 select * from arma
 
+-- Sintaxe do backup
 BACKUP DATABASE cardgame
-TO DISK = 'C:\Users\mathe\eclipse-workspace\LES-CardGame\WebContent\resource\cardgameDB.bak';
+TO DISK = 'E:\Teste\cardgameDB.bak';
 
 -- Retorna jogador baseado no usuario/senha --
 SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
@@ -199,20 +202,5 @@ INNER JOIN baralho b
 ON b.id_campeao = c.id
 WHERE b.id_jogador = 1 AND b.nome_baralho = 'Default'
 
--- Retorna as cartas a venda --
-SELECT c.id, c.nome FROM carta c
-WHERE c.preco_compra > 0
-/*
--- Retorna as cartas forjáveis --
-SELECT c.id, c.nome FROM carta c
-INNER JOIN carta_material cm
-on cm.id_carta = c.id
-
--- Retorna os materiais da carta forjável --
-SELECT c.id, c.nome, cm.quantidade FROM carta c
-INNER JOIN carta_material cm
-on cm.id_material = c.id
-WHERE cm.id_carta = 1
-*/
 -- Retorna o último ID de card cadastrado --
 SELECT MAX(id) AS id FROM carta
