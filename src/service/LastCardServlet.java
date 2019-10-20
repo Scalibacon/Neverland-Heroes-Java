@@ -26,5 +26,6 @@ public class LastCardServlet extends HttpServlet{
 		/* ----------------------------- */
 		PrintWriter out = response.getWriter();
 		out.println(id);
+		out.close();
 	}
 }

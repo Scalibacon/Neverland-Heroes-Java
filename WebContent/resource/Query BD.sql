@@ -161,14 +161,21 @@ as
 			@id int
 	set @cont = 2
 	set @id = (select id from inserted)
+	insert into baralho values(@id, 'Padrão', 2)
 	while(@cont <= 21)
 	begin
 		insert into colecao_carta values(@id, @cont, 1)
+		if(@cont != 2)
+		begin
+			insert into baralho_carta values(@id, 'Padrão', @cont, 1)
+		end
 		set @cont = @cont + 1
-	end
+	end	
 
 -- ***************** Querys de teste ***************** --
 select * from colecao_carta where id_jogador = 1
+select * from baralho_carta where id_jogador = 1
+select id_campeao from baralho where id_jogador = 1
 select * from jogador
 select * from carta
 select * from postura

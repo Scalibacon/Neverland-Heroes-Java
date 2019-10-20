@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
 <script type='text/javascript' src='js/jquery-3.4.1.min.js'></script>
 <script type="text/javascript" src="js/index-scripts.js"></script>
 <link rel="stylesheet" type="text/css" href="css/index-style.css">

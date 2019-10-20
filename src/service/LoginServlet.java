@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		/* depois tirar daqui... */
 		if (usuario.equals("Scalibacon") && senha.equals("senha")) {
-			session.setAttribute("id", 0);
+			session.setAttribute("id", 1);
 			session.setAttribute("usuario", "Scalibacon");
 			session.setAttribute("tipo", 2);
 			PrintWriter out = response.getWriter();

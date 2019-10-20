@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="css/criador-cartas-style.css">
 <script type='text/javascript' src='js/jquery-3.4.1.min.js'></script>
 <title>Criador de Cartas - Neverland Heroes</title>

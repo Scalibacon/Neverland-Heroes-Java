@@ -7,7 +7,7 @@
 	<img src="img/logo2.png" id="header-logo">
 	<span id="header-btnjogar">Jogar</span>
 	<span class="header-menu-item">Ajuda</span>
-	<span class="header-menu-item">Coleção</span>
+	<a href="colecao.jsp"><span class="header-menu-item">Coleção</span></a>
 	<span class="header-menu-item">Mercado</span>
 	<span class="header-menu-item" id="header-perfil-container">
 		<span id="perfil-drop">Perfil</span>

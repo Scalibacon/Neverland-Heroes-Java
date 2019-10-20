@@ -3,6 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="css/novidades-style.css">
 <script type="text/javascript" src="js/novidades-scripts.js"></script>
 <title>Bem-vindo ao Neverland Heroes</title>
