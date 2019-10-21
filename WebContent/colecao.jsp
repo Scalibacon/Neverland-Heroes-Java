@@ -63,6 +63,20 @@
 		</div>
 		
 		<div id="deck-container">
+			<div class="container-titulo">
+				<div class='deck-btn' id="btn-esvaziar">Esvaziar</div>
+				<div class='deck-btn' id="btn-salvar">Salvar</div>
+				SEU DECK				
+			</div>			
+			<div class="cards-container" id="cards-deck">			
+			</div>	
+			<div id="container-deck-info">	
+				<img src="img/rank.png" class="deck-icon"><span class="deck-info-text" id="info-rank">20</span>
+				<img src="img/hero.png" class="deck-icon"><span class="deck-info-text" id="info-heros">8</span>
+				<img src="img/espada.png" class="deck-icon"><span class="deck-info-text" id="info-forca">88</span>
+				<img src="img/magia.png" class="deck-icon"><span class="deck-info-text" id="info-magia">88</span>
+				<img src="img/back.png" class="deck-icon"><span class="deck-info-text" id="info-qtde">50</span>
+			</div>
 		</div>
 	</div>	
 <script type="text/javascript" src="js/colecao-scripts.js"></script>

@@ -192,10 +192,11 @@ SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
 WHERE j.usuario = 'Scalibacon' and j.senha = 'senha'
 
 -- Retorna a coleção do jogador --
-SELECT c.id, c.nome FROM carta c
+SELECT cc.id_carta, c.nome, cc.quantidade FROM carta c
 INNER JOIN colecao_carta cc
 ON cc.id_carta = c.id
 WHERE cc.id_jogador = 1
+order by c.nome
 
 -- Retorna o baralho --
 SELECT c.id, c.nome, bc.quantidade FROM baralho_carta bc

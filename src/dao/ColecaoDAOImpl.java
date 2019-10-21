@@ -18,7 +18,11 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public Colecao buscaColecao(Jogador j) {
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select * from colecao_carta where id_jogador = ?";
+			String sql = "SELECT cc.id_carta, c.nome, cc.quantidade FROM carta c " + 
+					"INNER JOIN colecao_carta cc " + 
+					"ON cc.id_carta = c.id " + 
+					"WHERE cc.id_jogador = ? " + 
+					"ORDER BY c.nome";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
