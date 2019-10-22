@@ -96,11 +96,8 @@ body{
 .mini-card{
 	width:calc(370px/5);
 	height:calc(530px/5);
-	background-color:red;
 	float:left;
 	margin:10px;
-	background: url(../img/cards/1.PNG) no-repeat;
-	background-size: 100%;
 	position:relative;
 	box-shadow: 1px 1px 2px rgba(121,121,121,0.5);
 }
@@ -142,7 +139,6 @@ body{
 }
 #cards-deck{
 	height:80%;
-	background-color:snow;
 }
 #container-deck-info{
 	height:12%;
@@ -163,4 +159,15 @@ body{
 	font-family: 'Fredericka the Great', cursive;
 	font-weight:800;
 	font-size:110%;
+}
+.champion-card{
+	width:calc(370px/5);
+	height:calc(530px/5);
+	float:left;
+	margin:10px;
+	position:relative;
+	box-shadow: 0px 0px 8px 5px rgba(212,175,55,1);
+	background: url(../img/champion.png) no-repeat;
+	background-size: 50%;
+	background-position:center;
 }

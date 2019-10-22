@@ -182,6 +182,7 @@ select * from postura
 select * from magia
 select * from heroi
 select * from arma
+select * from baralho
 
 -- Sintaxe do backup
 BACKUP DATABASE cardgame
@@ -192,23 +193,26 @@ SELECT j.id, j.nivel, j.experiencia, j.dinheiro FROM jogador j
 WHERE j.usuario = 'Scalibacon' and j.senha = 'senha'
 
 -- Retorna a coleção do jogador --
-SELECT cc.id_carta, c.nome, cc.quantidade FROM carta c
+SELECT cc.id_carta, c.nome, c.tipo, cc.quantidade FROM carta c
 INNER JOIN colecao_carta cc
 ON cc.id_carta = c.id
 WHERE cc.id_jogador = 1
 order by c.nome
 
 -- Retorna o baralho --
-SELECT c.id, c.nome, bc.quantidade FROM baralho_carta bc
+SELECT bc.id_carta, c.nome, c.tipo, bc.quantidade, b.id_campeao FROM baralho_carta bc
 INNER JOIN carta c
 ON c.id = bc.id_carta
-WHERE bc.id_jogador = 1 AND bc.nome_baralho = 'Default'
+INNER JOIN baralho b
+ON b.id_jogador = bc.id_jogador
+WHERE bc.id_jogador = 1 AND bc.nome_baralho = 'Padrão'
+ORDER BY c.tipo desc, c.nome asc
 
 -- Retorna o campeão do baralho
 SELECT b.id_campeao, c.nome FROM carta c
 INNER JOIN baralho b
 ON b.id_campeao = c.id
-WHERE b.id_jogador = 1 AND b.nome_baralho = 'Default'
+WHERE b.id_jogador = 1 AND b.nome_baralho = 'Padrão'
 
 -- Retorna o último ID de card cadastrado --
 SELECT MAX(id) AS id FROM carta

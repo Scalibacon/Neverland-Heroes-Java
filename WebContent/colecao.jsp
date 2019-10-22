@@ -58,7 +58,6 @@
 		<div id="colecao-container">
 			<div class="container-titulo">SUA COLEÇÃO</div>
 			<div class="cards-container" id="cards-colecao">
-				<div class="mini-card" id='1'><span class="carta-qtde">x3</span></div>
 			</div>
 		</div>
 		
@@ -68,7 +67,8 @@
 				<div class='deck-btn' id="btn-salvar">Salvar</div>
 				SEU DECK				
 			</div>			
-			<div class="cards-container" id="cards-deck">			
+			<div class="cards-container" id="cards-deck">
+				<div class="champion-card"></div>			
 			</div>	
 			<div id="container-deck-info">	
 				<img src="img/rank.png" class="deck-icon"><span class="deck-info-text" id="info-rank">20</span>
