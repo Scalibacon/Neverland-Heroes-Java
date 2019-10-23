@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.BaralhoDAO;
 import dao.BaralhoDAOImpl;
+import dao.PseuDAO;
 import model.Baralho;
 import model.Jogador;
 
@@ -22,10 +23,17 @@ public class BuscaBaralhoServlet extends HttpServlet{
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		BaralhoDAO bDao = new BaralhoDAOImpl();
-		Jogador j = new Jogador();
-		j.setId((int) session.getAttribute("id"));
-		Baralho baralho = bDao.buscaBaralho(j);
+		Baralho baralho;
+		
+		/* depois tirar daqui... */
+		if(true) {
+			baralho = PseuDAO.pseudoBaralho();
+		} else { /* até aqui */
+			BaralhoDAO bDao = new BaralhoDAOImpl();
+			Jogador j = new Jogador();
+			j.setId((int) session.getAttribute("id"));
+			baralho = bDao.buscaBaralho(j);
+		} //aqui tb
 		PrintWriter out = response.getWriter();
 		String gson = baralho.toJson();
 		out.println(gson);

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import dao.ColecaoDAO;
 import dao.ColecaoDAOImpl;
+import dao.PseuDAO;
 import model.Colecao;
 import model.Jogador;
 
@@ -22,10 +23,16 @@ public class BuscaColecaoServlet extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		ColecaoDAO cDao = new ColecaoDAOImpl();
-		Jogador j = new Jogador();
-		j.setId((int) session.getAttribute("id"));
-		Colecao colecao = cDao.buscaColecao(j);
+		Colecao colecao;
+		/* depois tirar daqui... */
+		if(true) {
+			colecao = PseuDAO.pseudoColecao();
+		}else { /* até aqui */
+			ColecaoDAO cDao = new ColecaoDAOImpl();
+			Jogador j = new Jogador();
+			j.setId((int) session.getAttribute("id"));
+			colecao = cDao.buscaColecao(j);
+		} //aqui tb
 		PrintWriter out = response.getWriter();
 		String gson = colecao.toJson();
 		out.println(gson);
