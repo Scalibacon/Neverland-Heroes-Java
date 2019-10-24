@@ -1,3 +1,21 @@
+//-------- Atualiza exibição das cartas --------
+function atualizaCartas(container, fonte){
+	if(fonte != deck){
+		document.getElementById(container).innerHTML = "";
+	}else{
+		document.getElementById("cards-deck").innerHTML = 
+			'<div class="champion-card" id="' + deck.campeao.id + '" style="background:url(img/cards/' + deck.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
+		;
+	}
+	for(var i = 0; i < fonte.cartas.length; i++){
+		document.getElementById(container).innerHTML += 
+			'<div class="mini-card" id="' + fonte.cartas[i].carta.id + '" style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
+			'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
+		;
+	}
+	invocaHover();
+}
+
 //-------- Atualiza coleção --------
 var colecao;
 function buscaCartas(){
@@ -11,14 +29,8 @@ function buscaCartas(){
 		success : function(data) {
 			colecao = JSON.parse(data);
 			//console.log(colecao);
-			document.getElementById("cards-colecao").innerHTML = "";
-			for(var i = 0; i < colecao.cartas.length; i++){
-				document.getElementById("cards-colecao").innerHTML += 
-					'<div class="mini-card" id="' + colecao.cartas[i].carta.id + '" style="background:url(img/cards/' + colecao.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
-					'<span class="carta-qtde">x' + colecao.cartas[i].quantidade + '</span></div>'
-				;
-			}
-			invocaHover();
+			atualizaCartas("cards-colecao", colecao);
+			atualizaDeckInfo();
 		},
 		error : function(e) {
 			alert('Erro ao pegar as cartas: ' + e);
@@ -26,6 +38,11 @@ function buscaCartas(){
 	});
 }
 buscaCartas();
+
+function atualizaDeckInfo(){
+	
+}
+
 //--------- Atualiza o baralho ---------
 var deck;
 function buscaBaralho(){
@@ -38,16 +55,8 @@ function buscaBaralho(){
 		cache : false,
 		success : function(data) {
 			deck = JSON.parse(data);
-			//console.log(deck);
-			document.getElementById("cards-deck").innerHTML = 
-				'<div class="champion-card" id="' + deck.campeao.id + '" style="background:url(img/cards/' + deck.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
-			;			
-			for(var i = 0; i < deck.cartas.length; i++){
-				document.getElementById("cards-deck").innerHTML += 
-					'<div class="mini-card" id="' + deck.cartas[i].carta.id + '" style="background:url(img/cards/' + deck.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
-					'<span class="carta-qtde">x' + deck.cartas[i].quantidade + '</span></div>'
-				;
-			}
+			//console.log(deck);						
+			atualizaCartas("cards-deck", deck);
 			invocaHover();
 		},
 		error : function() {

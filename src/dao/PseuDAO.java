@@ -22,7 +22,7 @@ public class PseuDAO {
 	public static Colecao pseudoColecao() {
 		Colecao col = new Colecao();
 		List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-		for(int i = 2; i <= 21; i++) {
+		for(int i = 1; i <= 21; i++) {
 			Carta c = new Carta();
 			c.setId(i);
 			CartaColecao cc = new CartaColecao();
