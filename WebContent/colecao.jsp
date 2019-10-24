@@ -71,11 +71,11 @@
 				<div class="champion-card"></div>			
 			</div>	
 			<div id="container-deck-info">	
-				<img src="img/rank.png" class="deck-icon"><span class="deck-info-text" id="info-rank">20</span>
-				<img src="img/hero.png" class="deck-icon"><span class="deck-info-text" id="info-heros">8</span>
-				<img src="img/espada.png" class="deck-icon"><span class="deck-info-text" id="info-forca">88</span>
-				<img src="img/magia.png" class="deck-icon"><span class="deck-info-text" id="info-magia">88</span>
-				<img src="img/back.png" class="deck-icon"><span class="deck-info-text" id="info-qtde">50</span>
+				<img src="img/rank.png" class="deck-icon"><span class="deck-info-text" id="info-rank">?</span>
+				<img src="img/hero.png" class="deck-icon"><span class="deck-info-text" id="info-herois">?</span>
+				<img src="img/espada.png" class="deck-icon"><span class="deck-info-text" id="info-forca">?</span>
+				<img src="img/magia.png" class="deck-icon"><span class="deck-info-text" id="info-poder">?</span>
+				<img src="img/back.png" class="deck-icon"><span class="deck-info-text" id="info-qtde">?</span>
 			</div>
 		</div>
 	</div>	

@@ -30,7 +30,6 @@ function buscaCartas(){
 			colecao = JSON.parse(data);
 			//console.log(colecao);
 			atualizaCartas("cards-colecao", colecao);
-			atualizaDeckInfo();
 		},
 		error : function(e) {
 			alert('Erro ao pegar as cartas: ' + e);
@@ -38,10 +37,6 @@ function buscaCartas(){
 	});
 }
 buscaCartas();
-
-function atualizaDeckInfo(){
-	
-}
 
 //--------- Atualiza o baralho ---------
 var deck;
@@ -55,8 +50,9 @@ function buscaBaralho(){
 		cache : false,
 		success : function(data) {
 			deck = JSON.parse(data);
-			//console.log(deck);						
+			console.log(deck);//					
 			atualizaCartas("cards-deck", deck);
+			atualizaDeckInfo();
 			invocaHover();
 		},
 		error : function() {
@@ -65,6 +61,31 @@ function buscaBaralho(){
 	});
 }
 buscaBaralho();
+
+
+// ------- Atualiza as informações sobre o deck -------
+function atualizaDeckInfo(){
+	var somaRank =  deck.campeao.rank;
+	var qtdeHerois = 1;
+	var somaForca =  deck.campeao.forca;
+	var somaPoder =  deck.campeao.poder;
+	var qtdeCartas = 1 + deck.cartas.length;
+	
+	for(var i = 0; i < deck.cartas.length; i++){
+		if(!isNaN(deck.cartas[i].carta.rank)){
+			somaRank += deck.cartas[i].carta.rank;
+			qtdeHerois++;
+			somaForca += deck.cartas[i].carta.forca;
+			somaPoder += deck.cartas[i].carta.poder;
+		}
+	}
+	document.getElementById("info-rank").innerHTML = somaRank;
+	document.getElementById("info-herois").innerHTML = qtdeHerois;
+	document.getElementById("info-qtde").innerHTML = qtdeCartas;
+	document.getElementById("info-forca").innerHTML = somaForca;
+	document.getElementById("info-poder").innerHTML = somaPoder;
+}
+
 //--------- Mostrar carta grandona no hover ---------
 var timeoutId;
 function invocaHover(){
@@ -94,3 +115,8 @@ function invocaHover(){
 	});
 }
 invocaHover();
+
+
+function addToDeck(id){
+	console.log(id);
+}
