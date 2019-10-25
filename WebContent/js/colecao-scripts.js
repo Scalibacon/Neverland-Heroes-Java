@@ -1,17 +1,28 @@
 //-------- Atualiza exibição das cartas --------
 function atualizaCartas(container, fonte){
+	var tipoId;
 	if(fonte != deck){
+		tipoId = "colecao";
 		document.getElementById(container).innerHTML = "";
 	}else{
+		tipoId = "deck"
 		document.getElementById("cards-deck").innerHTML = 
-			'<div class="champion-card" id="' + deck.campeao.id + '" style="background:url(img/cards/' + deck.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
+			'<div class="champion-card" id="deck' + deck.campeao.id + '" style="background:url(img/cards/' + deck.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
 		;
 	}
-	for(var i = 0; i < fonte.cartas.length; i++){
-		document.getElementById(container).innerHTML += 
-			'<div class="mini-card" id="' + fonte.cartas[i].carta.id + '" style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
-			'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
-		;
+	for(var i = 0; i < fonte.cartas.length; i++){		
+		if(fonte == colecao){
+			document.getElementById(container).innerHTML += 
+				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" onclick=tryToDeck(' + fonte.cartas[i].carta.id + ') style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
+				'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
+			;
+		} else {
+			document.getElementById(container).innerHTML += 
+				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
+				'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
+			;
+		}
+		
 	}
 	invocaHover();
 }
@@ -62,6 +73,29 @@ function buscaBaralho(){
 }
 buscaBaralho();
 
+//adiciona uma carta da coleção ao baralho
+function tryToDeck(id){
+	var podeAdd = true;
+	var quantidadeNoDeck = 0;
+	
+	if(deck.cartas.length >= 50){
+		podeAdd = false;
+	}
+	
+	if(deck.campeao.id == id){
+		quantidadeNoDeck++; //se for só 1 setar pra false
+	}
+	
+	for(var i = 0; i < deck.cartas.length; i++){
+		if(deck.cartas[i].carta.id == id){
+			if(deck.cartas[i].quantidade >= 3){ //tirar caso o limite seja 1
+				podeAdd = false;
+			} //
+			quantidadeNoDeck = deck.cartas[i].quantidade;
+		}
+	}
+	console.log(id + " - " + quantidadeNoDeck);
+}
 
 // ------- Atualiza as informações sobre o deck -------
 function atualizaDeckInfo(){
@@ -99,8 +133,9 @@ function invocaHover(){
 	        		var x = event.clientX - 300;
 	        	}
 	        	var y = event.clientY; 
-	            timeoutId = null;
-	            $('#carta-grandona').css({display:'block', left:x+'px',background:'url(img/cards/' + event.target.id + '.PNG) no-repeat', 'background-size': '100%'});
+	            timeoutId = null;	            
+	            var idAsNumber = event.target.id.match(/\d+/)[0];
+	            $('#carta-grandona').css({display:'block', left:x+'px',background:'url(img/cards/' + idAsNumber + '.PNG) no-repeat', 'background-size': '100%'});
 	       }, 500);
 	    }
 	},
@@ -115,8 +150,3 @@ function invocaHover(){
 	});
 }
 invocaHover();
-
-
-function addToDeck(id){
-	console.log(id);
-}
