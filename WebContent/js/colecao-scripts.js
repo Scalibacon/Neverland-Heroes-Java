@@ -7,7 +7,7 @@ function atualizaCartas(container, fonte){
 	}else{
 		tipoId = "deck"
 		document.getElementById("cards-deck").innerHTML = 
-			'<div class="champion-card" id="deck' + deck.campeao.id + '" style="background:url(img/cards/' + deck.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
+			'<div class="champion-card" id="deck' + fonte.campeao.id + '" style="background:url(img/cards/' + fonte.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
 		;
 	}
 	for(var i = 0; i < fonte.cartas.length; i++){		
@@ -62,9 +62,8 @@ function buscaBaralho(){
 		success : function(data) {
 			deck = JSON.parse(data);
 			console.log(deck);//					
-			atualizaCartas("cards-deck", deck);
+			atualizaCartas("cards-deck", deck);	
 			atualizaDeckInfo();
-			invocaHover();
 		},
 		error : function() {
 			alert('Erro ao pegar as cartas');
@@ -77,24 +76,51 @@ buscaBaralho();
 function tryToDeck(id){
 	var podeAdd = true;
 	var quantidadeNoDeck = 0;
+	var cartaPraAdd;
 	
-	if(deck.cartas.length >= 50){
+	if(deck.cartas.length >= 50){ //mudar caso a max qtde mude
 		podeAdd = false;
-	}
+		return;
+	}	
 	
+	for(var i = 0; i < colecao.cartas.length; i++){
+		if(colecao.cartas[i].carta.id == id){
+			cartaPraAdd = colecao.cartas[i];
+			break;
+		}
+	}	
+
 	if(deck.campeao.id == id){
-		quantidadeNoDeck++; //se for só 1 setar pra false
-	}
-	
-	for(var i = 0; i < deck.cartas.length; i++){
-		if(deck.cartas[i].carta.id == id){
-			if(deck.cartas[i].quantidade >= 3){ //tirar caso o limite seja 1
-				podeAdd = false;
-			} //
-			quantidadeNoDeck = deck.cartas[i].quantidade;
+		quantidadeNoDeck++; //se limite for 1 setar pra false
+		if(cartaPraAdd.quantidade == 1){
+			podeAdd = false;
+			return;
 		}
 	}
-	console.log(id + " - " + quantidadeNoDeck);
+	
+	if(podeAdd){
+		for(var i = 0; i < deck.cartas.length; i++){
+			if(deck.cartas[i].carta.id == id){
+				quantidadeNoDeck += deck.cartas[i].quantidade;
+				if(quantidadeNoDeck >= 3){ //tirar caso o limite seja 1
+					return;
+				} else //
+				if(quantidadeNoDeck >= cartaPraAdd.quantidade){
+					podeAdd = false;
+					return;
+				}else{
+					deck.cartas[i].quantidade++;
+					atualizaCartas("cards-deck", deck);
+					return;
+				}
+				break;
+			}
+		}
+		
+		cartaPraAdd.quantidade = 1;
+		deck.cartas.push(cartaPraAdd);
+		atualizaCartas("cards-deck", deck);
+	}
 }
 
 // ------- Atualiza as informações sobre o deck -------
