@@ -23,17 +23,16 @@ public class BuscaBaralhoServlet extends HttpServlet{
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		Baralho baralho;
-		
+		Baralho baralho;		
 		/* depois tirar daqui... */
-		if(true) {
-			baralho = PseuDAO.pseudoBaralho();
-		} else { /* até aqui */
+//		if(true) {
+//			baralho = PseuDAO.pseudoBaralho();
+//		} else { /* até aqui */
 			BaralhoDAO bDao = new BaralhoDAOImpl();
 			Jogador j = new Jogador();
 			j.setId((int) session.getAttribute("id"));
 			baralho = bDao.buscaBaralho(j);
-		} //aqui tb
+//		} //aqui tb
 		PrintWriter out = response.getWriter();
 		String gson = baralho.toJson();
 		out.println(gson);

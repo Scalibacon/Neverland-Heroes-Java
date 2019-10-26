@@ -184,6 +184,7 @@ select * from heroi
 select * from arma
 select * from baralho
 
+-- retorna todas as armas na coleção do jogador
 select c.id, c.nome, c.tipo, cc.quantidade, a.tipo as tipo_arma from colecao_carta cc
 inner join carta c
 on c.id = cc.id_carta
@@ -206,10 +207,19 @@ ON cc.id_carta = c.id
 WHERE cc.id_jogador = 1
 order by c.nome
 
+select c.id, c.nome, c.tipo, h.rank_, h.hp, h.forca, h.poder from carta c
+inner join baralho b
+on b.id_campeao = c.id
+inner join heroi h
+on h.id = c.id
+where b.id_jogador = 1 and b.nome_baralho = 'Padrão'
+
 -- Retorna o baralho --
-SELECT bc.id_carta, c.nome, c.tipo, bc.quantidade, b.id_campeao FROM baralho_carta bc
+SELECT c.id, c.nome, c.tipo, h.rank_, h.forca, h.poder, bc.quantidade FROM baralho_carta bc
 INNER JOIN carta c
 ON c.id = bc.id_carta
+inner join heroi h
+on h.id = c.id
 INNER JOIN baralho b
 ON b.id_jogador = bc.id_jogador
 WHERE bc.id_jogador = 1 AND bc.nome_baralho = 'Padrão'

@@ -7,43 +7,238 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Arma;
 import model.Baralho;
-import model.Carta;
 import model.CartaColecao;
+import model.Consumivel;
+import model.Heroi;
 import model.Jogador;
+import model.Magia;
+import model.Postura;
+import model.TipoAfinidade;
+import model.TipoArma;
 import model.TipoCarta;
 
 public class BaralhoDAOImpl implements BaralhoDAO {
 
 	@Override
-	public Baralho buscaBaralho(Jogador j) {
-		try (Connection con = DBConnection.getInstancia().conectar();) {
-			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT bc.id_carta, c.nome, c.tipo, bc.quantidade, b.id_campeao FROM baralho_carta bc "
-					+ "INNER JOIN carta c " + "ON c.id = bc.id_carta " + "INNER JOIN baralho b "
-					+ "ON b.id_jogador = bc.id_jogador " + "WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' "
-					+ "ORDER BY c.tipo desc, c.nome asc";
+	public Baralho buscaBaralho(Jogador j) {	
+		Baralho baralho = new Baralho();
+		List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+		
+		baralho.setCampeao(buscaCampeao(j));
+		cartas.addAll(buscaHerois(j));
+		cartas.addAll(buscaArmas(j));
+		cartas.addAll(buscaMagias(j));
+		cartas.addAll(buscaPosturas(j));
+		cartas.addAll(buscaConsumiveis(j));
+		
+		baralho.setJogador(j);
+		baralho.setCartas(cartas);
+		return baralho;		
+	}
+	
+	@Override
+	public Heroi buscaCampeao(Jogador j) {
+		try (Connection con = DBConnection.getInstancia().conectar();){			
+			Heroi campeao = new Heroi();
+			String sql = "select c.id, c.nome, c.tipo, h.rank_, h.hp, h.forca, h.poder from carta c " + 
+					"inner join baralho b " + 
+					"on b.id_campeao = c.id " + 
+					"inner join heroi h " + 
+					"on h.id = c.id " + 
+					"where b.id_jogador = ? and b.nome_baralho = 'Padrão'";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
 			Baralho baralho = new Baralho();
-			while(rs.next()) {
-				Carta campeao = new Carta();
-				campeao.setId(rs.getInt("id_campeao"));
+			if(rs.next()) {
+				campeao = new Heroi();
+				campeao.setId(rs.getInt("id"));
+				campeao.setNome(rs.getString("nome"));
+				campeao.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				campeao.setRank(rs.getInt("rank_"));
+				campeao.setHp(rs.getInt("hp"));
+				campeao.setForca(rs.getInt("forca"));
+				campeao.setPoder(rs.getInt("poder"));
 				baralho.setCampeao(campeao);
-				
-				Carta carta = new Carta();
-				carta.setId(rs.getInt("id_carta"));
-				carta.setNome(rs.getString("nome"));
-				carta.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
-				CartaColecao carta_colecao = new CartaColecao();
-				carta_colecao.setCarta(carta);
-				carta_colecao.setQuantidade(rs.getInt("quantidade"));
-				cartas.add(carta_colecao);
-			}			
-			baralho.setJogador(j);
-			baralho.setCartas(cartas);
-			return baralho;
+			}
+			return campeao;	
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<CartaColecao> buscaHerois(Jogador j){
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+			String sql = "SELECT c.id, c.nome, c.tipo, h.rank_, h.hp, h.forca, h.poder, bc.quantidade FROM baralho_carta bc " + 
+					"INNER JOIN carta c " + 
+					"ON c.id = bc.id_carta " + 
+					"inner join heroi h " + 
+					"on h.id = c.id " + 
+					"INNER JOIN baralho b " + 
+					"ON b.id_jogador = bc.id_jogador " + 
+					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
+					"ORDER BY c.tipo desc, c.nome asc";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, j.getId());
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				Heroi c = new Heroi();
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setRank(rs.getInt("rank_"));
+				c.setHp(rs.getInt("hp"));
+				c.setForca(rs.getInt("forca"));
+				c.setPoder(rs.getInt("poder"));
+				CartaColecao cc = new CartaColecao();
+				cc.setCarta(c);
+				cc.setQuantidade(rs.getInt("quantidade"));
+				cartas.add(cc);
+			}
+			return cartas;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<CartaColecao> buscaArmas(Jogador j){
+		try {
+			Connection con = DBConnection.getInstancia().conectar();
+			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+			String sql = "SELECT c.id, c.nome, c.tipo, a.tipo as tipo_arma, bc.quantidade FROM baralho_carta bc " + 
+					"INNER JOIN carta c " + 
+					"ON c.id = bc.id_carta " + 
+					"inner join arma a " + 
+					"on a.id = c.id " + 
+					"INNER JOIN baralho b " + 
+					"ON b.id_jogador = bc.id_jogador " + 
+					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
+					"ORDER BY c.tipo desc, c.nome asc";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, j.getId());
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				Arma c = new Arma();
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setTipoArma(TipoArma.buscaTipoArma(rs.getInt("tipo_arma")));
+				CartaColecao cc = new CartaColecao();
+				cc.setCarta(c);
+				cc.setQuantidade(rs.getInt("quantidade"));
+				cartas.add(cc);
+			}
+			return cartas;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<CartaColecao> buscaMagias(Jogador j){
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+			String sql = "SELECT c.id, c.nome, c.tipo, m.afinidade, m.custo, bc.quantidade FROM baralho_carta bc " + 
+					"inner join carta c " + 
+					"on c.id = bc.id_carta " +
+					"INNER JOIN magia m " + 
+					"ON m.id = bc.id_carta " + 				 
+					"INNER JOIN baralho b " + 
+					"ON b.id_jogador = bc.id_jogador " + 
+					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
+					"ORDER BY c.tipo desc, c.nome asc";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, j.getId());
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				Magia c = new Magia();
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
+				c.setCusto(rs.getInt("custo"));
+				CartaColecao cc = new CartaColecao();
+				cc.setCarta(c);
+				cc.setQuantidade(rs.getInt("quantidade"));
+				cartas.add(cc);
+			}
+			return cartas;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<CartaColecao> buscaPosturas(Jogador j){
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+			String sql = "SELECT c.id, c.nome, c.tipo, p.tipo_arma, p.custo, bc.quantidade FROM baralho_carta bc " + 
+					"INNER JOIN carta c " + 
+					"ON c.id = bc.id_carta " + 
+					"inner join postura p " + 
+					"on p.id = c.id " + 
+					"INNER JOIN baralho b " + 
+					"ON b.id_jogador = bc.id_jogador " + 
+					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
+					"ORDER BY c.tipo desc, c.nome asc";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, j.getId());
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				Postura c = new Postura();
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setTipoArma(TipoArma.buscaTipoArma(rs.getInt("tipo_arma")));
+				c.setCusto(rs.getInt("custo"));
+				CartaColecao cc = new CartaColecao();
+				cc.setCarta(c);
+				cc.setQuantidade(rs.getInt("quantidade"));
+				cartas.add(cc);
+			}
+			return cartas;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<CartaColecao> buscaConsumiveis(Jogador j){
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+			String sql = "SELECT c.id, c.nome, c.tipo, bc.quantidade FROM baralho_carta bc " + 
+					"INNER JOIN carta c " + 
+					"ON c.id = bc.id_carta " + 
+					"inner join consumivel con " + 
+					"on con.id = c.id " + 
+					"INNER JOIN baralho b " + 
+					"ON b.id_jogador = bc.id_jogador " + 
+					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
+					"ORDER BY c.tipo desc, c.nome asc";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, j.getId());
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				Consumivel c = new Consumivel();
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				CartaColecao cc = new CartaColecao();
+				cc.setCarta(c);
+				cc.setQuantidade(rs.getInt("quantidade"));
+				cartas.add(cc);
+			}
+			return cartas;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

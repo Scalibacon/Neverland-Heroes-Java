@@ -23,22 +23,18 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 
 	@Override
 	public Colecao buscaColecao(Jogador j) {
-		try (Connection con = DBConnection.getInstancia().conectar();) {
-			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			cartas.addAll(buscaHerois(j));
-			cartas.addAll(buscaArmas(j));
-			cartas.addAll(buscaMagias(j));
-			cartas.addAll(buscaPosturas(j));
-			cartas.addAll(buscaConsumiveis(j));
-			
-			Colecao colecao = new Colecao();
-			colecao.setJogador(j);
-			colecao.setCartas(cartas);
-			return colecao;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
+		Colecao colecao = new Colecao();
+		List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+		
+		cartas.addAll(buscaHerois(j));
+		cartas.addAll(buscaArmas(j));
+		cartas.addAll(buscaMagias(j));
+		cartas.addAll(buscaPosturas(j));
+		cartas.addAll(buscaConsumiveis(j));		
+		
+		colecao.setJogador(j);
+		colecao.setCartas(cartas);
+		return colecao;
 	}
 	
 	@Override
@@ -177,8 +173,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 			String sql = "select c.id, c.nome, c.tipo, cc.quantidade from colecao_carta cc " + 
 					"inner join carta c " + 
 					"on c.id = cc.id_carta " + 
-					"inner join postura p " + 
-					"on p.id = c.id " + 
+					"inner join consumivel con " + 
+					"on con.id = c.id " + 
 					"where cc.id_jogador = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());

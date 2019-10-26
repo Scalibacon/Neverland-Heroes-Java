@@ -45,6 +45,7 @@ function buscaCartas(){
 			colecao = JSON.parse(data);
 			console.log(colecao);
 			atualizaCartas("cards-colecao", colecao);
+			buscaBaralho();
 		},
 		error : function(e) {
 			alert('Erro ao pegar as cartas: ' + e);
@@ -73,7 +74,6 @@ function buscaBaralho(){
 		}
 	});
 }
-buscaBaralho();
 
 //adiciona uma carta da coleção ao baralho
 function tryToDeck(id){
