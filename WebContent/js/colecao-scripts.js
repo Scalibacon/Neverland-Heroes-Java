@@ -1,7 +1,7 @@
 //-------- Atualiza exibição das cartas --------
 function atualizaCartas(container, fonte){
 	var tipoId;
-	if(fonte != deck){
+	if(fonte == colecao){
 		tipoId = "colecao";
 		document.getElementById(container).innerHTML = "";
 	}else{
@@ -18,12 +18,16 @@ function atualizaCartas(container, fonte){
 			;
 		} else {
 			document.getElementById(container).innerHTML += 
-				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
+				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" onclick=tirarDoDeck(' + fonte.cartas[i].carta.id + ') oncontextmenu=adicionarCampeao(' + fonte.cartas[i].carta.id + ') style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
 				'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
 			;
-		}
-		
+		}		
 	}
+	
+	if(fonte == deck){
+		atualizaDeckInfo();
+	}
+	
 	invocaHover();
 }
 
@@ -39,7 +43,7 @@ function buscaCartas(){
 		cache : false,
 		success : function(data) {
 			colecao = JSON.parse(data);
-			//console.log(colecao);
+			console.log(colecao);
 			atualizaCartas("cards-colecao", colecao);
 		},
 		error : function(e) {
@@ -62,8 +66,7 @@ function buscaBaralho(){
 		success : function(data) {
 			deck = JSON.parse(data);
 			console.log(deck);//					
-			atualizaCartas("cards-deck", deck);	
-			atualizaDeckInfo();
+			atualizaCartas("cards-deck", deck);				
 		},
 		error : function() {
 			alert('Erro ao pegar as cartas');
@@ -103,12 +106,16 @@ function tryToDeck(id){
 			if(deck.cartas[i].carta.id == id){
 				quantidadeNoDeck += deck.cartas[i].quantidade;
 				if(quantidadeNoDeck >= 3){ //tirar caso o limite seja 1
+					//console.log("Mais que 3");
+					podeAdd = false;
 					return;
 				} else //
 				if(quantidadeNoDeck >= cartaPraAdd.quantidade){
+					//console.log("Mais que você tem - " + cartaPraAdd.quantidade);
 					podeAdd = false;
 					return;
 				}else{
+					//console.log("Já tem no deck, mas pode add");
 					deck.cartas[i].quantidade++;
 					atualizaCartas("cards-deck", deck);
 					return;
@@ -117,9 +124,47 @@ function tryToDeck(id){
 			}
 		}
 		
-		cartaPraAdd.quantidade = 1;
-		deck.cartas.push(cartaPraAdd);
+		var cartaProntaPraAdd = JSON.parse(JSON.stringify(cartaPraAdd));
+		cartaProntaPraAdd.quantidade = 1;
+		deck.cartas.push(cartaProntaPraAdd);
 		atualizaCartas("cards-deck", deck);
+	}
+}
+
+function tirarDoDeck(id){
+	for(var i = 0; i < deck.cartas.length; i++){
+		if(deck.cartas[i].carta.id == id){
+			if(deck.cartas[i].quantidade > 1){
+				deck.cartas[i].quantidade--;
+			}else{
+				deck.cartas.splice(i, 1);
+			}
+			break;
+		}
+	}
+	atualizaCartas("cards-deck", deck);
+	$('#carta-grandona').css({display:'none'});	
+}
+
+function adicionarCampeao(id){	
+	for(var i = 0; i < deck.cartas.length; i++){
+		if(deck.cartas[i].carta.id == id){
+			if(isNaN(deck.cartas[i].carta.rank) || deck.cartas[i].carta.id == deck.campeao.id){
+				return;
+			} else {
+				var exCampeao = JSON.parse(JSON.stringify(deck.campeao));
+				deck.campeao = deck.cartas[i].carta;
+				tryToDeck(exCampeao.id);
+				if(deck.cartas[i].quantidade > 1){
+					deck.cartas[i].quantidade--;
+				} else {
+					deck.cartas.splice(i, 1);
+				}
+				atualizaCartas("cards-deck", deck);
+				$('#carta-grandona').css({display:'none'});
+				return;
+			}
+		}
 	}
 }
 
@@ -129,15 +174,16 @@ function atualizaDeckInfo(){
 	var qtdeHerois = 1;
 	var somaForca =  deck.campeao.forca;
 	var somaPoder =  deck.campeao.poder;
-	var qtdeCartas = 1 + deck.cartas.length;
+	var qtdeCartas = 1;
 	
 	for(var i = 0; i < deck.cartas.length; i++){
 		if(!isNaN(deck.cartas[i].carta.rank)){
-			somaRank += deck.cartas[i].carta.rank;
-			qtdeHerois++;
-			somaForca += deck.cartas[i].carta.forca;
-			somaPoder += deck.cartas[i].carta.poder;
+			somaRank += (deck.cartas[i].carta.rank * deck.cartas[i].quantidade);
+			qtdeHerois += 1 * deck.cartas[i].quantidade;
+			somaForca += (deck.cartas[i].carta.forca * deck.cartas[i].quantidade);
+			somaPoder += (deck.cartas[i].carta.poder * deck.cartas[i].quantidade);
 		}
+		qtdeCartas += (1 * deck.cartas[i].quantidade);
 	}
 	document.getElementById("info-rank").innerHTML = somaRank;
 	document.getElementById("info-herois").innerHTML = qtdeHerois;
@@ -152,8 +198,7 @@ function invocaHover(){
 	$(".mini-card, .champion-card").hover(function(event) {
 	    if (!timeoutId) {
 	        timeoutId = window.setTimeout(function() {
-	        	//console.log(event.target.parentElement.id);
-	        	if(event.target.parentElement.id == "cards-colecao"){
+	        	if(event.target.parentElement != null && event.target.parentElement.id == "cards-colecao"){
 	        		var x = event.clientX + 40;
 	        	}else{
 	        		var x = event.clientX - 300;
@@ -173,6 +218,11 @@ function invocaHover(){
 	    else { //roda quando a delayzada não tá no aguardo
 	    	 $('#carta-grandona').css({display:'none'});
 	    }
+	});
+	
+	//impede de abrir o menu no right click
+	$(".mini-card").contextmenu(function(e){
+		e.preventDefault();
 	});
 }
 invocaHover();

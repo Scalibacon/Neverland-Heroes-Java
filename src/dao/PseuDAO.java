@@ -24,7 +24,7 @@ public class PseuDAO {
 		Colecao col = new Colecao();
 		List<CartaColecao> cartas = new ArrayList<CartaColecao>();
 		for (int i = 1; i <= 21; i++) {
-			if (i >= 2 && i <= 6 ) {
+			if (i >= 1 && i <= 6 ) {
 				Heroi c = new Heroi();
 				c.setId(i);
 				c.setRank(1);
@@ -33,7 +33,7 @@ public class PseuDAO {
 				c.setPoder((int) Math.random() * 5 + 1);
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
-				cc.setQuantidade(2);
+				cc.setQuantidade(5);
 				cartas.add(cc);
 			}else {
 				Carta c = new Carta();

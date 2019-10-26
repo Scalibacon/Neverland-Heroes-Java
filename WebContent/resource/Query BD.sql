@@ -184,6 +184,13 @@ select * from heroi
 select * from arma
 select * from baralho
 
+select c.id, c.nome, c.tipo, cc.quantidade, a.tipo as tipo_arma from colecao_carta cc
+inner join carta c
+on c.id = cc.id_carta
+inner join arma a
+on a.id = c.id
+where cc.id_jogador = 1
+
 -- Sintaxe do backup
 BACKUP DATABASE cardgame
 TO DISK = 'E:\Teste\cardgameDB.bak';
