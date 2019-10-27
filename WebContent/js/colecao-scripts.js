@@ -5,7 +5,7 @@ function atualizaCartas(container, fonte){
 		tipoId = "colecao";
 		document.getElementById(container).innerHTML = "";
 	}else{
-		tipoId = "deck"
+		tipoId = "deck";
 		document.getElementById("cards-deck").innerHTML = 
 			'<div class="champion-card" id="deck' + fonte.campeao.id + '" style="background:url(img/cards/' + fonte.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
 		;
@@ -192,6 +192,11 @@ function atualizaDeckInfo(){
 	document.getElementById("info-poder").innerHTML = somaPoder;
 }
 
+//--------- Salva o deck ---------
+function saveDeck(){
+	console.log('foi');
+}
+
 //--------- Mostrar carta grandona no hover ---------
 var timeoutId;
 function invocaHover(){
@@ -204,10 +209,12 @@ function invocaHover(){
 	        		var x = event.clientX - 300;
 	        	}
 	        	var y = event.clientY; 
-	            timeoutId = null;	            
-	            var idAsNumber = event.target.id.match(/\d+/)[0];
-	            $('#carta-grandona').css({display:'block', left:x+'px',background:'url(img/cards/' + idAsNumber + '.PNG) no-repeat', 'background-size': '100%'});
-	       }, 500);
+	            timeoutId = null;	
+	            if(event.target != null){
+	            	var idAsNumber = event.target.id.match(/\d+/)[0];
+	            	$('#carta-grandona').css({display:'block', left:x+'px',background:'url(img/cards/' + idAsNumber + '.PNG) no-repeat', 'background-size': '100%'});
+	            }
+            }, 500);
 	    }
 	},
 	function () { //oumouseleave
@@ -218,8 +225,7 @@ function invocaHover(){
 	    else { //roda quando a delayzada não tá no aguardo
 	    	 $('#carta-grandona').css({display:'none'});
 	    }
-	});
-	
+	});	
 	//impede de abrir o menu no right click
 	$(".mini-card").contextmenu(function(e){
 		e.preventDefault();

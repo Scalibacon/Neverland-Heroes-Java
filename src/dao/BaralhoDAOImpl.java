@@ -18,6 +18,7 @@ import model.Postura;
 import model.TipoAfinidade;
 import model.TipoArma;
 import model.TipoCarta;
+import model.TipoRaridade;
 
 public class BaralhoDAOImpl implements BaralhoDAO {
 
@@ -42,7 +43,8 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public Heroi buscaCampeao(Jogador j) {
 		try (Connection con = DBConnection.getInstancia().conectar();){			
 			Heroi campeao = new Heroi();
-			String sql = "select c.id, c.nome, c.tipo, h.rank_, h.hp, h.forca, h.poder from carta c " + 
+			String sql = "select c.id, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
+					+ "h.afinidade, h.pericia, h.ganho_pericia from carta c " + 
 					"inner join baralho b " + 
 					"on b.id_campeao = c.id " + 
 					"inner join heroi h " + 
@@ -57,10 +59,18 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				campeao.setId(rs.getInt("id"));
 				campeao.setNome(rs.getString("nome"));
 				campeao.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				campeao.setRaridade(TipoRaridade.buscaTipoRaridade(rs.getInt("raridade")));
+				campeao.setPrecoVenda(rs.getInt("preco_venda"));
 				campeao.setRank(rs.getInt("rank_"));
 				campeao.setHp(rs.getInt("hp"));
+				campeao.setMana(rs.getInt("mana"));
 				campeao.setForca(rs.getInt("forca"));
 				campeao.setPoder(rs.getInt("poder"));
+				campeao.setDefesa(rs.getInt("defesa"));
+				campeao.setResistencia(rs.getInt("resistencia"));
+				campeao.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
+				campeao.setPericia(TipoArma.buscaTipoArma(rs.getInt("pericia")));
+				campeao.setGanhoPericia(rs.getInt("ganho_pericia"));
 				baralho.setCampeao(campeao);
 			}
 			return campeao;	
@@ -74,7 +84,8 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaHerois(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.tipo, h.rank_, h.hp, h.forca, h.poder, bc.quantidade FROM baralho_carta bc " + 
+			String sql = "SELECT c.id, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
+					+ "h.afinidade, h.pericia, h.ganho_pericia, bc.quantidade FROM baralho_carta bc " + 
 					"INNER JOIN carta c " + 
 					"ON c.id = bc.id_carta " + 
 					"inner join heroi h " + 
@@ -91,10 +102,21 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setRaridade(TipoRaridade.buscaTipoRaridade(rs.getInt("raridade")));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setRank(rs.getInt("rank_"));
 				c.setHp(rs.getInt("hp"));
+				c.setMana(rs.getInt("mana"));
 				c.setForca(rs.getInt("forca"));
 				c.setPoder(rs.getInt("poder"));
+				c.setDefesa(rs.getInt("defesa"));
+				c.setResistencia(rs.getInt("resistencia"));
+				c.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
+				c.setPericia(TipoArma.buscaTipoArma(rs.getInt("pericia")));
+				c.setGanhoPericia(rs.getInt("ganho_pericia"));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
 				cc.setQuantidade(rs.getInt("quantidade"));
