@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 public class Baralho {
 	private Jogador jogador;
 	private String nome;
-	private Carta campeao;
+	private Heroi campeao;
 	private List<CartaColecao> cartas;
 	
 	public Jogador getJogador() {
@@ -22,10 +22,10 @@ public class Baralho {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Carta getCampeao() {
+	public Heroi getCampeao() {
 		return campeao;
 	}
-	public void setCampeao(Carta campeao) {
+	public void setCampeao(Heroi campeao) {
 		this.campeao = campeao;
 	}
 	public List<CartaColecao> getCartas() {

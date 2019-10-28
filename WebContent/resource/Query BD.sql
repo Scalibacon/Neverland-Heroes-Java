@@ -233,3 +233,17 @@ WHERE b.id_jogador = 1 AND b.nome_baralho = 'Padrão'
 
 -- Retorna o último ID de card cadastrado --
 SELECT MAX(id) AS id FROM carta
+
+-- Salva o deck --
+delete from baralho_carta where id_jogador = 1 and nome_baralho = 'Padrão' --apaga as cartas antigas
+update baralho set id_campeao = 1 where id_jogador = 1 and nome_baralho = 'Padrão' --atualiza o campeão
+insert into baralho_carta values (1, 'Padrão', 1, 1) --laço que insere as cartas
+/*
+.
+.
+.
+id_jogador int not null,
+nome_baralho varchar(100) not null,
+id_carta int not null,
+quantidade int not null,
+*/

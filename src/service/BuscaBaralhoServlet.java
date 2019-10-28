@@ -22,10 +22,10 @@ public class BuscaBaralhoServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
-		Baralho baralho;		
-		/* depois tirar daqui... */
-//		if(true) {
+		Baralho baralho;			
+//		if(true) { /* depois tirar daqui... */
 //			baralho = PseuDAO.pseudoBaralho();
 //		} else { /* até aqui */
 			BaralhoDAO bDao = new BaralhoDAOImpl();

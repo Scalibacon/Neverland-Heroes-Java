@@ -22,10 +22,10 @@ public class BuscaColecaoServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
-		Colecao colecao;
-		/* depois tirar daqui... */
-//		if(true) {
+		Colecao colecao;		
+//		if(true) { /* depois tirar daqui... */
 //			colecao = PseuDAO.pseudoColecao();
 //		}else { /* até aqui */
 			ColecaoDAO cDao = new ColecaoDAOImpl();

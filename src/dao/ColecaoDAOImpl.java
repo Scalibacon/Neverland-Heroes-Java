@@ -18,6 +18,7 @@ import model.Postura;
 import model.TipoAfinidade;
 import model.TipoArma;
 import model.TipoCarta;
+import model.TipoRaridade;
 
 public class ColecaoDAOImpl implements ColecaoDAO{
 
@@ -41,7 +42,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaHerois(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.tipo, cc.quantidade, h.rank_,  h.forca, h.poder, h.hp from colecao_carta cc " + 
+			String sql = "select c.id, c.preco_venda, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia," +
+					"h.afinidade, h.pericia, h.ganho_pericia, cc.quantidade from colecao_carta cc " + 
 					"inner join carta c " + 
 					"on c.id = cc.id_carta " + 
 					"inner join heroi h " + 
@@ -54,11 +56,23 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 				Heroi c = new Heroi();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setId(rs.getInt("id"));
+				c.setNome(rs.getString("nome"));
+				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
+				c.setRaridade(TipoRaridade.buscaTipoRaridade(rs.getInt("raridade")));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setRank(rs.getInt("rank_"));
 				c.setHp(rs.getInt("hp"));
+				c.setMana(rs.getInt("mana"));
 				c.setForca(rs.getInt("forca"));
 				c.setPoder(rs.getInt("poder"));
+				c.setDefesa(rs.getInt("defesa"));
+				c.setResistencia(rs.getInt("resistencia"));
+				c.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
+				c.setPericia(TipoArma.buscaTipoArma(rs.getInt("pericia")));
+				c.setGanhoPericia(rs.getInt("ganho_pericia"));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
 				cc.setQuantidade(rs.getInt("quantidade"));
@@ -75,7 +89,7 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaArmas(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.tipo, cc.quantidade, a.tipo as tipo_arma from colecao_carta cc " + 
+			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, cc.quantidade, a.tipo as tipo_arma from colecao_carta cc " + 
 					"inner join carta c " + 
 					"on c.id = cc.id_carta " + 
 					"inner join arma a " + 
@@ -88,6 +102,7 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 				Arma c = new Arma();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setTipoArma(TipoArma.buscaTipoArma(rs.getInt("tipo_arma")));
 				CartaColecao cc = new CartaColecao();
@@ -106,7 +121,7 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaMagias(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.tipo, cc.quantidade, m.afinidade, m.custo from colecao_carta cc " + 
+			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, cc.quantidade from colecao_carta cc " + 
 					"inner join carta c " + 
 					"on c.id = cc.id_carta " + 
 					"inner join magia m " + 
@@ -119,9 +134,11 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 				Magia c = new Magia();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
 				c.setCusto(rs.getInt("custo"));
+				c.setTempoRecarga(rs.getInt("tempo_recarga"));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
 				cc.setQuantidade(rs.getInt("quantidade"));
@@ -138,7 +155,7 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaPosturas(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.tipo, cc.quantidade, p.tipo_arma, p.custo from colecao_carta cc " + 
+			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, cc.quantidade from colecao_carta cc " + 
 					"inner join carta c " + 
 					"on c.id = cc.id_carta " + 
 					"inner join postura p " + 
@@ -151,9 +168,11 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 				Postura c = new Postura();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setTipoArma(TipoArma.buscaTipoArma(rs.getInt("tipo_arma")));
 				c.setCusto(rs.getInt("custo"));
+				c.setTempoRecarga(rs.getInt("tempo_recarga"));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
 				cc.setQuantidade(rs.getInt("quantidade"));
@@ -170,7 +189,7 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaConsumiveis(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.tipo, cc.quantidade from colecao_carta cc " + 
+			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, cc.quantidade from colecao_carta cc " + 
 					"inner join carta c " + 
 					"on c.id = cc.id_carta " + 
 					"inner join consumivel con " + 
@@ -183,6 +202,7 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 				Consumivel c = new Consumivel();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);

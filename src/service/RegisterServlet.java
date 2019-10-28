@@ -35,5 +35,9 @@ public class RegisterServlet extends HttpServlet{
 			response.sendRedirect("index.jsp");
 		}		
 	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		doPost(request, response);
+	}
 
 }

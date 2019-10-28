@@ -43,7 +43,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public Heroi buscaCampeao(Jogador j) {
 		try (Connection con = DBConnection.getInstancia().conectar();){			
 			Heroi campeao = new Heroi();
-			String sql = "select c.id, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
+			String sql = "select c.id, c.preco_venda, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
 					+ "h.afinidade, h.pericia, h.ganho_pericia from carta c " + 
 					"inner join baralho b " + 
 					"on b.id_campeao = c.id " + 
@@ -58,6 +58,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				campeao = new Heroi();
 				campeao.setId(rs.getInt("id"));
 				campeao.setNome(rs.getString("nome"));
+				campeao.setPrecoVenda(rs.getInt("preco_venda"));
 				campeao.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				campeao.setRaridade(TipoRaridade.buscaTipoRaridade(rs.getInt("raridade")));
 				campeao.setPrecoVenda(rs.getInt("preco_venda"));
@@ -84,7 +85,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaHerois(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
+			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
 					+ "h.afinidade, h.pericia, h.ganho_pericia, bc.quantidade FROM baralho_carta bc " + 
 					"INNER JOIN carta c " + 
 					"ON c.id = bc.id_carta " + 
@@ -101,6 +102,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				Heroi c = new Heroi();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
@@ -134,7 +136,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 		try {
 			Connection con = DBConnection.getInstancia().conectar();
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.tipo, a.tipo as tipo_arma, bc.quantidade FROM baralho_carta bc " + 
+			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, bc.quantidade FROM baralho_carta bc " + 
 					"INNER JOIN carta c " + 
 					"ON c.id = bc.id_carta " + 
 					"inner join arma a " + 
@@ -150,6 +152,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				Arma c = new Arma();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setTipoArma(TipoArma.buscaTipoArma(rs.getInt("tipo_arma")));
 				CartaColecao cc = new CartaColecao();
@@ -168,7 +171,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaMagias(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.tipo, m.afinidade, m.custo, bc.quantidade FROM baralho_carta bc " + 
+			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, bc.quantidade FROM baralho_carta bc " + 
 					"inner join carta c " + 
 					"on c.id = bc.id_carta " +
 					"INNER JOIN magia m " + 
@@ -184,9 +187,11 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				Magia c = new Magia();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
 				c.setCusto(rs.getInt("custo"));
+				c.setTempoRecarga(rs.getInt("tempo_recarga"));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
 				cc.setQuantidade(rs.getInt("quantidade"));
@@ -203,7 +208,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaPosturas(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.tipo, p.tipo_arma, p.custo, bc.quantidade FROM baralho_carta bc " + 
+			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, bc.quantidade FROM baralho_carta bc " + 
 					"INNER JOIN carta c " + 
 					"ON c.id = bc.id_carta " + 
 					"inner join postura p " + 
@@ -219,9 +224,11 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				Postura c = new Postura();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setTipoArma(TipoArma.buscaTipoArma(rs.getInt("tipo_arma")));
 				c.setCusto(rs.getInt("custo"));
+				c.setTempoRecarga(rs.getInt("tempo_recarga"));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
 				cc.setQuantidade(rs.getInt("quantidade"));
@@ -238,7 +245,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaConsumiveis(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.tipo, bc.quantidade FROM baralho_carta bc " + 
+			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, bc.quantidade FROM baralho_carta bc " + 
 					"INNER JOIN carta c " + 
 					"ON c.id = bc.id_carta " + 
 					"inner join consumivel con " + 
@@ -254,6 +261,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				Consumivel c = new Consumivel();
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
+				c.setPrecoVenda(rs.getInt("preco_venda"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				CartaColecao cc = new CartaColecao();
 				cc.setCarta(c);
@@ -264,6 +272,35 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	@Override
+	public boolean salvaDeck(Baralho deck) {
+		String sql;
+		PreparedStatement stm;
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			sql = "delete from baralho_carta where id_jogador = ? and nome_baralho = 'Padrão' " +
+				  "update baralho set id_campeao = ? where id_jogador = ? and nome_baralho = 'Padrão'";
+			stm = con.prepareStatement(sql);
+			stm.setInt(1, deck.getJogador().getId());
+			stm.setInt(2, deck.getCampeao().getId());
+			stm.setInt(3, deck.getJogador().getId());
+			stm.executeUpdate();
+			
+			for(int i = 0; i < deck.getCartas().size(); i++) {
+				sql = "insert into baralho_carta values (?, 'Padrão', ?, ?)";
+				stm = con.prepareStatement(sql);
+				stm.setInt(1, deck.getJogador().getId());				
+				stm.setInt(2, deck.getCartas().get(i).getCarta().getId());
+				stm.setInt(3, deck.getCartas().get(i).getQuantidade());
+				stm.executeUpdate();
+			}
+			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 }

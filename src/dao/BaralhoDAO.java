@@ -21,4 +21,6 @@ public interface BaralhoDAO {
 	List<CartaColecao> buscaHerois(Jogador j);
 
 	Heroi buscaCampeao(Jogador j);
+	
+	boolean salvaDeck(Baralho deck);
 }

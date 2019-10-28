@@ -63,7 +63,7 @@
 		
 		<div id="deck-container">
 			<div class="container-titulo">
-				<div class='deck-btn' id="btn-esvaziar">Esvaziar</div>
+				<div class='deck-btn' id="btn-ordenar" onclick="sortDeck()">Ordenar</div>
 				<div class='deck-btn' id="btn-salvar" onclick="saveDeck()">Salvar</div>
 				SEU DECK				
 			</div>			

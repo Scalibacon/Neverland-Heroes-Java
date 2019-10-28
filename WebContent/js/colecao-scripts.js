@@ -1,10 +1,14 @@
+document.write("<script type='text/javascript' src='js/sweetalert2.all.min.js'></script>");
 //-------- Atualiza exibição das cartas --------
-function atualizaCartas(container, fonte){
+function atualizaCartas(fonte){
 	var tipoId;
+	var container;
 	if(fonte == colecao){
+		container = "cards-colecao";
 		tipoId = "colecao";
 		document.getElementById(container).innerHTML = "";
 	}else{
+		container = "cards-deck";
 		tipoId = "deck";
 		document.getElementById("cards-deck").innerHTML = 
 			'<div class="champion-card" id="deck' + fonte.campeao.id + '" style="background:url(img/cards/' + fonte.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
@@ -44,7 +48,7 @@ function buscaCartas(){
 		success : function(data) {
 			colecao = JSON.parse(data);
 			console.log(colecao);
-			atualizaCartas("cards-colecao", colecao);
+			atualizaCartas(colecao);
 			buscaBaralho();
 		},
 		error : function(e) {
@@ -67,7 +71,7 @@ function buscaBaralho(){
 		success : function(data) {
 			deck = JSON.parse(data);
 			console.log(deck);//					
-			atualizaCartas("cards-deck", deck);				
+			atualizaCartas(deck);				
 		},
 		error : function() {
 			alert('Erro ao pegar as cartas');
@@ -117,7 +121,7 @@ function tryToDeck(id){
 				}else{
 					//console.log("Já tem no deck, mas pode add");
 					deck.cartas[i].quantidade++;
-					atualizaCartas("cards-deck", deck);
+					atualizaCartas(deck);
 					return;
 				}
 				break;
@@ -127,7 +131,7 @@ function tryToDeck(id){
 		var cartaProntaPraAdd = JSON.parse(JSON.stringify(cartaPraAdd));
 		cartaProntaPraAdd.quantidade = 1;
 		deck.cartas.push(cartaProntaPraAdd);
-		atualizaCartas("cards-deck", deck);
+		atualizaCartas(deck);
 	}
 }
 
@@ -142,7 +146,7 @@ function tirarDoDeck(id){
 			break;
 		}
 	}
-	atualizaCartas("cards-deck", deck);
+	atualizaCartas(deck);
 	$('#carta-grandona').css({display:'none'});	
 }
 
@@ -160,7 +164,7 @@ function adicionarCampeao(id){
 				} else {
 					deck.cartas.splice(i, 1);
 				}
-				atualizaCartas("cards-deck", deck);
+				atualizaCartas(deck);
 				$('#carta-grandona').css({display:'none'});
 				return;
 			}
@@ -194,13 +198,56 @@ function atualizaDeckInfo(){
 
 //--------- Salva o deck ---------
 function saveDeck(){
-	console.log('foi');
+	var deckJSON = JSON.stringify(deck);
+	$.ajax({
+		url : 'saveDeckServlet',
+		data : {
+			deck : deckJSON
+		},
+		type : 'post',
+		cache : false,
+		success : function(data) {
+			if(data == "success"){
+				Swal.fire({
+				  title: 'Deck gravado com sucesso! :)',
+				  text: "Seu deck foi gravado com êxito em nosso sistema",
+				  type: 'success'
+				});
+			} else {
+				Swal.fire({
+				  title: 'Erro ao gravar o deck! :(',
+				  text: "Ocorreu um erro inesperado e talcez suas alterações não tenham sido salvas",
+				  type: 'error'
+				});
+			}
+		},
+		error : function(e) {
+			alert('Erro ao gravar as cartas: ' + e);
+		}
+	});
 }
 
-//--------- Mostrar carta grandona no hover ---------
+//Ordena o deck (Heroi --> Consumivel)
+function sortDeck(){
+	var tipos = ["CONSUMIVEL", "POSTURA", "MAGIA", "ARMA", "HEROI"];
+	
+	for(var j = 0; j < 5; j++){
+		for(var i = 0; i < deck.cartas.length; i++){
+			if(deck.cartas[i].carta.tipo_carta == tipos[j]){
+				var aux = deck.cartas[i];				
+				deck.cartas.splice(i, 1);
+				deck.cartas.unshift(aux);
+			}
+		}
+	}
+	atualizaCartas(deck);	
+}
+
+//--------- Reinvoca os events ---------
 var timeoutId;
 function invocaHover(){
-	$(".mini-card, .champion-card").hover(function(event) {
+	//mostra grandona no hover
+	$(".mini-card, .champion-card").hover(function(event) { 
 	    if (!timeoutId) {
 	        timeoutId = window.setTimeout(function() {
 	        	if(event.target.parentElement != null && event.target.parentElement.id == "cards-colecao"){
@@ -217,7 +264,8 @@ function invocaHover(){
             }, 500);
 	    }
 	},
-	function () { //oumouseleave
+	//some com a grandona no leave
+	function () {
 	    if (timeoutId) { //impede que a função delayzada rode
 	        window.clearTimeout(timeoutId);
 	        timeoutId = null;
@@ -226,6 +274,7 @@ function invocaHover(){
 	    	 $('#carta-grandona').css({display:'none'});
 	    }
 	});	
+	
 	//impede de abrir o menu no right click
 	$(".mini-card").contextmenu(function(e){
 		e.preventDefault();
