@@ -70,6 +70,7 @@ dinheiro int not null,
 tipo int not null,
 quantidade_jogos int not null,
 vitorias int not null,
+icone int not null,
 primary key (id)
 )
 

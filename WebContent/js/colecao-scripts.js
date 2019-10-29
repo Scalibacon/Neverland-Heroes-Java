@@ -207,22 +207,18 @@ function saveDeck(){
 		type : 'post',
 		cache : false,
 		success : function(data) {
-			if(data == "success"){
-				Swal.fire({
-				  title: 'Deck gravado com sucesso! :)',
-				  text: "Seu deck foi gravado com êxito em nosso sistema",
-				  type: 'success'
-				});
-			} else {
-				Swal.fire({
-				  title: 'Erro ao gravar o deck! :(',
-				  text: "Ocorreu um erro inesperado e talcez suas alterações não tenham sido salvas",
-				  type: 'error'
-				});
-			}
+			Swal.fire({
+			  title: 'Deck gravado com sucesso! :)',
+			  text: "Seu deck foi gravado com êxito em nosso sistema",
+			  type: 'success'
+			});			
 		},
-		error : function(e) {
-			alert('Erro ao gravar as cartas: ' + e);
+		error : function(e) {			
+			Swal.fire({
+			  title: 'Erro ao gravar o deck! :(',
+			  text: "Ocorreu um erro inesperado e talcez suas alterações não tenham sido salvas",
+			  type: 'error'
+			});			
 		}
 	});
 }

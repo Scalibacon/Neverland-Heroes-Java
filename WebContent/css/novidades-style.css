@@ -1,11 +1,125 @@
 @charset "UTF-8";
 
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Roboto|Staatliches&display=swap');
+
 body{
 	background: url(../img/bg2.jpg) no-repeat;
 	background-size: 100%;
+	background-attachment: fixed;
 }
 
 *{
 	margin:0px;
 	padding:0px;
+}
+
+#container-center{
+	position:relative;
+	width:1000px;
+	height:750px;
+	display: block;
+	margin-left: auto;
+  	margin-right: auto;
+	margin-top:25px;
+	margin-bottom:25px;
+	box-sizing:border-box;
+	background-color:rgba(240,255,255,0.8);
+}
+
+.news-container{
+	position:relative;
+	margin-top:20px;
+	margin-left:2.5%;
+	box-sizing:border-box;
+	width:30%;
+	height:45%;
+	background-color:snow;
+	float:left;
+	
+	border-left: 1px solid rgba(84, 84, 84, 0.3);
+    border-top: 1px solid rgba(84, 84, 84, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    border-right: 1px solid rgba(255, 255, 255, 0.6);
+    cursor:pointer;
+
+}
+
+.news-image{
+	width:100%;
+	height:45%;	
+	box-sizing:border-box;	
+	border:solid 3px rgba(180,180,180,0.25);
+	border-bottom:solid 1px rgba(121,121,121,0.6);
+	border-bottom:none;	
+}
+
+#news-img1{
+	background: url(../img/news/news1.jpg) no-repeat;
+	background-size: 100%;
+}
+#news-img2{
+	background: url(../img/news/news2.jpg) no-repeat;
+	background-size: 100%;
+}
+#news-img3{
+	background: url(../img/news/news3.jpg) no-repeat;
+	background-size: 100%;
+}
+
+.news-textos-container{
+	width:100%;
+	height:55%;
+	box-sizing:border-box;
+	padding-left:10px;
+	padding-right:10px;
+	border-right:solid 3px rgba(180,180,180,0.25);
+	border-left:solid 3px rgba(180,180,180,0.25);
+	border-bottom:solid 3px rgba(180,180,180,0.25);
+}
+
+.news-title{
+	width:100%;
+	height:30%;
+	box-sizing:border-box;
+	text-align:center;
+	/*background-color:rgba(200,200,200,0.25);*/
+	line-height:45px;
+	font-family: 'Fredericka the Great', cursive;
+	font-size:110%;
+	font-weight:800;	
+}
+
+.news-text{
+	width:100%;
+	height:55%;
+	box-sizing:border-box;
+	font-size:80%;
+	line-height:18px;
+	/*text-align:justify;*/
+	font-family: 'Roboto', sans serif;
+	/*background-color:rgba(80,189,224,0.25);*/
+	border-bottom: solid 1px rgba(121,121,121,0.3);
+	overflow: hidden;
+  	text-overflow: ellipsis; 
+  	white-space: normal;
+}
+
+.news-info{
+	width:100%;
+	height:15%;
+	box-sizing:border-box;
+	line-height:25px;
+	color:rgba(75,75,75,0.8);
+}
+
+.news-info-autor{
+	float:left;
+	font-size:75%;
+	font-family: 'Roboto', sans serif;
+}
+
+.news-info-data{
+	float:right;
+	font-size:75%;
+	font-family: 'Roboto', sans serif;
 }
