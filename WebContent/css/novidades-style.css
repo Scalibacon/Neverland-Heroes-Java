@@ -65,6 +65,18 @@ body{
 	background: url(../img/news/news3.jpg) no-repeat;
 	background-size: 100%;
 }
+#news-img4{
+	background: url(../img/news/news4.jpg) no-repeat;
+	background-size: 100%;
+}
+#news-img5{
+	background: url(../img/news/news5.jpg) no-repeat;
+	background-size: 100%;
+}
+#news-img6{
+	background: url(../img/news/news6.jpg) no-repeat;
+	background-size: 100%;
+}
 
 .news-textos-container{
 	width:100%;

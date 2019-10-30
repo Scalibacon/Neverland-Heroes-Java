@@ -10,10 +10,9 @@
 	<a href="colecao.jsp"><span class="header-menu-item">Coleção</span></a>
 	<span class="header-menu-item">Mercado</span>
 	<span class="header-menu-item" id="header-perfil-container">
-		<span id="perfil-drop">Perfil</span>
+		<a href="perfil.jsp"><span id="perfil-drop">Perfil</span></a>
 		<span class="perfil-drop-content">
-			<a href="#">Informações</a>
-			<a href="#">Amigos</a>
+			<a href="perfil.jsp">Informações</a>
 			<%
 			int tipo = 0;
 			if(request.isRequestedSessionIdValid()){

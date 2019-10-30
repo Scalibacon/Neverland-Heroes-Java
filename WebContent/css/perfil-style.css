@@ -1,0 +1,51 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Roboto|Staatliches&display=swap');
+
+*{
+	margin: 0px;
+	padding: 0px;
+}
+
+body{
+	background: url(../img/bg2.jpg) no-repeat;
+	background-size: 100%;
+}
+
+#perfil-container{
+	position:relative;
+	width:900px;
+	height:550px;
+	background-color:rgba(255,255,240,0.66);
+	box-sizing:border-box;
+	margin-top:15px;
+	border-radius:30px 0px 30px 0px;
+	display: block;
+	margin-left: auto;
+  	margin-right: auto;
+}
+
+#perfil-info-container{
+	position:relative;
+	float:left;
+	margin:15px;
+	width:400px;
+	height:300px;
+	box-sizing:border-box;
+	padding:8px;
+	background-color:rgba(255,0,255,0.1);
+}
+#perfil-icone{
+	width:125px;
+	height:125px;
+	background: url(../img/icons/1.png) no-repeat;
+	background-size: 100%;
+	border:solid 2px rgba(255,0,255,0.9);
+	float:left;
+}
+.perfil-info-text{
+	float:left;
+	font-family: 'Fredericka the Great', cursive;
+	font-size:110%;
+	font-weight:800;
+	text-indent: 10px;
+}

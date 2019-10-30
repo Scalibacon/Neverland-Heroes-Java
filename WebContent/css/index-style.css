@@ -64,13 +64,15 @@ body{
 	width:410px;
 	height:auto;
 	/*background-color:rgba(177,177,177,0.75);*/
-	margin-left:35%;
 	z-index: 10;
 	position:relative;
-	/*animation-name: brilhoca;*/
-	animation-duration: 3s;
+	animation-name: brilhoca;
+	animation-duration: 2s;
 	animation-delay: 2s;
 	animation-fill-mode: backwards;
+	display: block;
+	margin-left: auto;
+  	margin-right: auto;
 }
 
 #logo1{
