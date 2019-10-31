@@ -30,9 +30,10 @@ body{
 }
 
 #hero-left{
-	width: 30%;
-	float:left;
-	margin-top:30px;
+	position:absolute;
+	width: 320px;
+	left:15px;
+	top:70px;
 	opacity: 1;
 	animation-name: invoca;
 	animation-duration: 3s;
@@ -41,11 +42,10 @@ body{
 }
 
 #hero-right{
-	width: 30%;
-	float:right;
-	margin-right:15px;
-	margin-top:120px;
-	margin-bottom:0px !important;
+	position:absolute;
+	width: 350px;
+	right:10px;
+	top:120px;
 	opacity: 1;
 	animation-name: invoca;
 	animation-duration: 3s;

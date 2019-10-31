@@ -21,8 +21,8 @@
 	<jsp:include page="index_alerts.jsp" />
 	<div id="fundo1">
 		
-		<img src="img/ayra.png" id="hero-left"> 		
-		<img src="img/robin.png" id="hero-right">
+		<img src="img/olivia.png" id="hero-left"> 		
+		<img src="img/corrin.png" id="hero-right">
 
 		<div id="centro">
 			<img src="img/logo1.png" id="logo1">
