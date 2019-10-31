@@ -13,9 +13,11 @@ body{
 	height:570px;
 	margin-left:5%;
 	box-sizing: border-box;
-	background-color:rgba(240,255,255,0.75);
-	box-shadow: 2px 2px 3px rgba(121,121,121,0.66);
+	/*background-color:rgba(240,255,255,0.75);*/
+	/*box-shadow: 2px 2px 3px rgba(121,121,121,0.66);*/
 	border:solid 2px rgba(0,149,255,1);
+	border-bottom:none;
+	border-right:none;
 }
 
 .bem-na-dividida{
@@ -35,15 +37,20 @@ body{
 }
 
 .container-settings{
-	background-color:rgba(255,255,0,0.33);
+	/*background-color:rgba(255,255,0,0.33);*/
+	background-color:rgba(255,255,240,0.8);
 	float:left;
 	width:50%;
 	height:360px;
 	box-sizing: border-box;
 	line-height:30px;
 	padding:10px;
-	position:relative;
+	position:relative;	
 	/*border-bottom:solid 2px rgba(0,149,255,1);*/
+}
+#container-inputs2{
+	border-right:solid 2px rgba(0,149,255,1);
+	box-shadow: 2px -2px 3px rgba(121,121,121,0.66);
 }
 
 .txt-auxiliar{
@@ -53,7 +60,7 @@ body{
 .settings-input{
 	padding:3px;
 	margin-top:5px;
-	border:solid 1px transparent;
+	border:solid 1px black;
 	float:right;
 	width:70%;
 	box-sizing: border-box;
@@ -62,7 +69,7 @@ body{
 .settings-area{
 	padding:3px;
 	margin-top:5px;
-	border:solid 1px transparent;
+	border:solid 1px black;
 	float:right;
 	width:70%;
 	height:140px;
@@ -87,6 +94,9 @@ body{
 	position:relative;
 	float:left;
 	border-bottom:solid 2px rgba(0,149,255,1);
+	border-right:solid 2px rgba(0,149,255,1);
+	box-shadow: 2px 2px 3px rgba(121,121,121,0.66);
+	background-color:rgba(255,255,240,0.8);
 }
 
 #button-gravar{
@@ -105,28 +115,23 @@ body{
 	color:white;
 	border:solid 1px rgba(0,86,149,1);
 }
-
-#container-materiais{
-	float:left;
-	width:100%;
-	height:156px;
-	box-sizing: border-box;
-	background-color:rgba(128,0,128,0.66);
-}
 /* ---------- Parte da carta ---------- */
 #card-container{
 	border-right:solid 2px rgba(0,149,255,1);
 	width:37%;
+	border-bottom:solid 2px rgba(0,149,255,1);
+	background-color:rgba(255,255,240,0.8);
 }
 
 #card-base{
 	width:340px;
 	height:500px;
 	background-color:snow;
-	margin-left: calc(340px - 68%);
-	margin-top:10px;
 	border:solid 15px rgb(75,75,75,1);
-	position: relative;
+	position: absolute;
+	left:50%;
+  	top:50%;
+  	transform: translate(-50%, -50%);
 }
 
 .card-gem{

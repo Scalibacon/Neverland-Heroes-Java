@@ -71,6 +71,7 @@ tipo int not null,
 quantidade_jogos int not null,
 vitorias int not null,
 icone int not null,
+conquistas varchar(max) default(''),
 primary key (id)
 )
 
@@ -172,6 +173,7 @@ as
 		end
 		set @cont = @cont + 1
 	end	
+
 
 -- ***************** Querys de teste ***************** --
 select * from colecao_carta where id_jogador = 1

@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.Gson;
+
 public class Jogador {
 	private int id;
 	private String usuario;
@@ -8,7 +10,11 @@ public class Jogador {
 	private int nivel;
 	private int experiencia;
 	private int dinheiro;
-	private TipoJogador tipo;	
+	private TipoJogador tipo;
+	private int partidas;
+	private int vitorias;
+	private int derrotas;	
+	private Gson conquistas;
 	
 	public int getId() {
 		return id;
@@ -57,6 +63,30 @@ public class Jogador {
 	}
 	public void setTipo(TipoJogador tipo) {
 		this.tipo = tipo;
+	}
+	public int getPartidas() {
+		return partidas;
+	}
+	public void setPartidas(int partidas) {
+		this.partidas = partidas;
+	}
+	public int getVitorias() {
+		return vitorias;
+	}
+	public void setVitorias(int vitorias) {
+		this.vitorias = vitorias;
+	}
+	public int getDerrotas() {
+		return derrotas;
+	}
+	public void setDerrotas(int derrotas) {
+		this.derrotas = derrotas;
+	}
+	public Gson getConquistas() {
+		return conquistas;
+	}
+	public void setConquistas(Gson conquistas) {
+		this.conquistas = conquistas;
 	}
 	
 }

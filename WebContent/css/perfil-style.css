@@ -11,11 +11,47 @@ body{
 	background-size: 100%;
 }
 
+#background-veil{
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	background-color:rgba(90,90,185,0.66);
+	z-index:10;
+	display:none;
+}
+#container-icons{
+	position:absolute;
+	width:420px;
+	height:310px;
+	background-color:white;
+	border:solid 2px rgba(82,112,253,1);
+	left:50%;
+  	top:50%;
+  	transform: translate(-50%, -50%);
+  	box-shadow:2px 2px 3px rgba(33,88,121,0.3);
+}
+#close-icons{
+	position:absolute;
+	right:0;
+	top:0;
+	width:25px;
+	cursor:pointer;
+}
+.profile-icon{
+	float:left;
+	margin:10px;
+	width:75px;
+	height:75px;
+	border:solid 2px rgba(82,112,253,1);
+	cursor:pointer;
+}
+
 #perfil-container{
 	position:relative;
 	width:900px;
-	height:550px;
-	background-color:rgba(255,255,240,0.66);
+	height:420px;
+	/*background-color:rgba(255,255,240,0.66);*/
 	box-sizing:border-box;
 	margin-top:15px;
 	border-radius:30px 0px 30px 0px;
@@ -24,28 +60,226 @@ body{
   	margin-right: auto;
 }
 
+#perfil-line{
+	position:absolute;
+	width:30px;
+	box-sizing:border-box;
+	left:415px;
+	top:205px;
+	border:solid 2px rgba(82,112,253,1);
+}
+
 #perfil-info-container{
 	position:relative;
 	float:left;
 	margin:15px;
+	margin-top:50px;
 	width:400px;
 	height:300px;
 	box-sizing:border-box;
 	padding:8px;
-	background-color:rgba(255,0,255,0.1);
+	background-color:snow;
+	border:solid 4px rgba(82,112,253,1);
 }
 #perfil-icone{
 	width:125px;
 	height:125px;
-	background: url(../img/icons/1.png) no-repeat;
+	background: url(../img/icons/12.jpg) no-repeat;
 	background-size: 100%;
-	border:solid 2px rgba(255,0,255,0.9);
+	border:solid 2px rgba(82,112,253,1);
 	float:left;
 }
+#perfil-icone:hover #change-icon-background{
+	display:block;
+}
+#change-icon-background{
+	background-color: rgba(121,121,121,0.75);
+	width:100%;
+	height:100%;
+	overflow:auto;
+	display:none;
+}
+#change-icon-btn{
+	width:70px;
+	height:30px;
+	line-height:30px;
+	margin-top:48px;
+	display: block;
+	text-align:center;
+	font-family: 'Roboto', sans-serif;
+	font-size: 90%;
+	box-sizing: border-box;
+	font-weight: 600;
+	color: white;
+	background-color: rgba(0, 149, 255, 1);
+	border: solid 1px rgba(0, 86, 149, 1);
+	margin-left: auto;
+  	margin-right: auto;
+  	cursor:pointer;
+}
 .perfil-info-text{
+	min-width:200px;
 	float:left;
 	font-family: 'Fredericka the Great', cursive;
 	font-size:110%;
 	font-weight:800;
-	text-indent: 10px;
+	text-indent: 15px;
+}
+#perfil-level-bar{
+	width: 200px;
+	height:17px;
+	box-sizing:border-box;
+	border:solid 2px rgba(35,23,100,1);
+	float:left;
+	margin-top:35px;
+	margin-left:15px;
+	position:relative;
+}
+#perfil-level-text{
+	position:absolute;
+	/left:-10px;
+	top:-10px;
+	font-family: 'Fredericka the Great', cursive;
+	font-size: 100%;
+	font-weight:800;
+	letter-spacing:1px;
+	color:white;	
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+}
+#perfil-xp-bar{
+	background-color:rgba(78,255,84,1);
+	height:100%;
+	width:75%;
+}
+#perfil-info-grana{
+	margin-top:35px;
+	color:rgba(255,244,78,1);
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+}
+
+#perfil-partidas-container{
+	float:left;
+	width:100%;
+	height:50px;
+	margin-top:15px;
+	border-top:solid 2px rgba(82,112,253,0.33);
+	box-sizing:border-box;
+}
+.partidas-texto{
+	width:33.33%;
+	float:left;
+	height:100%;
+	text-align:center;
+	line-height:50px;
+	box-sizing:border-box;
+	font-family: 'Fredericka the Great', cursive;
+	font-size: 100%;
+	font-weight:800;
+	letter-spacing:1px;
+	color:white;	
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+}
+#partida-total{
+	color:white;
+}
+#partida-vitoria{
+	color:rgba(56,255,86,1);
+}
+
+#partida-derrota{
+	color:rgba(255,56,56,1);
+}
+
+#perfil-rank-container{
+	position:relative;
+	float:left;
+	width:auto; /*400px - 16 */
+	height:45px;
+	margin-top:15px;
+	margin-left:150px;
+	box-sizing:border-box;
+	padding:5px;
+	/*background-color:rgba(255,255,233,1);*/
+}
+.perfil-rank{
+	height:35px;
+	margin-left:10px;
+}
+
+#conquistas-box{
+	position:relative;
+	float:right;
+	margin:15px;
+	width:440px;
+	height:380px;
+	box-sizing:border-box;
+	background-color:snow;
+	border:solid 2px rgba(82,112,253,1);
+}
+#conquista-container{
+	height:321px;
+	width:auto;
+	overflow-y:auto;
+}
+#conquistas-container-titulo{
+	position:relative;
+	width:75%;
+	height:50px;
+	line-height:50px;
+	font-family: 'Fredericka the Great', cursive;
+	font-size: 145%;
+	font-weight:800;
+	letter-spacing:1px;
+	color:white;	
+	border-bottom:solid 2px rgba(82,112,253,0.33);
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+	text-align:center;
+	display: block;
+	margin-left: auto;
+  	margin-right: auto;
+  	box-sizing:border-box;
+  	margin-bottom:5px;
+}
+.conquista{
+	width:100%;
+	height:50px;
+	box-sizing:border-box;
+	background-color:snow;
+	border-bottom:solid 1px rgba(82,112,253,1);
+	border-top:solid 1px transparent;	
+}
+#conquista1{
+	border-top:solid 1px rgba(82,112,253,1);
+}
+.conquista-img{
+	float:left;
+	height:100%;
+	width:50px;
+}
+.conquista-titulo{
+	float:left;	
+	width:380px;
+	height:20px;
+	line-height:20px;
+	box-sizing:border-box;
+	font-family: 'Fredericka the Great', cursive;
+	font-size:95%;
+	font-weight:800;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	text-indent:5px;
+}
+.conquista-texto{
+	width:380px;
+	height:30px;
+	line-height:30px;
+	box-sizing:border-box;
+	font-family: 'Roboto', sans serif;
+	font-size:75%;
+	float:left;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	text-indent:5px;
 }

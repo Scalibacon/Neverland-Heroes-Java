@@ -24,6 +24,8 @@ body{
 	margin-bottom:25px;
 	box-sizing:border-box;
 	background-color:rgba(240,255,255,0.8);
+	border:solid 2px rgba(82,112,253,1);
+	box-shadow:2px 2px 3px rgba(33,88,121,0.3);
 }
 
 .news-container{

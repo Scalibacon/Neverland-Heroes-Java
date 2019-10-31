@@ -64,7 +64,7 @@
 					<br>
 					<input type="file" id="upload-imagem" name="imagem"/>
 				</div>
-				<div class="container-settings">
+				<div class="container-settings" id="container-inputs2">
 					<span class="txt-auxiliar">Afinidade:</span> <select name="afinidade" class="combobox" id="afinidade" onchange="atualizaAfinidade()">
 						<option value="0" selected>Neutro</option>
 						<option value="1">Luz</option>
@@ -112,10 +112,7 @@
 					<br>					
 				</div>
 				
-				<div id="container-button"><input type="button" id="button-gravar" value="Gravar" onclick="adicionaCarta()"></div>
-					
-				<div id="container-materiais">
-				</div>				
+				<div id="container-button"><input type="button" id="button-gravar" value="Gravar" onclick="adicionaCarta()"></div>			
 			</form>
 		</div>
 	</div>

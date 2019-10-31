@@ -8,7 +8,7 @@
 	<span id="header-btnjogar">Jogar</span>
 	<span class="header-menu-item">Ajuda</span>
 	<a href="colecao.jsp"><span class="header-menu-item">Coleção</span></a>
-	<span class="header-menu-item">Mercado</span>
+	<a href="loja.jsp"><span class="header-menu-item">Loja</span></a>
 	<span class="header-menu-item" id="header-perfil-container">
 		<a href="perfil.jsp"><span id="perfil-drop">Perfil</span></a>
 		<span class="perfil-drop-content">
