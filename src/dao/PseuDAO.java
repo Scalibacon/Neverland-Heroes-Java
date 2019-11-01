@@ -17,6 +17,15 @@ public class PseuDAO {
 		j.setId(1);
 		j.setUsuario("Scalibacon");
 		j.setTipo(TipoJogador.buscaTipoJogador(2));
+		j.setPartidas(40);
+		j.setVitorias(25);
+		j.setDerrotas(15);
+		j.setNivel(27);
+		j.setExperiencia(889);
+		j.setDinheiro(2350);
+		j.setTipo(TipoJogador.ADMINISTRADOR);
+		j.setIcone(12);
+		j.setConquistas("{1:true, 2:false, 3:true, 4:true, 5:false, 6:false, 7:false}");
 		return j;
 	}
 

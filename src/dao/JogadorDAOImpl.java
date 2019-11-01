@@ -15,7 +15,8 @@ public class JogadorDAOImpl implements JogadorDAO {
 	public Jogador buscaJogadorLogin(String usuario, String senha) {
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			Jogador jogador = new Jogador();
-			String sql = "SELECT j.id, j.nivel, j.experiencia, j.dinheiro, j.tipo FROM jogador j "
+			String sql = "SELECT j.id, j.nivel, j.experiencia, j.dinheiro, j.tipo, j.partidas, j.vitorias,"
+					+ "j.icone, j.conquistas FROM jogador j "
 					+ "WHERE j.usuario = ? and j.senha = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setString(1, usuario);
@@ -29,7 +30,11 @@ public class JogadorDAOImpl implements JogadorDAO {
 				jogador.setExperiencia(rs.getInt("experiencia"));
 				jogador.setDinheiro(rs.getInt("dinheiro"));
 				jogador.setTipo(TipoJogador.buscaTipoJogador(rs.getInt("tipo")));
-
+				jogador.setPartidas(rs.getInt("partidas"));
+				jogador.setVitorias(rs.getInt("vitorias"));
+				jogador.setDerrotas(jogador.getPartidas() - jogador.getVitorias());
+				jogador.setIcone(rs.getInt("icone"));
+				jogador.setConquistas(rs.getString("conquistas"));
 				return jogador;
 			}
 		} catch (SQLException e) {

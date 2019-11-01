@@ -13,8 +13,9 @@ public class Jogador {
 	private TipoJogador tipo;
 	private int partidas;
 	private int vitorias;
-	private int derrotas;	
-	private Gson conquistas;
+	private int derrotas;
+	private int icone;
+	private String conquistas;
 	
 	public int getId() {
 		return id;
@@ -82,11 +83,22 @@ public class Jogador {
 	public void setDerrotas(int derrotas) {
 		this.derrotas = derrotas;
 	}
-	public Gson getConquistas() {
+	public int getIcone() {
+		return icone;
+	}
+	public void setIcone(int icone) {
+		this.icone = icone;
+	}
+	public String getConquistas() {
 		return conquistas;
 	}
-	public void setConquistas(Gson conquistas) {
+	public void setConquistas(String conquistas) {
 		this.conquistas = conquistas;
 	}
 	
+	public String toJson() {
+		Gson gson = new Gson();
+		String json = gson.toJson(this);
+		return json;
+	}	
 }
