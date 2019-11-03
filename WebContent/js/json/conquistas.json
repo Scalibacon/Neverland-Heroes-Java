@@ -1,0 +1,9 @@
+{
+	"conquistas": [
+				{"conquista":{"id":1, "titulo":"Esse é das antigas", "texto":"Criou a conta na fase beta", "tipo":1}},
+				{"conquista":{"id":2, "titulo":"Toneladas de dano", "texto":"Cause 50 de dano em uma única partida", "tipo":2}},
+				{"conquista":{"id":3, "titulo":"Precaução nunca é demais", "texto":"Cure 40 de HP de seus heróis em uma única partida", "tipo":3}},
+				{"conquista":{"id":4, "titulo":"Sem piedade", "texto":"Vença uma partida em 3 turnos ou menos", "tipo":1}}
+					
+	]
+}

@@ -25,17 +25,17 @@ public class BuscaBaralhoServlet extends HttpServlet{
 		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		Baralho baralho;			
-		if(true) { /* depois tirar daqui... */
-			baralho = PseuDAO.pseudoBaralho();
-		} else { /* até aqui */
+//		if(true) { /* depois tirar daqui... */
+//			baralho = PseuDAO.pseudoBaralho();
+//		} else { /* até aqui */
 			BaralhoDAO bDao = new BaralhoDAOImpl();
 			Jogador j = new Jogador();
 			j.setId((int) session.getAttribute("id"));
 			baralho = bDao.buscaBaralho(j);
-		} //aqui tb
+//		} //aqui tb
 		PrintWriter out = response.getWriter();
-		String gson = baralho.toJson();
-		out.println(gson);
+		String json = baralho.toJson();
+		out.println(json);
 		out.close();
 	}
 	

@@ -1,4 +1,5 @@
 document.write("<script type='text/javascript' src='js/sweetalert2.all.min.js'></script>");
+
 //-------- Atualiza exibição das cartas --------
 function atualizaCartas(fonte){
 	var tipoId;
@@ -11,18 +12,18 @@ function atualizaCartas(fonte){
 		container = "cards-deck";
 		tipoId = "deck";
 		document.getElementById("cards-deck").innerHTML = 
-			'<div class="champion-card" id="deck' + fonte.campeao.id + '" style="background:url(img/cards/' + fonte.campeao.id + '.PNG) no-repeat;background-size:100%"></div>'
+			'<div class="champion-card" id="deck' + fonte.campeao.id + '" style="background:url(img/cards/' + fonte.campeao.id + '.jpg) no-repeat;background-size:100%"></div>'
 		;
 	}
 	for(var i = 0; i < fonte.cartas.length; i++){		
 		if(fonte == colecao){
 			document.getElementById(container).innerHTML += 
-				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" onclick=tryToDeck(' + fonte.cartas[i].carta.id + ') style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
+				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" onclick=tryToDeck(' + fonte.cartas[i].carta.id + ') style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.jpg) no-repeat;background-size:100%">' +
 				'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
 			;
 		} else {
 			document.getElementById(container).innerHTML += 
-				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" onclick=tirarDoDeck(' + fonte.cartas[i].carta.id + ') oncontextmenu=adicionarCampeao(' + fonte.cartas[i].carta.id + ') style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.PNG) no-repeat;background-size:100%">' +
+				'<div class="mini-card" id="' + tipoId + fonte.cartas[i].carta.id + '" onclick=tirarDoDeck(' + fonte.cartas[i].carta.id + ') oncontextmenu=adicionarCampeao(' + fonte.cartas[i].carta.id + ') style="background:url(img/cards/' + fonte.cartas[i].carta.id + '.jpg) no-repeat;background-size:100%">' +
 				'<span class="carta-qtde">x' + fonte.cartas[i].quantidade + '</span></div>'
 			;
 		}		
@@ -44,10 +45,9 @@ function buscaCartas(){
 			teste : 'vazio'
 		},
 		type : 'post',
-		cache : false,
 		success : function(data) {
 			colecao = JSON.parse(data);
-			console.log(colecao);
+			//console.log(colecao);
 			atualizaCartas(colecao);
 			buscaBaralho();
 		},
@@ -67,10 +67,10 @@ function buscaBaralho(){
 			teste : 'vazio'
 		},
 		type : 'post',
-		cache : false,
 		success : function(data) {
 			deck = JSON.parse(data);
-			console.log(deck);//					
+			//console.log(data);//
+			//console.log(deck);//					
 			atualizaCartas(deck);				
 		},
 		error : function() {
@@ -84,11 +84,6 @@ function tryToDeck(id){
 	var podeAdd = true;
 	var quantidadeNoDeck = 0;
 	var cartaPraAdd;
-	
-	if(deck.cartas.length >= 50){ //mudar caso a max qtde mude
-		podeAdd = false;
-		return;
-	}	
 	
 	for(var i = 0; i < colecao.cartas.length; i++){
 		if(colecao.cartas[i].carta.id == id){
@@ -150,6 +145,7 @@ function tirarDoDeck(id){
 	$('#carta-grandona').css({display:'none'});	
 }
 
+//adiciona um campeão e joga o anterior pro baralho
 function adicionarCampeao(id){	
 	for(var i = 0; i < deck.cartas.length; i++){
 		if(deck.cartas[i].carta.id == id){
@@ -173,6 +169,7 @@ function adicionarCampeao(id){
 }
 
 // ------- Atualiza as informações sobre o deck -------
+var allowSave = true;
 function atualizaDeckInfo(){
 	var somaRank =  deck.campeao.rank;
 	var qtdeHerois = 1;
@@ -189,38 +186,78 @@ function atualizaDeckInfo(){
 		}
 		qtdeCartas += (1 * deck.cartas[i].quantidade);
 	}
+	
 	document.getElementById("info-rank").innerHTML = somaRank;
+	if(somaRank > 20){
+		allowSave = false;
+		document.getElementById("info-rank").style.color = "rgba(231,68,68,1)";
+	}else{
+		document.getElementById("info-rank").style.color = "black";
+	}
+	
 	document.getElementById("info-herois").innerHTML = qtdeHerois;
+	if(qtdeHerois > 10){
+		allowSave = false;
+		document.getElementById("info-herois").style.color = "rgba(231,68,68,1)";		
+	}else{
+		document.getElementById("info-herois").style.color = "black";
+	}
+	
 	document.getElementById("info-qtde").innerHTML = qtdeCartas;
+	if(qtdeCartas > 60 || qtdeCartas < 20){
+		allowSave = false;
+		document.getElementById("info-qtde").style.color = "rgba(231,68,68,1)";
+	}else{
+		document.getElementById("info-qtde").style.color = "black";
+	}	
+	
 	document.getElementById("info-forca").innerHTML = somaForca;
 	document.getElementById("info-poder").innerHTML = somaPoder;
+	
+	if((qtdeCartas <= 60 && qtdeCartas >= 20) && qtdeHerois <= 10 && somaRank <= 20){
+		allowSave = true;
+	}
+	
+	if(!allowSave){
+		document.getElementById("btn-salvar").style.filter = "grayscale(100%)";
+	}else{
+		document.getElementById("btn-salvar").style.filter = "grayscale(0%)";
+	}
 }
 
 //--------- Salva o deck ---------
 function saveDeck(){
-	var deckJSON = JSON.stringify(deck);
-	$.ajax({
-		url : 'saveDeckServlet',
-		data : {
-			deck : deckJSON
-		},
-		type : 'post',
-		cache : false,
-		success : function(data) {
-			Swal.fire({
-			  title: 'Deck gravado com sucesso! :)',
-			  text: "Seu deck foi gravado com êxito em nosso sistema",
-			  type: 'success'
-			});			
-		},
-		error : function(e) {			
-			Swal.fire({
-			  title: 'Erro ao gravar o deck! :(',
-			  text: "Ocorreu um erro inesperado e talcez suas alterações não tenham sido salvas",
-			  type: 'error'
-			});			
-		}
-	});
+	if(allowSave){
+		var deckJSON = JSON.stringify(deck);
+		$.ajax({
+			url : 'saveDeckServlet',
+			data : {
+				deck : deckJSON
+			},
+			type : 'post',
+			cache : false,
+			success : function(data) {
+				Swal.fire({
+				  title: 'Deck gravado com sucesso! :)',
+				  text: "Seu deck foi gravado com êxito em nosso sistema",
+				  type: 'success'
+				});			
+			},
+			error : function(e) {			
+				Swal.fire({
+				  title: 'Erro ao gravar o deck! :(',
+				  text: "Ocorreu um erro inesperado e talcez suas alterações não tenham sido salvas",
+				  type: 'error'
+				});			
+			}
+		});
+	}else{
+		Swal.fire({
+		  title: 'Seu deck não é válido :(',
+		  text: "Certifique-se que seu deck está dentro das regras do jogo",
+		  type: 'error'
+		});	
+	}
 }
 
 //Ordena o deck (Heroi --> Consumivel)
@@ -229,7 +266,7 @@ function sortDeck(){
 	
 	for(var j = 0; j < 5; j++){
 		for(var i = 0; i < deck.cartas.length; i++){
-			if(deck.cartas[i].carta.tipo_carta == tipos[j]){
+			if(deck.cartas[i].carta.tipo_carta == tipos[j]){				
 				var aux = deck.cartas[i];				
 				deck.cartas.splice(i, 1);
 				deck.cartas.unshift(aux);
@@ -252,11 +289,9 @@ function invocaHover(){
 	        		var x = event.clientX - 300;
 	        	}
 	        	var y = event.clientY; 
-	            timeoutId = null;	
-	            if(event.target != null){
-	            	var idAsNumber = event.target.id.match(/\d+/)[0];
-	            	$('#carta-grandona').css({display:'block', left:x+'px',background:'url(img/cards/' + idAsNumber + '.PNG) no-repeat', 'background-size': '100%'});
-	            }
+	            timeoutId = null;
+	            var idAsNumber = event.target.id.match(/\d+/)[0];
+	            $('#carta-grandona').css({display:'block', left:x+'px',background:'url(img/cards/' + idAsNumber + '.jpg) no-repeat', 'background-size': '100%'});
             }, 500);
 	    }
 	},

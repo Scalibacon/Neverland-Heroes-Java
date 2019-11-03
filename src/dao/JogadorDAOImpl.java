@@ -61,4 +61,47 @@ public class JogadorDAOImpl implements JogadorDAO {
 		}
 		return false;
 	}
+	
+	@Override
+	public Jogador buscarPerfil(Jogador jogador) {
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			String sql = "select * from v_busca_perfil where id = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, jogador.getId());
+			ResultSet rs = stm.executeQuery();
+
+			if (rs.next()) {
+				jogador.setUsuario(rs.getString("usuario"));
+				jogador.setEmail(rs.getString("email"));
+				jogador.setNivel(rs.getInt("nivel"));
+				jogador.setExperiencia(rs.getInt("experiencia"));
+				jogador.setDinheiro(rs.getInt("dinheiro"));
+				jogador.setTipo(TipoJogador.buscaTipoJogador(rs.getInt("tipo")));
+				jogador.setPartidas(rs.getInt("partidas"));
+				jogador.setVitorias(rs.getInt("vitorias"));
+				jogador.setDerrotas(jogador.getPartidas() - jogador.getVitorias());
+				jogador.setIcone(rs.getInt("icone"));
+				jogador.setConquistas(rs.getString("conquistas"));
+			}
+			return jogador;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public boolean trocaIcone(Jogador jogador) {
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			String sql = "UPDATE jogador set icone = ? where id = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, jogador.getIcone());
+			stm.setInt(2, jogador.getId());
+			stm.executeUpdate();			
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

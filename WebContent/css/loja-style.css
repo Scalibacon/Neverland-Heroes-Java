@@ -6,6 +6,46 @@ body{
 	background-size: 100%;
 }
 
+#background-veil{
+	width:100%;
+	height:100%;
+	position:fixed;
+	top:0px;
+	background-color:rgba(90,90,185,0.75);
+	z-index:10;
+	display:none;
+}
+#new-cards-container{
+	display:none;
+	z-index:11;
+	position:fixed;
+	width: 1000px;
+	height:450px;
+	border:solid 3px rgba(82,112,253,1);
+	box-shadow:2px 2px 3px rgba(33,88,121,0.3);
+	background-color:rgba(255,250,250,1);
+	margin-top:50px;
+	left:0;
+ 	right:0;
+ 	margin-left: auto;
+  	margin-right: auto;
+}
+#close-icons{
+	position:absolute;
+	right:0;
+	top:0;
+	width:25px;
+	cursor:pointer;
+}
+.new-card{
+	float:left;
+	width:calc(370px / 1.5);
+	height:calc(530px / 1.5);
+	float:left;
+	margin:20px;
+	box-shadow: 2px 2px 2px rgba(121,121,121,0.8);
+}
+
 #big-loja-container{
 	position:relative;
 	width:1000px;

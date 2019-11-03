@@ -42,13 +42,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaHerois(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.preco_venda, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia," +
-					"h.afinidade, h.pericia, h.ganho_pericia, cc.quantidade from colecao_carta cc " + 
-					"inner join carta c " + 
-					"on c.id = cc.id_carta " + 
-					"inner join heroi h " + 
-					"on h.id = c.id " + 
-					"where cc.id_jogador = ?";
+			String sql = "select * from v_busca_colecao_herois " + 
+						 "where id_jogador = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -89,12 +84,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaArmas(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, cc.quantidade, a.tipo as tipo_arma from colecao_carta cc " + 
-					"inner join carta c " + 
-					"on c.id = cc.id_carta " + 
-					"inner join arma a " + 
-					"on a.id = c.id " + 
-					"where cc.id_jogador = ?";
+			String sql = "select * from v_busca_colecao_armas " + 
+						 "where id_jogador = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -121,12 +112,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaMagias(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, cc.quantidade from colecao_carta cc " + 
-					"inner join carta c " + 
-					"on c.id = cc.id_carta " + 
-					"inner join magia m " + 
-					"on m.id = c.id " + 
-					"where cc.id_jogador = ?";
+			String sql = "select * from v_busca_colecao_magias " + 
+					"where id_jogador = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -155,12 +142,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaPosturas(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, cc.quantidade from colecao_carta cc " + 
-					"inner join carta c " + 
-					"on c.id = cc.id_carta " + 
-					"inner join postura p " + 
-					"on p.id = c.id " + 
-					"where cc.id_jogador = ?";
+			String sql = "select * from v_busca_colecao_posturas " + 
+						 "where id_jogador = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -189,12 +172,8 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 	public List<CartaColecao> buscaConsumiveis(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select c.id, c.nome, c.preco_venda, c.tipo, cc.quantidade from colecao_carta cc " + 
-					"inner join carta c " + 
-					"on c.id = cc.id_carta " + 
-					"inner join consumivel con " + 
-					"on con.id = c.id " + 
-					"where cc.id_jogador = ?";
+			String sql = "select * from v_busca_colecao_consumiveis " + 
+					"where id_jogador = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();

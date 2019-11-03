@@ -11,8 +11,6 @@ body{
 	width:calc(370px / 1.33);
 	height:calc(530px / 1.33);
 	z-index:2;
-	background: url(../img/cards/1.PNG) no-repeat;
-	background-size: 100%;
 	top:175px;
 	box-shadow: 2px 2px 2px rgba(121,121,121,0.5);
 	display:none;
@@ -28,7 +26,7 @@ body{
   	margin-top:20px;
 	box-sizing: border-box;
 	border:solid 2px rgba(0,149,255,1);
-	background-color:rgba(240,255,255,0.75);
+	background-color:rgba(200,215,225,1);
 }
 
 #colecao-container{
@@ -89,11 +87,11 @@ body{
 	position:absolute;
 	width:100px;
 	height:35px;
-	line-height:35px;
+	line-height:31px;
 	box-sizing: border-box;
-	background-color:orange;
 	font-size:90%;
-	font-weight:400;
+	font-weight:800;
+	color:white;
 	font-family: 'Roboto', sans serif;
 	text-align:center;
 	cursor:pointer;
@@ -101,10 +99,21 @@ body{
 }
 #btn-ordenar{
 	left:3px;
+	background-color:rgba(241,140,24,1);
+	border:solid 2px rgba(204,115,15,1);
+}
+#btn-ordenar:hover{
+	background-color:rgba(210,125,19,1);
 }
 #btn-salvar{
 	right:3px;
+	background-color:rgba(63,219,121,1);
+	border:solid 2px rgba(40,170,100,1);
 }
+#btn-salvar:hover{
+	background-color:rgba(55,195,115,1);
+}
+
 #cards-deck{
 	height:80%;
 }

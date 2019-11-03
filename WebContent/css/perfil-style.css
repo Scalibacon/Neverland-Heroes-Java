@@ -21,7 +21,9 @@ body{
 	display:none;
 }
 #container-icons{
-	position:absolute;
+	display:none;
+	z-index:11;
+	position:fixed;
 	width:420px;
 	height:310px;
 	background-color:white;

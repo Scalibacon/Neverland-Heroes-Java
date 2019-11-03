@@ -72,15 +72,8 @@ partidas int not null,
 vitorias int not null,
 icone int not null,
 conquistas varchar(max) default(''),
+data_desban datetime,
 primary key (id)
-)
-
-create table jogador_amigo(
-id_jogador1 int not null,
-id_jogador2 int not null,
-primary key (id_jogador1, id_jogador2),
-foreign key (id_jogador1) references jogador(id),
-foreign key (id_jogador2) references jogador(id),
 )
 
 create table colecao_carta(
@@ -148,8 +141,140 @@ primary key (id),
 foreign key (id_autor) references jogador(id)
 )
 
-INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,quantidade_jogos,vitorias)
-	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',1,0,100,2,0,0)
+create table partida(
+id1 int not null,
+id2 int not null,
+data_partida datetime not null,
+vencedor int,
+primary key (id1, id2, data_partida),
+foreign key (id1) references jogador(id),
+foreign key (id2) references jogador(id),
+)
+
+INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,partidas,vitorias,icone)
+	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',18,300,99999,2,33,25,12)
+--UPDATE jogador set experiencia = 1000 where id = 2
+-- ***************** Views ***************** --
+------------------------- GERAL ------------------------------
+go
+create view v_busca_perfil
+as
+	select id, usuario, email, nivel, experiencia, dinheiro, tipo, partidas, vitorias, icone, conquistas, data_desban
+	from jogador
+
+----------------------- BARALHO ------------------------------
+go
+create view v_busca_baralho_campeao
+as
+	select b.id_jogador, b.nome_baralho, c.id, c.preco_venda, c.nome, c.tipo, c.raridade, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia,
+	h.afinidade, h.pericia, h.ganho_pericia from carta c
+	inner join baralho b 
+	on b.id_campeao = c.id 
+	inner join heroi h 
+	on h.id = c.id
+---------------------------------------------------
+go
+create view v_busca_baralho_herois
+as
+	SELECT b.id_jogador, b.nome_baralho, c.id, c.nome, c.preco_venda, c.tipo, c.raridade, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, 
+	h.afinidade, h.pericia, h.ganho_pericia, bc.quantidade FROM baralho_carta bc
+	INNER JOIN carta c
+	ON c.id = bc.id_carta 
+	inner join heroi h 
+	on h.id = c.id
+	INNER JOIN baralho b 
+	ON b.id_jogador = bc.id_jogador 
+---------------------------------------------------
+go
+create view v_busca_baralho_armas
+as
+	SELECT b.id_jogador, b.nome_baralho, c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, bc.quantidade FROM baralho_carta bc
+	INNER JOIN carta c
+	ON c.id = bc.id_carta 
+	inner join arma a 
+	on a.id = c.id 
+	INNER JOIN baralho b 
+	ON b.id_jogador = bc.id_jogador
+---------------------------------------------------
+go
+create view v_busca_baralho_magias
+as
+	SELECT b.id_jogador, b.nome_baralho, c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, bc.quantidade FROM baralho_carta bc
+	inner join carta c
+	on c.id = bc.id_carta
+	INNER JOIN magia m 
+	ON m.id = bc.id_carta 				 
+	INNER JOIN baralho b 
+	ON b.id_jogador = bc.id_jogador 
+---------------------------------------------------
+go
+create view v_busca_baralho_posturas
+as
+	SELECT b.id_jogador, b.nome_baralho, c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, bc.quantidade FROM baralho_carta bc 
+	INNER JOIN carta c
+	ON c.id = bc.id_carta
+	inner join postura p 
+	on p.id = c.id
+	INNER JOIN baralho b 
+	ON b.id_jogador = bc.id_jogador
+---------------------------------------------------
+go
+create view v_busca_baralho_consumiveis
+as
+	SELECT b.id_jogador, b.nome_baralho, c.id, c.nome, c.preco_venda, c.tipo, bc.quantidade FROM baralho_carta bc
+	INNER JOIN carta c
+	ON c.id = bc.id_carta 
+	inner join consumivel con 
+	on con.id = c.id 
+	INNER JOIN baralho b 
+	ON b.id_jogador = bc.id_jogador 
+
+----------------------- COLEÇÃO ------------------------------
+go
+create view v_busca_colecao_herois
+as
+	select cc.id_jogador, c.id, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia,
+	h.afinidade, h.pericia, h.ganho_pericia, cc.quantidade from colecao_carta cc
+	inner join carta c
+	on c.id = cc.id_carta 
+	inner join heroi h 
+	on h.id = c.id
+---------------------------------------------------
+go
+create view v_busca_colecao_armas
+as
+	select cc.id_jogador, c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, cc.quantidade from colecao_carta cc
+	inner join carta c
+	on c.id = cc.id_carta 
+	inner join arma a 
+	on a.id = c.id 
+---------------------------------------------------
+go
+create view v_busca_colecao_magias
+as
+	select cc.id_jogador, c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, cc.quantidade from colecao_carta cc
+	inner join carta c
+	on c.id = cc.id_carta 
+	inner join magia m 
+	on m.id = c.id 
+---------------------------------------------------
+go
+create view v_busca_colecao_posturas
+as
+	select cc.id_jogador, c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, cc.quantidade from colecao_carta cc 
+	inner join carta c 
+	on c.id = cc.id_carta 
+	inner join postura p
+	on p.id = c.id 
+---------------------------------------------------
+go
+create view v_busca_colecao_consumiveis
+as
+	select cc.id_jogador, c.id, c.nome, c.preco_venda, c.tipo, cc.quantidade from colecao_carta cc
+	inner join carta c
+	on c.id = cc.id_carta 
+	inner join consumivel con 
+	on con.id = c.id 
 
 -- ***************** Triggers ***************** --
 

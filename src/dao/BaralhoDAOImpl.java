@@ -43,13 +43,8 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public Heroi buscaCampeao(Jogador j) {
 		try (Connection con = DBConnection.getInstancia().conectar();){			
 			Heroi campeao = new Heroi();
-			String sql = "select c.id, c.preco_venda, c.nome, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
-					+ "h.afinidade, h.pericia, h.ganho_pericia from carta c " + 
-					"inner join baralho b " + 
-					"on b.id_campeao = c.id " + 
-					"inner join heroi h " + 
-					"on h.id = c.id " + 
-					"where b.id_jogador = ? and b.nome_baralho = 'Padrão'";
+			String sql = "select * from v_busca_baralho_campeao " + 
+						 "where id_jogador = ? and nome_baralho = 'Padrão'";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -85,25 +80,14 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaHerois(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, c.raridade, c.preco_venda, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, "
-					+ "h.afinidade, h.pericia, h.ganho_pericia, bc.quantidade FROM baralho_carta bc " + 
-					"INNER JOIN carta c " + 
-					"ON c.id = bc.id_carta " + 
-					"inner join heroi h " + 
-					"on h.id = c.id " + 
-					"INNER JOIN baralho b " + 
-					"ON b.id_jogador = bc.id_jogador " + 
-					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
-					"ORDER BY c.tipo desc, c.nome asc";
+			String sql = "select * from v_busca_baralho_herois " + 
+						 "WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+						 "ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
 				Heroi c = new Heroi();
-				c.setId(rs.getInt("id"));
-				c.setNome(rs.getString("nome"));
-				c.setPrecoVenda(rs.getInt("preco_venda"));
-				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
 				c.setTipoCarta(TipoCarta.buscaTipoCarta(rs.getInt("tipo")));
@@ -136,15 +120,9 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 		try {
 			Connection con = DBConnection.getInstancia().conectar();
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, bc.quantidade FROM baralho_carta bc " + 
-					"INNER JOIN carta c " + 
-					"ON c.id = bc.id_carta " + 
-					"inner join arma a " + 
-					"on a.id = c.id " + 
-					"INNER JOIN baralho b " + 
-					"ON b.id_jogador = bc.id_jogador " + 
-					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
-					"ORDER BY c.tipo desc, c.nome asc";
+			String sql = "select * from v_busca_baralho_armas " + 
+						 "WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+						 "ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -171,15 +149,9 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaMagias(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, bc.quantidade FROM baralho_carta bc " + 
-					"inner join carta c " + 
-					"on c.id = bc.id_carta " +
-					"INNER JOIN magia m " + 
-					"ON m.id = bc.id_carta " + 				 
-					"INNER JOIN baralho b " + 
-					"ON b.id_jogador = bc.id_jogador " + 
-					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
-					"ORDER BY c.tipo desc, c.nome asc";
+			String sql = "select * from v_busca_baralho_magias " + 
+					"WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+					"ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -208,15 +180,9 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaPosturas(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, bc.quantidade FROM baralho_carta bc " + 
-					"INNER JOIN carta c " + 
-					"ON c.id = bc.id_carta " + 
-					"inner join postura p " + 
-					"on p.id = c.id " + 
-					"INNER JOIN baralho b " + 
-					"ON b.id_jogador = bc.id_jogador " + 
-					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
-					"ORDER BY c.tipo desc, c.nome asc";
+			String sql = "select * from v_busca_baralho_posturas " + 
+					"WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+					"ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
@@ -245,15 +211,9 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	public List<CartaColecao> buscaConsumiveis(Jogador j){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "SELECT c.id, c.nome, c.preco_venda, c.tipo, bc.quantidade FROM baralho_carta bc " + 
-					"INNER JOIN carta c " + 
-					"ON c.id = bc.id_carta " + 
-					"inner join consumivel con " + 
-					"on con.id = c.id " + 
-					"INNER JOIN baralho b " + 
-					"ON b.id_jogador = bc.id_jogador " + 
-					"WHERE bc.id_jogador = ? AND bc.nome_baralho = 'Padrão' " + 
-					"ORDER BY c.tipo desc, c.nome asc";
+			String sql = "select * from v_busca_baralho_consumiveis " + 
+					"WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+					"ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();

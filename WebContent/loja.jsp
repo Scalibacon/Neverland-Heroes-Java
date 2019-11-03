@@ -11,8 +11,15 @@
 <body>
 	<jsp:include page="header.jsp" />
 
+	<div id="background-veil" onclick="escondeNovasCartas()">		
+	</div>
+	<div id="new-cards-container">
+		<img src="img/x.png" id="close-icons" onclick="escondeNovasCartas()">
+		<img src="" class="new-card">
+	</div>
+
 	<div id="big-loja-container">
-		<div class="fissure-container" id="container1">
+		<div class="fissure-container" id="container1" onclick="mostraNovasCartas()">
 			<img src="img/fissure1.jpg" class="fissure-img">
 			<div class="fissure-price" id="price1">$300</div>
 			<div class="fissure-name" id="name1">Fissura Comum</div>
