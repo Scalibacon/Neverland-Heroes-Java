@@ -87,3 +87,10 @@
 .texto-ajuda{
 	padding:10px;
 }
+
+#hero-help{
+	float:left;
+	margin-left:30px;
+	margin-top:20px;
+	margin-bottom:20px;
+}

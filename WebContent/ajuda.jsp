@@ -50,10 +50,25 @@
 			</div>
 		</div>
 		
-		<div class="ajuda-topico" onclick="alternaTopico(3)">Heróis</div>
+		<div class="ajuda-topico" onclick="alternaTopico(3, 999)">Heróis</div>
 		<div class="ajuda-dentro" id="ajuda3">
 			<div class="texto-ajuda">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				<p>Heróis são as cartas principais do jogo, sendo necessárias para se usar magias/posturas, consumíveis e para equipar armas. Quando não há mais heróis no campo, o jogador perde. Abaixo segue uma imagem mostrando algumas características desse tipo de carta:</p>
+				<img src="img/hero-help.png" id="hero-help">
+				<ul>
+					<li><b>Nome:</b> o nome do herói.</li>
+					<li><b>Afinidade:</b> o elemento que esse herói tem afinidade.</li>
+					<li><b>Perícia:</b> a arma que esse herói tem perícia e o bônus que ele ganha ao estar equipado com uma arma desse tipo.</li>
+					<li><b>Raride:</b> raridade da carta.</li>
+					<li><b>HP:</b> quantidade de HP base do herói (um herói é derrotado quando seu HP chega à 0).</li>
+					<li><b>Mana:</b> quantidade de MANA base do herói, que é consumida ao usar magias/posturas.</li>
+					<li><b>Força:</b> pontos de força (FOR) base do herói, que são usados ao calcular o dano de ataques desse herói.</li>
+					<li><b>Poder:</b> pontos de poder (POD) base do herói, que geralmente são usados em efeitos de magias.</li>
+					<li><b>Defesa:</b> pontos de defesa base do herói, que são usados para reduzir danos físicos.</li>
+					<li><b>Resistência:</b> pontos de resistência base do herói, que são usados para reduzir danos mágicos.</li>
+					<li><b>Rank:</b> a quantidade de estrelas indica o rank da carta, usada para validar o baralho (geralmente quanto maior o rank mais poderosa é a carta).</li>
+					<li><b>Efeito:</b> o texto que fala qual efeito a carta possui, que pode variar bastante.</li>					
+				</ul>
 			</div>
 		</div>
 		
