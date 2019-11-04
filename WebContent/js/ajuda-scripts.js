@@ -1,9 +1,9 @@
 var topicos = [false,false,false,false,false,false,false];
 
-function alternaTopico(ajuda){
+function alternaTopico(ajuda, tamanho){
 	
 	if(!topicos[ajuda-1]){
-		document.getElementById("ajuda" + ajuda).style.height = "400px";
+		document.getElementById("ajuda" + ajuda).style.height = tamanho + "px";
 	} else {
 		document.getElementById("ajuda" + ajuda).style.height = "0px";
 	}
