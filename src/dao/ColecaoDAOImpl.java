@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Arma;
+import model.Carta;
 import model.CartaColecao;
 import model.Colecao;
 import model.Consumivel;
@@ -188,6 +190,29 @@ public class ColecaoDAOImpl implements ColecaoDAO{
 				cc.setQuantidade(rs.getInt("quantidade"));
 				cartas.add(cc);
 			}
+			return cartas;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public List<Carta> comprarPacote(Jogador j, int pacote, int preco) {
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			List<Carta> cartas = new ArrayList<Carta>();
+			String sql = "{CALL proc_compra_carta(?, ?, ?)}";
+			CallableStatement cs = con.prepareCall(sql);
+			cs.setInt(1, pacote);
+			cs.setInt(2, preco);
+			cs.setInt(3, j.getId());
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()) {
+				Carta c = new Carta();
+				c.setId(rs.getInt("id_carta"));
+				cartas.add(c);
+			}
+			cs.close();
 			return cartas;
 		} catch (SQLException e) {
 			e.printStackTrace();

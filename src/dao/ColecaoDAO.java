@@ -2,6 +2,7 @@ package dao;
 
 import java.util.List;
 
+import model.Carta;
 import model.CartaColecao;
 import model.Colecao;
 import model.Jogador;
@@ -18,4 +19,6 @@ public interface ColecaoDAO {
 	List<CartaColecao> buscaPosturas(Jogador j);
 	
 	List<CartaColecao> buscaConsumiveis(Jogador j);
+
+	List<Carta> comprarPacote(Jogador j, int pacote, int preco);
 }

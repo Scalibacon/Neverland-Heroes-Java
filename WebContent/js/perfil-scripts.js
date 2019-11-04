@@ -19,7 +19,7 @@ function carregaPerfil(){
 								   'background-size': '100%'});
 		},
 		error : function(e) {
-			alert('Erro ao buscar o perfil: ' + e);
+			alert('Erro ao buscar o perfil');
 		}
 	});
 }

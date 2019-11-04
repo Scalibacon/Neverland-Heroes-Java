@@ -9,6 +9,8 @@
 <title>Loja</title>
 </head>
 <body>
+	<div id="pacote-info">Lorem<br>Impsum<br>ka ka ka</div>
+
 	<jsp:include page="header.jsp" />
 
 	<div id="background-veil" onclick="escondeNovasCartas()">		
@@ -16,30 +18,31 @@
 	<div id="new-cards-container">
 		<img src="img/x.png" id="close-icons" onclick="escondeNovasCartas()">
 		<img src="" class="new-card">
-	</div>
-
+	</div>	
+	
 	<div id="big-loja-container">
-		<div class="fissure-container" id="container1" onclick="mostraNovasCartas()">
+		
+		<div class="fissure-container" id="container1" onclick="tentaComprarPacote(1)" onmouseover="mostraPacoteInfo(74,20,5,1)" onmouseleave="escondePacoteInfo()">
 			<img src="img/fissure1.jpg" class="fissure-img">
 			<div class="fissure-price" id="price1">$300</div>
 			<div class="fissure-name" id="name1">Fissura Comum</div>
 		</div>
 		
-		<div class="fissure-container" id="container2">
+		<div class="fissure-container" id="container2" onclick="tentaComprarPacote(2)" onmouseover="mostraPacoteInfo(30,64,5,1)" onmouseleave="escondePacoteInfo()">
 			<img src="img/fissure2.jpg" class="fissure-img">
 			<div class="fissure-price" id="price2">$500</div>
 			<div class="fissure-name" id="name2">Fissura Rara</div>
 		</div>
 		
-		<div class="fissure-container" id="container3">
+		<div class="fissure-container" id="container3" onclick="tentaComprarPacote(3)" onmouseover="mostraPacoteInfo(10,20,65,1)" onmouseleave="escondePacoteInfo()">
 			<img src="img/fissure3.jpg" class="fissure-img">
-			<div class="fissure-price" id="price3">$800</div>
+			<div class="fissure-price" id="price3">$1000</div>
 			<div class="fissure-name" id="name3">Fissura Épica</div>
 		</div>
 		
-		<div class="fissure-container" id="container4">
+		<div class="fissure-container" id="container4" onclick="tentaComprarPacote(4)" onmouseover="mostraPacoteInfo(5,15,30,50)" onmouseleave="escondePacoteInfo()">
 			<img src="img/fissure4.jpg" class="fissure-img">
-			<div class="fissure-price" id="price4">$1000</div>
+			<div class="fissure-price" id="price4">$2000</div>
 			<div class="fissure-name" id="name4">Fissura Lendária</div>
 		</div>
 		

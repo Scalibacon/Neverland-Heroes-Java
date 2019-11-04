@@ -151,16 +151,48 @@ foreign key (id1) references jogador(id),
 foreign key (id2) references jogador(id),
 )
 
-INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,partidas,vitorias,icone)
-	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',18,300,99999,2,33,25,12)
---UPDATE jogador set experiencia = 1000 where id = 2
--- ***************** Views ***************** --
+INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,partidas,vitorias,icone, conquistas)
+	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',18,300,99999,2,33,25,12, '1-2-3-4-5-6-7-')
+--UPDATE jogador set dinheiro = 5000 where id = 4
+
+
+-- ******************************** VIEWS *********************************** --
 ------------------------- GERAL ------------------------------
 go
 create view v_busca_perfil
 as
 	select id, usuario, email, nivel, experiencia, dinheiro, tipo, partidas, vitorias, icone, conquistas, data_desban
 	from jogador
+
+--------------------------------------------------------------
+go
+CREATE VIEW v_porcentagem_aleatoria
+AS
+SELECT RAND()*(100-1+1)+1 AS porcentagem
+
+--------------------------------------------------------------
+go
+CREATE VIEW v_carta_comum_aleatoria
+AS
+	SELECT TOP 1 id FROM carta where raridade = 0 ORDER BY NEWID()
+
+--------------------------------------------------------------
+go
+CREATE VIEW v_carta_rara_aleatoria
+AS
+	SELECT TOP 1 id FROM carta where raridade = 1 ORDER BY NEWID()
+
+--------------------------------------------------------------
+go
+CREATE VIEW v_carta_epica_aleatoria
+AS
+	SELECT TOP 1 id FROM carta where raridade = 2 ORDER BY NEWID()
+
+--------------------------------------------------------------
+go
+CREATE VIEW v_carta_lendaria_aleatoria
+AS
+	SELECT TOP 1 id FROM carta where raridade = 3 ORDER BY NEWID()
 
 ----------------------- BARALHO ------------------------------
 go
@@ -276,7 +308,102 @@ as
 	inner join consumivel con 
 	on con.id = c.id 
 
--- ***************** Triggers ***************** --
+
+-- ************************************* FUNCTIONS *************************************** --
+
+
+-- ************************************* PROCEDURE *************************************** --
+--drop procedure proc_compra_carta
+--exec proc_compra_carta 4, 200, 2
+-- 1 - comum; 2 - raro; 3 - épico; 4 - lendário --
+go
+create procedure proc_compra_carta(@tipo int, @preco int, @id_jogador int)
+as
+begin
+	DECLARE @id_carta int, @chanceC int, @chanceR int, @chanceE int, @chanceL int, @aleatorio int, @num_cartas int, @possui_carta int,
+	@dinheiro int
+	declare @tabela table(id_carta int)
+
+	set @dinheiro = (select dinheiro from jogador where id = @id_jogador)
+	if(@dinheiro >= @preco)
+		begin
+			update jogador set dinheiro = dinheiro - @preco where id = @id_jogador
+			set @num_cartas = 3
+			if(@tipo = 1)
+				begin
+					set @chanceC = 74
+					set @chanceR = 20
+					set @chanceE = 5
+					set @chanceL = 1
+				end
+			if(@tipo = 2)
+				begin
+					set @chanceC = 30
+					set @chanceR = 64
+					set @chanceE = 5
+					set @chanceL = 1
+				end
+			if(@tipo = 3)
+				begin
+					set @chanceC = 10
+					set @chanceR = 20
+					set @chanceE = 65
+					set @chanceL = 5
+				end
+			if(@tipo = 4)
+				begin
+					set @chanceC = 5
+					set @chanceR = 15
+					set @chanceE = 30
+					set @chanceL = 50
+				end
+
+			while(@num_cartas > 0)
+			begin
+				set @aleatorio = (SELECT porcentagem from v_porcentagem_aleatoria);
+	
+				if(@aleatorio <= @chanceL)
+					begin
+						set @id_carta = (select id from v_carta_lendaria_aleatoria)				
+					end
+				else 
+				begin
+					if(@aleatorio <= (@chanceL + @chanceE))
+						begin
+							set @id_carta = (select id from v_carta_epica_aleatoria)
+						end
+					else 
+					begin
+						if(@aleatorio <= (@chanceL + @chanceE + @chanceR))
+							begin
+								set @id_carta = (select id from v_carta_rara_aleatoria)
+							end
+						else 
+							begin
+								set @id_carta = (select id from v_carta_comum_aleatoria)
+							end
+					end
+				end
+				
+				insert into @tabela values(@id_carta)
+
+				set @possui_carta = (select count(id_carta) from colecao_carta where id_jogador = @id_jogador and id_carta = @id_carta)
+				if(@possui_carta > 0)
+					begin
+						update colecao_carta set quantidade = quantidade + 1 where id_jogador = @id_jogador and id_carta = @id_carta
+					end
+				else
+					begin
+						insert into colecao_carta values(@id_jogador, @id_carta, 1)
+					end
+
+				set @num_cartas = @num_cartas - 1
+			end
+			select * from @tabela
+		end		
+end
+
+-- ************************************* TRIGGERS *************************************** --
 
 -- Dá as cartas padrões pro jogador depois que for cadastrado --
 go

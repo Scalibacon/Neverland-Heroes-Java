@@ -64,10 +64,11 @@ body{
 
 #perfil-line{
 	position:absolute;
-	width:30px;
+	width:50px;
 	box-sizing:border-box;
-	left:415px;
+	left:410px;
 	top:205px;
+	z-index:-1;
 	border:solid 2px rgba(82,112,253,1);
 }
 
@@ -211,8 +212,9 @@ body{
 #conquistas-box{
 	position:relative;
 	float:right;
-	margin:15px;
-	width:440px;
+	margin:0px;
+	min-width:440px;
+	max-width:auto;
 	height:380px;
 	box-sizing:border-box;
 	background-color:snow;
@@ -220,8 +222,9 @@ body{
 }
 #conquista-container{
 	height:321px;
-	width:auto;
+	width:450px;
 	overflow-y:auto;
+	box-sizing:border-box;
 }
 #conquistas-container-titulo{
 	position:relative;

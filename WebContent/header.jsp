@@ -6,7 +6,7 @@
 <div id="header">
 	<img src="img/logo2.png" id="header-logo">
 	<span id="header-btnjogar">Jogar</span>
-	<span class="header-menu-item">Ajuda</span>
+	<a href="ajuda.jsp"><span class="header-menu-item">Ajuda</span></a>
 	<a href="colecao.jsp"><span class="header-menu-item">Coleção</span></a>
 	<a href="loja.jsp"><span class="header-menu-item">Loja</span></a>
 	<span class="header-menu-item" id="header-perfil-container">
