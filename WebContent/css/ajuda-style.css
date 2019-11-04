@@ -71,11 +71,13 @@
 	position:relative;
 	width:100%;
 	height:0px;
+	height:300px;//
 	background-color:rgb(255,255,255);
 	color:black;
 	font-family: 'Roboto', cursive;
 	font-size: 100%;
 	text-align:justify;
+	text-indent: 30px;
 	box-sizing:border-box;
 	transition: all 0.5s;
 	overflow:hidden;
