@@ -21,7 +21,21 @@
 		
 		<div id="choose-game-container">
 			<div class="inside-option" id="inside-option-online"></div>
-			<div class="inside-option" id="inside-option-offline"></div>
+			<div class="inside-option" id="inside-option-offline">
+				<div class="offline-separator" id="separator1">
+					<div id="separator1-title">Escolha seu oponente</div>
+					<div id="container-mini-oponentes">
+					</div>
+				</div>
+				
+				<div class="offline-separator" id="separator2">
+					<div id="oponente-img"></div>
+					<div id="oponente-nome"></div>
+					<div class="oponente-info"></div>
+					<div class="oponente-info"></div>
+					<div class="oponente-info"></div>
+				</div>
+			</div>
 		</div>
 	</div>
 	
