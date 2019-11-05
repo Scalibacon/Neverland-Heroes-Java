@@ -34,7 +34,7 @@
 			<div class="fissure-name" id="name2">Fissura Rara</div>
 		</div>
 		
-		<div class="fissure-container" id="container3" onclick="tentaComprarPacote(3)" onmouseover="mostraPacoteInfo(10,20,65,1)" onmouseleave="escondePacoteInfo()">
+		<div class="fissure-container" id="container3" onclick="tentaComprarPacote(3)" onmouseover="mostraPacoteInfo(10,20,65,5)" onmouseleave="escondePacoteInfo()">
 			<img src="img/fissure3.jpg" class="fissure-img">
 			<div class="fissure-price" id="price3">$1000</div>
 			<div class="fissure-name" id="name3">Fissura Épica</div>
@@ -45,6 +45,8 @@
 			<div class="fissure-price" id="price4">$2000</div>
 			<div class="fissure-name" id="name4">Fissura Lendária</div>
 		</div>
+		
+		<div id="money-container">Você possui: $7500</div>
 		
 		<img src="img/miniphisto.png" id="loja-miniphisto">
 	</div>

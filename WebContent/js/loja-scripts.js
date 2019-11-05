@@ -56,41 +56,32 @@ function comprarPacote(pacote){
 		preco = 2000;
 	}
 	
-	$.ajax({
-		url : 'buscaPerfilServlet',
-		type : 'post',
-		success : function(data) {
-			perfil = JSON.parse(data);
-			dinheiro = perfil.dinheiro;
-			if(dinheiro < preco){
-				Swal.fire({
-				  title: 'Você não possui dinheiro o suficiente',
-				  text: "Vá jogar e ganhar dinheiro, seu pobretão u.u",
-				  type: 'error'
-				});
-			} else {
-				$.ajax({
-					url : 'compraPacoteServlet',
-					data : {
-						pacote : pacote,
-						preco : preco
-					},
-					type : 'post',
-					success : function(data) {
-						var cartas = JSON.parse(data);
-						//console.log(cartas);
-						mostraNovasCartas(cartas);
-					},
-					error : function(e) {
-						alert('Erro ao comprar o pacote!');
-					}
-				});
+	
+	if(perfil.dinheiro < preco){
+		Swal.fire({
+		  title: 'Você não possui dinheiro o suficiente',
+		  text: "Vá jogar e ganhar dinheiro, seu pobretão u.u",
+		  type: 'error'
+		});
+	} else {
+		$.ajax({
+			url : 'compraPacoteServlet',
+			data : {
+				pacote : pacote,
+				preco : preco
+			},
+			type : 'post',
+			success : function(data) {
+				var cartas = JSON.parse(data);
+				//console.log(cartas);
+				mostraNovasCartas(cartas);
+				mostraDinheiro();
+			},
+			error : function(e) {
+				alert('Erro ao comprar o pacote!');
 			}
-		},
-		error : function(e) {
-			alert('Erro ao buscar a grana!');
-		}
-	});
+		});
+	}		
 }
 
 
@@ -109,3 +100,19 @@ function mostraPacoteInfo(comum, rara, epica, lendaria){
 function escondePacoteInfo(){
 	document.getElementById("pacote-info").style.display = "none";
 }
+
+var perfil;
+function mostraDinheiro(){
+	$.ajax({
+		url : 'buscaPerfilServlet',
+		type : 'post',
+		success : function(data) {
+			perfil = JSON.parse(data);
+			document.getElementById("money-container").innerHTML = "Você possui: " + perfil.dinheiro;
+		},
+		error : function(e) {
+			alert('Erro ao puxar a grana pacote!');
+		}
+	});
+}
+mostraDinheiro();
