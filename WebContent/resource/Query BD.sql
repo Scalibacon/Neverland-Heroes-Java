@@ -1,3 +1,4 @@
+
 create database cardgame
 go
 use cardgame
@@ -58,7 +59,7 @@ ganho_pericia int,
 foreign key (id) references carta(id) on delete cascade,
 primary key (id)
 )
-
+--update heroi set hp = 8 where id = 42
 create table jogador(
 id int identity(1,1) not null,
 usuario varchar(100) not null unique,
@@ -146,7 +147,18 @@ INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,partidas
 	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',18,300,99999,2,33,25,12, '1-2-3-4-5-6-7-')
 --UPDATE jogador set dinheiro = 5000 where id = 4
 
-
+select * from carta
+select * from heroi
+select * from arma
+select * from magia
+select * from postura
+select * from consumivel
+select * from jogador
+select * from colecao_carta
+select * from baralho
+select * from baralho_carta
+select * from oponente
+select * from carta_oponente
 -- ******************************** VIEWS *********************************** --
 ------------------------- GERAL ------------------------------
 go
