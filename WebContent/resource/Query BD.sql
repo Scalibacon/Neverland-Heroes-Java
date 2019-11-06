@@ -104,7 +104,7 @@ foreign key(id_carta) references carta(id)
 )
 
 create table oponente(
-id int identity(1,1) not null,
+id int not null,
 nome varchar(100) not null,
 nivel int not null,
 descricao varchar(max) not null,
@@ -120,15 +120,6 @@ quantidade int not null,
 primary key (id_oponente, id_carta),
 foreign key (id_oponente) references oponente(id),
 foreign key (id_carta) references carta(id)
-)
-
-create table drop_oponente(
-id_oponente int not null,
-id_drop int not null,
-chance decimal(3,2) not null,
-primary key (id_oponente, id_drop),
-foreign key (id_oponente) references oponente(id),
-foreign key (id_drop) references carta(id)
 )
 
 create table novidade(
@@ -193,6 +184,74 @@ go
 CREATE VIEW v_carta_lendaria_aleatoria
 AS
 	SELECT TOP 1 id FROM carta where raridade = 3 ORDER BY NEWID()
+
+
+----------------------- OPONENTE ------------------------------
+go
+create view v_oponente_campeao
+as
+	select o.id as id_oponente, c.id, c.preco_venda, c.nome, c.tipo, c.raridade, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia,
+	h.afinidade, h.pericia, h.ganho_pericia from carta c
+	inner join oponente o 
+	on o.campeao = c.id 
+	inner join heroi h 
+	on h.id = c.id
+---------------------------------------------------
+go
+create view v_oponente_herois
+as
+	SELECT o.id as id_oponente, c.id, c.nome, c.preco_venda, c.tipo, c.raridade, h.rank_, h.hp, h.mana, h.forca, h.poder, h.defesa, h.resistencia, 
+	h.afinidade, h.pericia, h.ganho_pericia, oc.quantidade FROM carta_oponente oc
+	INNER JOIN carta c
+	ON c.id = oc.id_carta 
+	inner join heroi h 
+	on h.id = c.id
+	INNER JOIN oponente o
+	ON o.id = oc.id_oponente
+---------------------------------------------------
+go
+create view v_oponente_armas
+as
+	SELECT o.id as id_oponente, c.id, c.nome, c.preco_venda, c.tipo, a.tipo as tipo_arma, oc.quantidade FROM carta_oponente oc
+	INNER JOIN carta c
+	ON c.id = oc.id_carta 
+	inner join arma a 
+	on a.id = c.id 
+	INNER JOIN oponente o 
+	ON o.id = oc.id_oponente
+---------------------------------------------------
+go
+create view v_oponente_magias
+as
+	SELECT o.id as id_oponente, c.id, c.nome, c.preco_venda, c.tipo, m.afinidade, m.custo, m.tempo_recarga, oc.quantidade FROM carta_oponente oc
+	inner join carta c
+	on c.id = oc.id_carta
+	INNER JOIN magia m 
+	ON m.id = oc.id_carta 				 
+	INNER JOIN oponente o 
+	ON o.id = oc.id_oponente
+---------------------------------------------------
+go
+create view v_oponente_posturas
+as
+	SELECT o.id as id_oponente, c.id, c.nome, c.preco_venda, c.tipo, p.tipo_arma, p.custo, p.tempo_recarga, oc.quantidade FROM carta_oponente oc 
+	INNER JOIN carta c
+	ON c.id = oc.id_carta
+	inner join postura p 
+	on p.id = c.id
+	INNER JOIN oponente o 
+	ON o.id = oc.id_oponente
+---------------------------------------------------
+go
+create view v_oponente_consumiveis
+as
+	SELECT o.id as id_oponente, c.id, c.nome, c.preco_venda, c.tipo, oc.quantidade FROM carta_oponente oc
+	INNER JOIN carta c
+	ON c.id = oc.id_carta 
+	inner join consumivel con 
+	on con.id = c.id 
+	INNER JOIN oponente o 
+	ON o.id = oc.id_oponente
 
 ----------------------- BARALHO ------------------------------
 go
@@ -426,6 +485,42 @@ as
 		set @cont = @cont + 1
 	end	
 
+
+-- ***************** Inserts chumbados se foda ***************** --
+
+insert into oponente values(1, 'Johnny', 1, '', 3)
+go
+insert into carta_oponente values(1,2,1),
+								 (1,4,1),
+								 (1,5,1),
+								 (1,6,1),
+								 (1,7,2),
+								 (1,8,1),
+								 (1,9,2),
+								 (1,11,1),
+								 (1,12,1),
+								 (1,13,2),
+								 (1,14,1),
+								 (1,15,1),
+								 (1,16,2),
+								 (1,17,1),
+								 (1,18,1),
+								 (1,20,2),
+								 (1,21,2)
+select * from oponente
+select * from carta_oponente
+/* ponente
+id int identity(1,1) not null,
+nome varchar(100) not null,
+nivel int not null,
+descricao varchar(max) not null,
+campeao int not null
+
+carta_oponente
+id_oponente int not null,
+id_carta int not null,
+quantidade int not null,
+*/
 
 -- ***************** Querys de teste ***************** --
 select * from colecao_carta where id_jogador = 1

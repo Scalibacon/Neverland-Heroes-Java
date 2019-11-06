@@ -2,6 +2,7 @@
     <wb-module deploy-name="LES-CardGame">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/json"/>
         <property name="context-root" value="LES-CardGame"/>
         <property name="java-output-path" value="/LES-CardGame/build/classes"/>
     </wb-module>

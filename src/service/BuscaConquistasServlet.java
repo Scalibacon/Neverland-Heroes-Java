@@ -1,41 +1,43 @@
 package service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import dao.BaralhoDAO;
-import dao.BaralhoDAOImpl;
-import dao.PseuDAO;
-import model.Baralho;
-import model.Jogador;
-
-@WebServlet("/buscaBaralhoServlet")
-public class BuscaBaralhoServlet extends HttpServlet{
+@WebServlet("/buscaConquistasServlet")
+public class BuscaConquistasServlet extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		Baralho baralho;			
-//		if(true) { /* depois tirar daqui... */
-//			baralho = PseuDAO.pseudoBaralho();
-//		} else { /* até aqui */
-			BaralhoDAO bDao = new BaralhoDAOImpl();
-			Jogador j = new Jogador();
-			j.setId((int) session.getAttribute("id"));
-			baralho = bDao.buscaBaralho(j);
-//		} //aqui tb
+		
+		ClassLoader classLoader = getClass().getClassLoader();		
+		URL resource = classLoader.getResource("conquistas.json");		 
+		File file = new File(resource.getFile());
+		
+		BufferedReader reader = new BufferedReader(new FileReader(file));		
+		
+		StringBuilder futuroJsonTxt = new StringBuilder();
+		String line = null;
+		
+		while ((line = reader.readLine()) != null) {
+			futuroJsonTxt.append(line);
+		}		
+		reader.close();
+		
+		String jsonTxt = futuroJsonTxt.toString().trim();
 		PrintWriter out = response.getWriter();
-		String json = baralho.toJson();
-		out.println(json);
+		out.println(jsonTxt);
 		out.close();
 	}
 	

@@ -29,12 +29,11 @@ carregaPerfil();
 function verificaConquistas(){
 	var conquistas;
 	$.ajax({
-	   url: 'js/json/conquistas.json',
-	   dataType: 'json',
+	   url: 'buscaConquistasServlet',
+	   type: 'post',
 	   contentType:"application/x-javascript; charset:UTF-8",
 	   success: function(data) {
-		   	conquistas_json = data;
-		 	//console.log(conquistas_json);
+		   	conquistas_json = JSON.parse(data);
 		   	var arr_conquistas = perfil.conquistas.split("-");
 		 	for(var i = 0; i < arr_conquistas.length; i++){
 		 		for(var j = 0; j < conquistas_json.conquistas.length; j++){

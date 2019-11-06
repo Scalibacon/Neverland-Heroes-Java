@@ -12,41 +12,57 @@ import model.Baralho;
 import model.CartaColecao;
 import model.Consumivel;
 import model.Heroi;
-import model.Jogador;
 import model.Magia;
+import model.Oponente;
 import model.Postura;
 import model.TipoAfinidade;
 import model.TipoArma;
 import model.TipoCarta;
 import model.TipoRaridade;
 
-public class BaralhoDAOImpl implements BaralhoDAO {
-
+public class OponenteDAOImpl implements OponenteDAO{
+	
 	@Override
-	public Baralho buscaBaralho(Jogador j) {	
-		Baralho baralho = new Baralho();
-		List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-		
-		baralho.setCampeao(buscaCampeao(j));
-		cartas.addAll(buscaHerois(j));
-		cartas.addAll(buscaArmas(j));
-		cartas.addAll(buscaMagias(j));
-		cartas.addAll(buscaPosturas(j));
-		cartas.addAll(buscaConsumiveis(j));
-		
-		baralho.setJogador(j);
-		baralho.setCartas(cartas);
-		return baralho;		
+	public Oponente buscaOponente(int id) {
+		try (Connection con = DBConnection.getInstancia().conectar();) {
+			Oponente oponente = new Oponente();
+			Baralho baralho = new Baralho();
+			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
+			String sql = "select * from oponente where id = ?";
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+			if(rs.next()) {
+				oponente.setId(rs.getInt("id"));
+				oponente.setNome(rs.getString("nome"));
+				oponente.setNivel(rs.getInt("nivel"));
+				oponente.setDescricao(rs.getString("descricao"));
+			}
+			baralho.setCampeao(buscaCampeao(oponente));
+			cartas.addAll(buscaHerois(oponente));
+			cartas.addAll(buscaArmas(oponente));
+			cartas.addAll(buscaMagias(oponente));
+			cartas.addAll(buscaPosturas(oponente));
+			cartas.addAll(buscaConsumiveis(oponente));
+			
+			baralho.setCartas(cartas);
+			oponente.setBaralho(baralho);
+			
+			return oponente;
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	@Override
-	public Heroi buscaCampeao(Jogador j) {
+	public Heroi buscaCampeao(Oponente o) {
 		try (Connection con = DBConnection.getInstancia().conectar();){			
 			Heroi campeao = new Heroi();
-			String sql = "select * from v_busca_baralho_campeao " + 
-						 "where id_jogador = ? and nome_baralho = 'Padrão'";
+			String sql = "select * from v_oponente_campeao " + 
+						 "where id_oponente = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, j.getId());
+			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			if(rs.next()) {
 				campeao = new Heroi();
@@ -75,14 +91,14 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	}
 	
 	@Override
-	public List<CartaColecao> buscaHerois(Jogador j){
+	public List<CartaColecao> buscaHerois(Oponente o){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select * from v_busca_baralho_herois " + 
-						 "WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+			String sql = "select * from v_oponente_herois " + 
+						 "WHERE id_oponente = ? " + 
 						 "ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, j.getId());
+			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
 				Heroi c = new Heroi();
@@ -114,15 +130,15 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	}
 	
 	@Override
-	public List<CartaColecao> buscaArmas(Jogador j){
+	public List<CartaColecao> buscaArmas(Oponente o){
 		try {
 			Connection con = DBConnection.getInstancia().conectar();
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select * from v_busca_baralho_armas " + 
-						 "WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+			String sql = "select * from v_oponente_armas " + 
+						 "WHERE id_oponente = ? " + 
 						 "ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, j.getId());
+			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
 				Arma c = new Arma();
@@ -144,14 +160,14 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	}
 	
 	@Override
-	public List<CartaColecao> buscaMagias(Jogador j){
+	public List<CartaColecao> buscaMagias(Oponente o){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select * from v_busca_baralho_magias " + 
-					"WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+			String sql = "select * from v_oponente_magias " + 
+					"WHERE id_oponente = ? " + 
 					"ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, j.getId());
+			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
 				Magia c = new Magia();
@@ -175,14 +191,14 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	}
 	
 	@Override
-	public List<CartaColecao> buscaPosturas(Jogador j){
+	public List<CartaColecao> buscaPosturas(Oponente o){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select * from v_busca_baralho_posturas " + 
-					"WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+			String sql = "select * from v_oponente_posturas " + 
+					"WHERE id_oponente = ? " + 
 					"ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, j.getId());
+			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
 				Postura c = new Postura();
@@ -206,14 +222,14 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	}
 	
 	@Override
-	public List<CartaColecao> buscaConsumiveis(Jogador j){
+	public List<CartaColecao> buscaConsumiveis(Oponente o){
 		try (Connection con = DBConnection.getInstancia().conectar();) {
 			List<CartaColecao> cartas = new ArrayList<CartaColecao>();
-			String sql = "select * from v_busca_baralho_consumiveis " + 
-					"WHERE id_jogador = ? AND nome_baralho = 'Padrão' " + 
+			String sql = "select * from v_oponente_consumiveis " + 
+					"WHERE id_oponente = ? " + 
 					"ORDER BY tipo desc, nome asc";
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setInt(1, j.getId());
+			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
 				Consumivel c = new Consumivel();
@@ -230,35 +246,6 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
-		}
-	}
-	
-	@Override
-	public boolean salvaDeck(Baralho deck) {
-		String sql;
-		PreparedStatement stm;
-		try (Connection con = DBConnection.getInstancia().conectar();) {
-			sql = "delete from baralho_carta where id_jogador = ? and nome_baralho = 'Padrão' " +
-				  "update baralho set id_campeao = ? where id_jogador = ? and nome_baralho = 'Padrão'";
-			stm = con.prepareStatement(sql);
-			stm.setInt(1, deck.getJogador().getId());
-			stm.setInt(2, deck.getCampeao().getId());
-			stm.setInt(3, deck.getJogador().getId());
-			stm.executeUpdate();
-			
-			for(int i = 0; i < deck.getCartas().size(); i++) {
-				sql = "insert into baralho_carta values (?, 'Padrão', ?, ?)";
-				stm = con.prepareStatement(sql);
-				stm.setInt(1, deck.getJogador().getId());				
-				stm.setInt(2, deck.getCartas().get(i).getCarta().getId());
-				stm.setInt(3, deck.getCartas().get(i).getQuantidade());
-				stm.executeUpdate();
-			}
-			
-			return true;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
 		}
 	}
 }

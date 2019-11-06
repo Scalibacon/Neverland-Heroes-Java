@@ -25,14 +25,14 @@ public class BuscaColecaoServlet extends HttpServlet{
 		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		Colecao colecao;		
-		if(true) { /* depois tirar daqui... */
-			colecao = PseuDAO.pseudoColecao();
-		}else { /* até aqui */
+//		if(true) { /* depois tirar daqui... */
+//			colecao = PseuDAO.pseudoColecao();
+//		}else { /* até aqui */
 			ColecaoDAO cDao = new ColecaoDAOImpl();
 			Jogador j = new Jogador();
 			j.setId((int) session.getAttribute("id"));
 			colecao = cDao.buscaColecao(j);
-		} //aqui tb
+//		} //aqui tb
 		PrintWriter out = response.getWriter();
 		String json = colecao.toJson();
 		out.println(json);

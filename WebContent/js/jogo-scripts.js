@@ -21,7 +21,42 @@ function carregaMiniOponentes(){
 }
 carregaMiniOponentes();
 
+var oponente;
 function escolherOponente(oponente){
 	document.getElementById('oponente-img').style.background = "url(img/oponentes/oponente" + oponente + ".jpg) no-repeat";
 	document.getElementById('oponente-img').style.backgroundSize = "100%";
+	
+	$.ajax({
+		url : 'buscaOponenteServlet',
+		data : {id : oponente},
+		type : 'post',
+		success : function(data) {
+			oponente = JSON.parse(data);
+			
+			document.getElementById('oponente-nome').innerHTML = oponente.nome;
+			document.getElementById('oponente-nome').style.backgroundColor = 'transparent';
+			document.getElementById('oponente-nome').style.border = 'none';
+			
+			document.getElementById('oponente-nivel').innerHTML = "Nível " + oponente.nivel;
+			document.getElementById('oponente-nivel').style.backgroundColor = 'transparent';
+			document.getElementById('oponente-nivel').style.border = 'none';
+			
+			document.getElementById('oponente-dificuldade').innerHTML = "Dificuldade: fácil";
+			document.getElementById('oponente-dificuldade').style.backgroundColor = 'transparent';
+			document.getElementById('oponente-dificuldade').style.border = 'none';
+			
+			document.getElementById('oponente-recompensa').innerHTML = "Recompensa: $15";
+			document.getElementById('oponente-recompensa').style.backgroundColor = 'transparent';
+			document.getElementById('oponente-recompensa').style.border = 'none';
+			
+			document.getElementById('btn-desafiar').style.display = 'block';
+		},
+		error : function(e) {
+			alert('Erro ao buscar o oponente');
+		}
+	});
 };
+
+function iniciarContraOponente(){
+	
+}

@@ -31,9 +31,11 @@
 				<div class="offline-separator" id="separator2">
 					<div id="oponente-img"></div>
 					<div id="oponente-nome"></div>
-					<div class="oponente-info"></div>
-					<div class="oponente-info"></div>
-					<div class="oponente-info"></div>
+					<div class="oponente-info" id="oponente-nivel"></div>
+					<div class="oponente-info" id="oponente-dificuldade"></div>
+					<div class="oponente-info" id="oponente-recompensa"></div>
+					
+					<div id="btn-desafiar" onclick="iniciarContraOponente()">Desafiar</div>
 				</div>
 			</div>
 		</div>
