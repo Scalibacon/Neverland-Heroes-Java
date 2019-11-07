@@ -22,16 +22,17 @@ function carregaMiniOponentes(){
 carregaMiniOponentes();
 
 var oponente;
-function escolherOponente(oponente){
-	document.getElementById('oponente-img').style.background = "url(img/oponentes/oponente" + oponente + ".jpg) no-repeat";
+function escolherOponente(oponente_id){
+	document.getElementById('oponente-img').style.background = "url(img/oponentes/oponente" + oponente_id + ".jpg) no-repeat";
 	document.getElementById('oponente-img').style.backgroundSize = "100%";
 	
 	$.ajax({
 		url : 'buscaOponenteServlet',
-		data : {id : oponente},
+		data : {id : oponente_id},
 		type : 'post',
 		success : function(data) {
 			oponente = JSON.parse(data);
+			//console.log(oponente);//
 			
 			document.getElementById('oponente-nome').innerHTML = oponente.nome;
 			document.getElementById('oponente-nome').style.backgroundColor = 'transparent';
@@ -57,6 +58,6 @@ function escolherOponente(oponente){
 	});
 };
 
-function iniciarContraOponente(){
-	
+function iniciarContraOponente(){	
+	startVsIa();	
 }

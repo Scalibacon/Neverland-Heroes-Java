@@ -12,6 +12,14 @@
 	<div id="fixed-background"></div>
 	<jsp:include page="header.jsp"/>
 	
+	<div id="game-container">
+		<div class="player-info" id="info1">
+		</div>
+		
+		<div class="player-info" id="info2">
+		</div>
+	</div>
+	
 	<div id="container-choose-game">
 		<div id="choose-game-top">
 			<div class="choose-game-option" id="option-offline" onclick="trocaOption('inside-option-offline')">Offline</div>
@@ -39,8 +47,10 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>	
 	
+	<script type="text/javascript" src="js/jogo-animations.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/jogo-scripts.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/jogo-vs-ia.js" charset="utf-8"></script>
 </body>
 </html>

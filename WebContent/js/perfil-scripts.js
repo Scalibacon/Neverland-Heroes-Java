@@ -34,22 +34,31 @@ function verificaConquistas(){
 	   contentType:"application/x-javascript; charset:UTF-8",
 	   success: function(data) {
 		   	conquistas_json = JSON.parse(data);
-		   	var arr_conquistas = perfil.conquistas.split("-");
-		 	for(var i = 0; i < arr_conquistas.length; i++){
-		 		for(var j = 0; j < conquistas_json.conquistas.length; j++){
-		 			if(arr_conquistas[i] == conquistas_json.conquistas[j].conquista.id){
-		 				document.getElementById("conquista-container").innerHTML +=
-		 					"<div class='conquista' id='conquista" + (i+1) + "'>" +
-		 					"<img src='img/conquista" + conquistas_json.conquistas[j].conquista.tipo + ".png' class='conquista-img'>" +
-		 					"<div class='conquista-titulo'>" + conquistas_json.conquistas[j].conquista.titulo + "</div>" +
-		 					"<div class='conquista-texto'>" + conquistas_json.conquistas[j].conquista.texto + "</div>" +
-		 					"</div>";
-		 				break;
-		 			}
-		 		}
-		 	}
+		   	processaConquista(conquistas_json);
+	   },
+	   error: function(){
+		   fetch('json/conquistas.json')
+		   .then(response => response.json())
+		   .then(jsonResponse => processaConquista(jsonResponse))   
 	   }
 	});
+}
+
+function processaConquista(conquistas_json){
+	var arr_conquistas = perfil.conquistas.split("-");
+ 	for(var i = 0; i < arr_conquistas.length; i++){
+ 		for(var j = 0; j < conquistas_json.conquistas.length; j++){
+ 			if(arr_conquistas[i] == conquistas_json.conquistas[j].conquista.id){
+ 				document.getElementById("conquista-container").innerHTML +=
+ 					"<div class='conquista' id='conquista" + (i+1) + "'>" +
+ 					"<img src='img/conquista" + conquistas_json.conquistas[j].conquista.tipo + ".png' class='conquista-img'>" +
+ 					"<div class='conquista-titulo'>" + conquistas_json.conquistas[j].conquista.titulo + "</div>" +
+ 					"<div class='conquista-texto'>" + conquistas_json.conquistas[j].conquista.texto + "</div>" +
+ 					"</div>";
+ 				break;
+ 			}
+ 		}
+ 	}
 }
 
 //verifica o rank do jogador

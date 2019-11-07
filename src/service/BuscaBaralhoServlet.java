@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import dao.BaralhoDAO;
 import dao.BaralhoDAOImpl;
+import dao.JogadorDAO;
+import dao.JogadorDAOImpl;
 import dao.PseuDAO;
 import model.Baralho;
 import model.Jogador;
@@ -29,8 +31,11 @@ public class BuscaBaralhoServlet extends HttpServlet{
 //			baralho = PseuDAO.pseudoBaralho();
 //		} else { /* até aqui */
 			BaralhoDAO bDao = new BaralhoDAOImpl();
+			JogadorDAO jDao = new JogadorDAOImpl();
 			Jogador j = new Jogador();
 			j.setId((int) session.getAttribute("id"));
+			j.setUsuario((String) session.getAttribute("usuario")); 
+			jDao.buscarPerfil(j);			
 			baralho = bDao.buscaBaralho(j);
 //		} //aqui tb
 		PrintWriter out = response.getWriter();
