@@ -13,11 +13,6 @@
 	<jsp:include page="header.jsp"/>
 	
 	<div id="game-container">
-		<div class="player-info" id="info1">
-		</div>
-		
-		<div class="player-info" id="info2">
-		</div>
 	</div>
 	
 	<div id="container-choose-game">
