@@ -4,7 +4,6 @@ import java.util.List;
 
 import model.Baralho;
 import model.CartaColecao;
-import model.Heroi;
 import model.Jogador;
 
 public interface BaralhoDAO {
@@ -20,7 +19,7 @@ public interface BaralhoDAO {
 
 	List<CartaColecao> buscaHerois(Jogador j);
 
-	Heroi buscaCampeao(Jogador j);
+	CartaColecao buscaCampeao(Jogador j);
 	
 	boolean salvaDeck(Baralho deck);
 }

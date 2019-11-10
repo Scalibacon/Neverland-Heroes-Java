@@ -102,7 +102,7 @@ function atualizaRank(){
 	var margin = 155 - ((rank - 1) * 21.25);
 	
 	for(var i = 1; i <= rank; i++){
-		ranks_html += "<img src='img/rank.png' class='card-rank'> "
+		ranks_html += "<img src='img/creation/rank.png' class='card-rank'> "
 	}
 	document.getElementById("card-rank-container").innerHTML = ranks_html;
 	$("#card-rank-container").css({left:margin+"px"});
@@ -139,13 +139,13 @@ function atualizaArma(){
 			break;
 	}
 	
-	$("#card-pericia").css({background:'url(img/arma'+ pericia +'.png) no-repeat','background-size': '100%'})
+	$("#card-pericia").css({background:'url(img/creation/arma'+ pericia +'.png) no-repeat','background-size': '100%'})
 }
 
 function atualizaAfinidade(){
 	var combo_afinidade = document.getElementById("afinidade");
 	var afinidade = combo_afinidade.options[combo_afinidade.selectedIndex].value;
-	$("#card-afinidade").css({background: 'url(img/afinidade' + afinidade + '.png) no-repeat','background-size': '100%'});
+	$("#card-afinidade").css({background: 'url(img/creation/afinidade' + afinidade + '.png) no-repeat','background-size': '100%'});
 }
 
 function atualizaTexto(origem, destino){

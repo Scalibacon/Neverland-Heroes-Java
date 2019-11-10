@@ -12,7 +12,7 @@ function atualizaCartas(fonte){
 		container = "cards-deck";
 		tipoId = "deck";
 		document.getElementById("cards-deck").innerHTML = 
-			'<div class="champion-card" id="deck' + fonte.campeao.id + '" style="background:url(img/cards/' + fonte.campeao.id + '.jpg) no-repeat;background-size:100%"></div>'
+			'<div class="champion-card" id="deck' + fonte.campeao.carta.id + '" style="background:url(img/cards/' + fonte.campeao.carta.id + '.jpg) no-repeat;background-size:100%"></div>'
 		;
 	}
 	for(var i = 0; i < fonte.cartas.length; i++){		
@@ -92,7 +92,7 @@ function tryToDeck(id){
 		}
 	}	
 
-	if(deck.campeao.id == id){
+	if(deck.campeao.carta.id == id){
 		quantidadeNoDeck++; //se limite for 1 setar pra false
 		if(cartaPraAdd.quantidade == 1){
 			podeAdd = false;
@@ -149,12 +149,13 @@ function tirarDoDeck(id){
 function adicionarCampeao(id){	
 	for(var i = 0; i < deck.cartas.length; i++){
 		if(deck.cartas[i].carta.id == id){
-			if(isNaN(deck.cartas[i].carta.rank) || deck.cartas[i].carta.id == deck.campeao.id){
+			if(isNaN(deck.cartas[i].carta.rank) || deck.cartas[i].carta.id == deck.campeao.carta.id){
 				return;
 			} else {
 				var exCampeao = JSON.parse(JSON.stringify(deck.campeao));
-				deck.campeao = deck.cartas[i].carta;
-				tryToDeck(exCampeao.id);
+				deck.campeao = deck.cartas[i];
+				deck.campeao.quantidade = 1;
+				tryToDeck(exCampeao.carta.id);
 				if(deck.cartas[i].quantidade > 1){
 					deck.cartas[i].quantidade--;
 				} else {
@@ -171,10 +172,10 @@ function adicionarCampeao(id){
 // ------- Atualiza as informações sobre o deck -------
 var allowSave = true;
 function atualizaDeckInfo(){
-	var somaRank =  deck.campeao.rank;
+	var somaRank =  deck.campeao.carta.rank;
 	var qtdeHerois = 1;
-	var somaForca =  deck.campeao.forca;
-	var somaPoder =  deck.campeao.poder;
+	var somaForca =  deck.campeao.carta.forca;
+	var somaPoder =  deck.campeao.carta.poder;
 	var qtdeCartas = 1;
 	
 	for(var i = 0; i < deck.cartas.length; i++){

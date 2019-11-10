@@ -40,15 +40,16 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 	}
 	
 	@Override
-	public Heroi buscaCampeao(Jogador j) {
+	public CartaColecao buscaCampeao(Jogador j) {
 		try (Connection con = DBConnection.getInstancia().conectar();){			
-			Heroi campeao = new Heroi();
+			CartaColecao c_campeao = new CartaColecao();
 			String sql = "select * from v_busca_baralho_campeao " + 
 						 "where id_jogador = ? and nome_baralho = 'Padrão'";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, j.getId());
 			ResultSet rs = stm.executeQuery();
 			if(rs.next()) {
+				Heroi campeao = new Heroi();
 				campeao = new Heroi();
 				campeao.setId(rs.getInt("id"));
 				campeao.setNome(rs.getString("nome"));
@@ -66,8 +67,10 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				campeao.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
 				campeao.setPericia(TipoArma.buscaTipoArma(rs.getInt("pericia")));
 				campeao.setGanhoPericia(rs.getInt("ganho_pericia"));
+				c_campeao.setCarta(campeao);
+				c_campeao.setQuantidade(1);
 			}
-			return campeao;	
+			return c_campeao;	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
@@ -242,7 +245,7 @@ public class BaralhoDAOImpl implements BaralhoDAO {
 				  "update baralho set id_campeao = ? where id_jogador = ? and nome_baralho = 'Padrão'";
 			stm = con.prepareStatement(sql);
 			stm.setInt(1, deck.getJogador().getId());
-			stm.setInt(2, deck.getCampeao().getId());
+			stm.setInt(2, deck.getCampeao().getCarta().getId());
 			stm.setInt(3, deck.getJogador().getId());
 			stm.executeUpdate();
 			

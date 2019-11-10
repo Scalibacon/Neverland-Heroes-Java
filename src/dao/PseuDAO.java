@@ -59,12 +59,13 @@ public class PseuDAO {
 
 	public static Baralho pseudoBaralho() {
 		Baralho bar = new Baralho();
+		CartaColecao c_cam = new CartaColecao();
 		Heroi cam = new Heroi();
 		cam.setId(2);
 		cam.setRank(1);
 		cam.setForca(2);
 		cam.setPoder(1);
-		bar.setCampeao(cam);
+		bar.setCampeao(c_cam);
 		List<CartaColecao> cartas = new ArrayList<CartaColecao>();
 		for (int i = 3; i <= 21; i++) {
 			if (i >= 2 && i <= 6 ) {

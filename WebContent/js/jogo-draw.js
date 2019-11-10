@@ -1,5 +1,5 @@
 //**************************************** PRÉ-JOGO *************************************************************
-function carregaTelaInicial(){
+function carregaTelaInicial(isVsIA){
 	var delay = 0;
 	
 	document.getElementById('container-choose-game').style.width = "0px";
@@ -56,7 +56,7 @@ function carregaTelaInicial(){
 	
 	delay += 200;
 	setTimeout(function(){
-		startGame();
+		startGame(isVsIA);
 	}, delay);
 }
 
@@ -110,6 +110,21 @@ function desenhaLateralDireita(){
 	createdChatContainer.appendChild(createdChat);
 	
 	document.getElementById('game-container').appendChild(createdChatContainer);
+	
+	//botoes 
+	var createdBtnPassar = document.createElement("div");
+	createdBtnPassar.setAttribute("class", "ingame-btn");
+	createdBtnPassar.setAttribute("id", "btn-passar");
+	createdBtnPassar.addEventListener("click", function(){ passarTurno(); });
+	createdBtnPassar.innerHTML = "Passar";
+	document.getElementById('game-container').appendChild(createdBtnPassar);
+	
+	var createdBtnDesistir = document.createElement("div");
+	createdBtnDesistir.setAttribute("class", "ingame-btn");
+	createdBtnDesistir.setAttribute("id", "btn-desistir");
+	createdBtnDesistir.addEventListener("click", function(){ desistir(); });
+	createdBtnDesistir.innerHTML = "Desistir";
+	document.getElementById('game-container').appendChild(createdBtnDesistir);
 }
 
 function desenhaCampo(){
@@ -272,9 +287,10 @@ var card_positions = {
 
 function drawPuxarCarta(jogador, carta){
 	var num_cartas = jogador.mao.length; 
+	var createdCard = document.createElement("div");
+	carta.div = createdCard;
 	
-	if(jogador == jogo.jogador1){
-		var createdCard = document.createElement("div");
+	if(jogador == jogo.jogador1){		
 		createdCard.setAttribute("class", "ingame-card-hand");
 		createdCard.style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";
 		createdCard.style.backgroundSize = "100%";
@@ -282,21 +298,25 @@ function drawPuxarCarta(jogador, carta){
 		createdCard.addEventListener("contextmenu", function(){ mostraCartona(carta); event.preventDefault(); });
 		
 		document.getElementById('inside-card-hand-jogador').style.width = (num_cartas * 67) + "px";
-		document.getElementById('inside-card-hand-jogador').appendChild(createdCard);
+		document.getElementById('inside-card-hand-jogador').appendChild(createdCard);	
 		
-		document.getElementById("deck-jogador").innerHTML = jogo.jogador1.baralho.cartas.length;
 	} else {
-		var createdCard = document.createElement("div");
-		createdCard.setAttribute("class", "ingame-card-hand-oponente");
-		createdCard.addEventListener("click", function(){ selecionarCartaNaMao(carta.carta) });
+		createdCard.setAttribute("class", "ingame-card-hand-oponente");		
 		
 		document.getElementById('inside-card-hand-oponente').style.width = (num_cartas * 67) + "px";
-		document.getElementById('inside-card-hand-oponente').appendChild(createdCard);
-		
+		document.getElementById('inside-card-hand-oponente').appendChild(createdCard);		
+	}		
+	
+	atualizaQtdeDeck(jogador);
+	return 200;
+}
+
+function atualizaQtdeDeck(jogador){
+	if(jogador == jogo.jogador1){
+		document.getElementById("deck-jogador").innerHTML = jogo.jogador1.baralho.cartas.length;
+	} else {
 		document.getElementById("deck-oponente").innerHTML = jogo.jogador2.baralho.cartas.length;
 	}
-	
-	return 200;
 }
 
 function drawPosicionarHeroi(jogador, heroi, line, slot){
@@ -322,6 +342,10 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 		}
 	}
 	
+	if(heroi.arma != null){
+		
+	}
+	
 	var createdHeroi = document.createElement("div");
 	createdHeroi.setAttribute("class", "ingame-carta");
 	
@@ -331,19 +355,28 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 		createdHeroi.setAttribute("id", "ingame-carta-oponente");
 	}
 	
-	if(heroi.carta == null || heroi.carta == undefined){
-		createdHeroi.style.background = "url(img/cards/" + heroi.id + ".jpg) no-repeat";
-	} else {
-		createdHeroi.style.background = "url(img/cards/" + heroi.carta.id + ".jpg) no-repeat";
-	}
+	createdHeroi.style.background = "url(img/cards/" + heroi.carta.id + ".jpg) no-repeat";	
 	
 	createdHeroi.style.backgroundSize = "100%";	
 	createdHeroi.style.left = x + "px";
 	createdHeroi.style.top = "1px";
+	heroi.div = createdHeroi;
 	createdHeroi.addEventListener("contextmenu", function(){ mostraCartona(heroi); event.preventDefault(); });
+	createdHeroi.addEventListener("click", function(){ selecionaHeroiEmCampo(jogador, line, slot); });	
 	container.appendChild(createdHeroi);	
 }
 
+function selecionaHeroiEmCampo(jogador, line, slot){
+	if(jogo.estado == gameStatus.ESCOLHENDO){
+		
+	} else {
+		if(line == "front"){			
+			console.log(jogador.campo.front[slot].carta.nome);						
+		}
+	}
+}
+
 function selecionarCartaNaMao(carta){
+	chamarHeroi(jogo.jogador1, carta, 'back', false);
 	console.log(carta);
 }

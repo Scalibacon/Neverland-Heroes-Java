@@ -149,43 +149,43 @@ body{
 }
 
 #card-hp{
-	background: url(../img/hp.png) no-repeat;
+	background: url(../img/creation/hp.png) no-repeat;
 	background-size: 100%; 
 	left:-7px;
 	top:-7px;
 }
 #card-mana{
-	background: url(../img/mana.png) no-repeat;
+	background: url(../img/creation/mana.png) no-repeat;
 	background-size: 100%; 
 	left:-7px;
 	top:37px;
 }
 #card-attack{
-	background: url(../img/attack.png) no-repeat;
+	background: url(../img/creation/attack.png) no-repeat;
 	background-size: 100%;
 	left:-7px; 
 	top:330px;
 }
 #card-power{
-	background: url(../img/power.png) no-repeat;
+	background: url(../img/creation/power.png) no-repeat;
 	background-size: 100%;
 	right:-7px; 
 	top:330px;
 }
 #card-def{
-	background: url(../img/def.png) no-repeat;
+	background: url(../img/creation/def.png) no-repeat;
 	background-size: 100%;
 	left:-8.5px; 
 	bottom:-8.5px;
 }
 #card-res{
-	background: url(../img/res.png) no-repeat;
+	background: url(../img/creation/res.png) no-repeat;
 	background-size: 100%;
 	right:-7px; 
 	bottom:-7px;
 }
 #card-cd{
-	background: url(../img/time.png) no-repeat;
+	background: url(../img/creation/time.png) no-repeat;
 	background-size:100%;
 	bottom:120px;
 	left:155px;
@@ -200,13 +200,13 @@ body{
 	position:absolute;
 	right:-7px;
 	top:-7px;
-	background: url(../img/afinidade0.png) no-repeat;
+	background: url(../img/creation/afinidade0.png) no-repeat;
 	background-size: 100%;
 }
 #card-pericia{
 	width: calc(72px / 1.5);
 	height: calc(73px / 1.5);
-	background: url(../img/arma0.png) no-repeat;
+	background: url(../img/creation/arma0.png) no-repeat;
 	background-size: 100%;
 	right:-7px;
 	top:45px;
@@ -248,9 +248,8 @@ body{
 #image-background{
 	width:100%;
 	height:100%;
-	background: url(../img/back-card.png) no-repeat;
+	background: url(../img/creation/back-card.png) no-repeat;
 	opacity:0.75;
-	/*background: url(../img/bg-card.jpg) no-repeat;*/
 	background-size: cover;
 	background-position:center;
 	filter: blur(0px);

@@ -56,15 +56,16 @@ public class OponenteDAOImpl implements OponenteDAO{
 	}
 	
 	@Override
-	public Heroi buscaCampeao(Oponente o) {
-		try (Connection con = DBConnection.getInstancia().conectar();){			
-			Heroi campeao = new Heroi();
+	public CartaColecao buscaCampeao(Oponente o) {
+		try (Connection con = DBConnection.getInstancia().conectar();){	
+			CartaColecao c_campeao = new CartaColecao();
 			String sql = "select * from v_oponente_campeao " + 
 						 "where id_oponente = ?";
 			PreparedStatement stm = con.prepareStatement(sql);
 			stm.setInt(1, o.getId());
 			ResultSet rs = stm.executeQuery();
 			if(rs.next()) {
+				Heroi campeao = new Heroi();
 				campeao = new Heroi();
 				campeao.setId(rs.getInt("id"));
 				campeao.setNome(rs.getString("nome"));
@@ -82,8 +83,10 @@ public class OponenteDAOImpl implements OponenteDAO{
 				campeao.setAfinidade(TipoAfinidade.buscaTipoAfinidade(rs.getInt("afinidade")));
 				campeao.setPericia(TipoArma.buscaTipoArma(rs.getInt("pericia")));
 				campeao.setGanhoPericia(rs.getInt("ganho_pericia"));
+				c_campeao.setCarta(campeao);
+				c_campeao.setQuantidade(1);
 			}
-			return campeao;	
+			return c_campeao;	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

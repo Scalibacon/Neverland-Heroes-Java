@@ -27,7 +27,7 @@
 				<div class="card-gem" id="card-def"></div>
 				<div class="card-gem" id="card-res"></div>				
 				<div id="card-rank-container">
-					<img src="img/rank.png" class="card-rank">				
+					<img src="img/creation/rank.png" class="card-rank">				
 				</div>
 				<div class="card-gem" id="card-cd"></div>
 				<div id="card-afinidade"></div>

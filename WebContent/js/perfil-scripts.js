@@ -113,7 +113,7 @@ function carregaRank(rank){
 	var ranks_html = "";
 	
 	for(var i = 1; i <= rank; i++){
-		ranks_html += "<img src='img/rank.png' class='perfil-rank'> "
+		ranks_html += "<img src='img/creation/rank.png' class='perfil-rank'> "
 	}
 	document.getElementById("perfil-rank-container").innerHTML = ranks_html;
 	$("#perfil-rank-container").css({'margin-left':margin+"px"});

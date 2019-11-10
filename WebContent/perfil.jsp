@@ -36,7 +36,7 @@
 			</div>
 			
 			<div id="perfil-rank-container">
-				<img src="img/rank.png" class="perfil-rank">
+				<img class="perfil-rank">
 			</div>
 		</div>
 		

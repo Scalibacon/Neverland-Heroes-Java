@@ -3,14 +3,13 @@ package dao;
 import java.util.List;
 
 import model.CartaColecao;
-import model.Heroi;
 import model.Oponente;
 
 public interface OponenteDAO {
 
 	Oponente buscaOponente(int id);
 
-	Heroi buscaCampeao(Oponente o);
+	CartaColecao buscaCampeao(Oponente o);
 
 	List<CartaColecao> buscaHerois(Oponente o);
 

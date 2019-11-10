@@ -30,7 +30,7 @@
 				<div class="champion-card"></div>			
 			</div>	
 			<div id="container-deck-info">	
-				<img src="img/rank.png" class="deck-icon"><span class="deck-info-text" id="info-rank">?</span>
+				<img src="img/creation/rank.png" class="deck-icon"><span class="deck-info-text" id="info-rank">?</span>
 				<img src="img/hero.png" class="deck-icon"><span class="deck-info-text" id="info-herois">?</span>
 				<img src="img/espada.png" class="deck-icon"><span class="deck-info-text" id="info-forca">?</span>
 				<img src="img/magia.png" class="deck-icon"><span class="deck-info-text" id="info-poder">?</span>

@@ -16,8 +16,8 @@ var jogo = {
 			baralho : [],
 			mao : [],
 			campo : {
-				frente : [],
-				tras : []
+				front : [],
+				back : []
 			},			
 			descarte : [],
 			recarga : [],
@@ -29,8 +29,8 @@ var jogo = {
 			baralho : [],
 			mao : [],
 			campo : {
-				frente : [],
-				tras : []
+				front : [],
+				back : []
 			},
 			descarte : [],
 			recarga : [],	
@@ -53,7 +53,7 @@ function startVsIa(){
 			
 			jogo.tipo = 0;
 			jogo.iniciante = jogador.jogador.id;
-			carregaTelaInicial();
+			carregaTelaInicial(true);
 		},
 		error : function() {
 			alert('Erro ao pegar as suas cartas');
@@ -73,6 +73,8 @@ function separaCartas(cartas){
 		cartas[i].arma = null;
 		cartas[i].usouMagia = 0;
 		cartas[i].atacou = 0;
+		cartas[i].moveu = 0;
+		cartas[i].div = null;
 	}
 	return cartas;
 }
@@ -94,26 +96,58 @@ function shuffle(cartas) {
 	return cartas;
 }
 
+
+
 //*************** pseudo interfaces *************
 
-function startGame(){	
+function startGame(isVsIA){	
 	jogo.estado = gameStatus.ESPERANDO;
 	
 	var delay = 500;	
+	
+	escolhePrimeiroJogador(isVsIA);
 	
 	puxarCartasIniciais(jogo.jogador1);
 	puxarCartasIniciais(jogo.jogador2);
 	
 	setTimeout(function(){
-		chamarCampeao(jogo.jogador1);
-		chamarCampeao(jogo.jogador2);
-	}, 1000 + 200);
-	
+		iniciaTurno(jogo.iniciante);		
+	}, 1000 + 200);	
 	
 	if(jogo.iniciante == jogo.jogador1.jogador.id){
 		jogo.estado = gameStatus.JOGANDO;
 	} else {
 		jogo.estado = gameStatus.OBSERVANDO;	
+}
+
+function iniciaTurno(jogador){
+	if(jogador == jogo.jogador1){
+		jogo.estado = gameStatus.JOGANDO;		
+	} else {
+		jogo.estado = gameStatus.OBSERVANDO;
+	}
+	
+	if(jogo.turno == 0){
+		chamarCampeao(jogador);
+	}
+}
+	
+function escolhePrimeiroJogador(isVsIA){
+	if(isVsIA){
+		if(jogo.jogador1.baralho.campeao.carta.rank > jogo.jogador2.baralho.campeao.carta.rank){
+			jogo.iniciante = jogo.jogador1;
+		} else 
+		if(jogo.jogador2.baralho.campeao.carta.rank > jogo.jogador1.baralho.campeao.carta.rank){
+			jogo.iniciante = jogo.jogador2;
+		} else 
+		if(jogo.jogador1.jogador.nivel < jogo.jogador2.jogador.nivel){
+			jogo.iniciante = jogo.jogador1;
+		} else {
+			jogo.iniciante = jogo.jogador2;
+		}
+	} else {
+		alert('contra jogador :(');
+	}
 }
 
 function puxarCartasIniciais(jogador){
@@ -142,29 +176,68 @@ function puxarCarta(jogador){
 }
 
 function chamarCampeao(jogador){	
-	chamarHeroi(jogador, jogador.baralho.campeao, "front");
+	chamarHeroi(jogador, jogador.baralho.campeao, "front", true);
 }
 
-function chamarHeroi(jogador, heroi, line){
+function chamarHeroi(jogador, heroi, line, isTheChampion){
+	if(moverHeroi(jogador, heroi, line)){
+		if(!isTheChampion){
+			removerCartaDaMao(jogador, heroi);
+		}
+		efeitoDeInvocacao(heroi);		
+	}
+}
+
+function removerCartaDaMao(jogador, carta){
+	for(var i = 0; i < jogador.mao.length; i++){
+		if(jogador.mao[i] == carta){
+			if(jogador == jogo.jogador1){
+				document.getElementById('inside-card-hand-jogador').removeChild(carta.div);
+			}
+		}
+	}
+}
+
+function moverHeroi(jogador, heroi, line){
 	var slot = -1;
 	if(line == "front"){
-		if(jogador.campo.frente[1] == null || jogador.campo.frente[1] == undefined){
-			jogador.campo.frente[1] = heroi;
+		if(jogador.campo.front[1] == null || jogador.campo.front[1] == undefined){
+			jogador.campo.front[1] = heroi;
 			slot = 1;
-		} else if(jogador.campo.frente[2] == null || jogador.campo.frente[2] == undefined){
-			jogador.campo.frente[2] = heroi;
+		} else if(jogador.campo.front[2] == null || jogador.campo.front[2] == undefined){
+			jogador.campo.front[2] = heroi;
 			slot = 2;
-		} else if(jogador.campo.frente[0] == null || jogador.campo.frente[0] == undefined){
-			jogador.campo.frente[0] = heroi;
+		} else if(jogador.campo.front[0] == null || jogador.campo.front[0] == undefined){
+			jogador.campo.front[0] = heroi;
 			slot = 0;
 		}
 	} else {
-		
+		if(jogador.campo.back[1] == null || jogador.campo.back[1] == undefined){
+			jogador.campo.back[1] = heroi;
+			slot = 1;
+		} else if(jogador.campo.back[2] == null || jogador.campo.back[2] == undefined){
+			jogador.campo.back[2] = heroi;
+			slot = 2;
+		} else if(jogador.campo.back[0] == null || jogador.campo.back[0] == undefined){
+			jogador.campo.back[0] = heroi;
+			slot = 0;
+		}
 	}
 	
 	if(slot > -1){
 		drawPosicionarHeroi(jogador, heroi, line, slot);
+		return true;
+	} else {
+		return false;
 	}
+}
+
+function passarTurno(){
+	alert('passou o turno');
+}
+
+function desistir(){
+	alert("desistiu!");
 }
 
 function escolherUsuario(){
@@ -192,10 +265,6 @@ function usarConsumivel(){
 }
 
 function atacar(){
-	
-}
-
-function moverHeroi(){
 	
 }
 
