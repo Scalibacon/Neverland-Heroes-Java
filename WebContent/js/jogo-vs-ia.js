@@ -1,18 +1,58 @@
+var gameStatus = {
+		ESPERANDO : 0,
+		JOGANDO : 1,
+		ESCOLHENDO : 2,
+		OBSERVANDO : 3
+}
 
-var jogador;
+var jogo = {
+		tipo : 0,
+		turno : 0,
+		estado : gameStatus.ESPERANDO,
+		iniciante : null,
+		
+		jogador1 : {
+			jogador : null,
+			baralho : [],
+			mao : [],
+			campo : {
+				frente : [],
+				tras : []
+			},			
+			descarte : [],
+			recarga : [],
+			efeitos : []
+		},
+		
+		jogador2 : {
+			jogador : null,
+			baralho : [],
+			mao : [],
+			campo : {
+				frente : [],
+				tras : []
+			},
+			descarte : [],
+			recarga : [],	
+			efeitos : []
+		}		
+		
+}
+
 function startVsIa(){
 	$.ajax({
 		url : 'buscaBaralhoServlet',
 		type : 'post',
 		success : function(data) {
-			jogador = JSON.parse(data);			
-			jogo.jogador1 = jogador.jogador;			
-			jogo.baralho1 = jogador.baralho;
+			var jogador = JSON.parse(data);			
+			jogo.jogador1.jogador = jogador.jogador;			
+			jogo.jogador1.baralho = {campeao : jogador.campeao, cartas : shuffle(separaCartas(jogador.cartas))};
 			
-			jogo.jogador2 = oponente;
-			jogo.baralho2 = oponente.baralho;
+			jogo.jogador2.jogador = oponente;
+			jogo.jogador2.baralho = {campeao : oponente.baralho.campeao, cartas : shuffle(separaCartas(oponente.baralho.cartas))};
 			
 			jogo.tipo = 0;
+			jogo.iniciante = jogador.jogador.id;
 			carregaTelaInicial();
 		},
 		error : function() {
@@ -21,181 +61,158 @@ function startVsIa(){
 	});	
 }
 
-function carregaTelaInicial(){
-	var delay = 0;
-	
-	document.getElementById('container-choose-game').style.width = "0px";
-	document.getElementById('container-choose-game').style.height = "580px";
-	
-	var createdDiv1= document.createElement("div");
-	createdDiv1.setAttribute("class", "player-info");
-	createdDiv1.setAttribute("id", "info1");
-	createdDiv1.innerHTML = "<img src='img/icons/" + jogo.jogador1.icone + ".jpg' class='player-icon' id='icon1'>" +
-	jogo.jogador1.usuario + "<br>" +
-	"Lvl " + jogo.jogador1.nivel;
-	document.getElementById('game-container').appendChild(createdDiv1);
-	
-	var createdDiv2= document.createElement("div");
-	createdDiv2.setAttribute("class", "player-info");
-	createdDiv2.setAttribute("id", "info2");
-	if(jogo.tipo == 0){
-		var txtBuscaIcon = "icons/" + jogo.jogador2.icone;
-		if(jogo.jogador2.jogador == null || jogo.jogador2.jogador == undefined){
-			txtBuscaIcon = "oponentes/oponente" + jogo.jogador2.id;
+function separaCartas(cartas){
+	for(var i = 0; i < cartas.length; i++){
+		for(var j = 1; j < cartas[i].quantidade; j++){
+			var carta = {carta : cartas[i].carta, quantidade : 1};
+			cartas.push(carta);			
 		}
-		createdDiv2.innerHTML = "<img src='img/" + txtBuscaIcon + ".jpg' class='player-icon' id='icon2'>" +
-		jogo.jogador2.nome + "<br>" +
-		"Lvl " + jogo.jogador2.nivel;
+		cartas[i].quantidade = 1;
+		cartas[i].buffs = [];
+		cartas[i].debuff = [];
+		cartas[i].arma = null;
+		cartas[i].usouMagia = 0;
+		cartas[i].atacou = 0;
 	}
-	document.getElementById('game-container').appendChild(createdDiv2);
-	
-	delay += 700;
-	setTimeout(function(){
-		document.getElementById('container-choose-game').style.display = "none";
-		document.getElementById('game-container').style.opacity = "1";
-		document.getElementById('game-container').style.width = "1200px";		
-	},delay);
-	
-	delay += 800;
-	setTimeout(function(){
-		var createdImgVs= document.createElement("div");
-		createdImgVs.setAttribute("id", "game-vs");
-		document.getElementById('game-container').appendChild(createdImgVs);
-	}, delay);
-	
-	delay += 2000;
-	setTimeout(function(){
-		$('.player-info').css({'opacity':'0'});
-		document.getElementById('game-vs').style.top = "-170px";
-	}, delay);
-	
-	delay += 500;
-	setTimeout(function(){
-		$('.player-info').css({'display':'none'});
-		document.getElementById('game-vs').style.display = "none";
-		mostraJogo();
-	}, delay);
+	return cartas;
 }
 
-function mostraJogo(){
-	desenhaLateralDireita();
-	desenhaMaos();
-	desenhaCampo();
+function shuffle(cartas) {
+	var indexAtual = cartas.length, aux, indexAleatorio;
+
+	// While there remain elements to shuffle...
+	while (indexAtual !== 0) {
+	    // Pick a remaining element...
+	    indexAleatorio = Math.floor(Math.random() * indexAtual);
+	    indexAtual -= 1;
+	
+	    // And swap it with the current element.
+	    aux = cartas[indexAtual];
+	    cartas[indexAtual] = cartas[indexAleatorio];
+	    cartas[indexAleatorio] = aux;
+	}
+	return cartas;
 }
 
-function desenhaLateralDireita(){
-	var createdChatContainer = document.createElement("div");
-	createdChatContainer.setAttribute("id", "game-chat-container");
+//*************** pseudo interfaces *************
+
+function startGame(){	
+	jogo.estado = gameStatus.ESPERANDO;
 	
-	//div com o profile de baixo
-	var createdPerfil1 = document.createElement("div");
-	createdPerfil1.setAttribute("class", "ingame-profile");
-	createdPerfil1.setAttribute("id", "ingame-profile1");
-	var createdIcon1 = document.createElement("img");
-	createdIcon1.setAttribute("class", "ingame-profile-icon");
-	if(jogo.jogador1 == jogador.jogador){ //se o player for o j1, ele fica embaixo
-		createdIcon1.setAttribute("src", "img/icons/" + jogo.jogador1.icone + ".jpg");
-		createdPerfil1.innerHTML += jogo.jogador1.usuario;
+	var delay = 500;	
+	
+	puxarCartasIniciais(jogo.jogador1);
+	puxarCartasIniciais(jogo.jogador2);
+	
+	setTimeout(function(){
+		chamarCampeao(jogo.jogador1);
+		chamarCampeao(jogo.jogador2);
+	}, 1000 + 200);
+	
+	
+	if(jogo.iniciante == jogo.jogador1.jogador.id){
+		jogo.estado = gameStatus.JOGANDO;
 	} else {
-		createdIcon1.setAttribute("src", "img/icons/" + jogo.jogador2.icone + ".jpg");
-		createdPerfil1.innerHTML += jogo.jogador2.usuario;
-	}
-	createdPerfil1.appendChild(createdIcon1);
-	createdChatContainer.appendChild(createdPerfil1);
-	
-	//div com o profile de cima
-	var createdPerfil2 = document.createElement("div");
-	createdPerfil2.setAttribute("class", "ingame-profile");
-	createdPerfil2.setAttribute("id", "ingame-profile2");
-	var createdIcon2 = document.createElement("img");
-	createdIcon2.setAttribute("class", "ingame-profile-icon");	
-	if(jogo.jogador2 == jogador.jogador){ //se o player for o j2, mostra ele embaixo e o outro em cima
-		createdIcon2.setAttribute("src", "img/icons/" + jogo.jogador1.icone + ".jpg");
-		createdPerfil2.innerHTML += jogo.jogador1.usuario;
-	} else {
-		if(jogo.jogador2.usuario == null || jogo.jogador2.usuario == undefined){
-			createdIcon2.setAttribute("src", "img/oponentes/oponente" + jogo.jogador2.id + ".jpg");
-			createdPerfil2.innerHTML += jogo.jogador2.nome;
-		} else {
-			createdIcon2.setAttribute("src", "img/icons/" + jogo.jogador2.icone + ".jpg");
-			createdPerfil2.innerHTML += jogo.jogador2.usuario;
-		}
-	}
-	createdPerfil2.appendChild(createdIcon2);
-	createdChatContainer.appendChild(createdPerfil2);
-	
-	//textfield
-	var createdTextField = document.createElement("input");
-	createdTextField.setAttribute("id", "ingame-textfield");
-	createdTextField.setAttribute("placeholder", "Digite sua mensagem...");
-	createdChatContainer.appendChild(createdTextField);
-	
-	//chat
-	var createdChat = document.createElement("div");
-	createdChat.setAttribute("id", "ingame-chat");
-	createdChatContainer.appendChild(createdChat);
-	
-	document.getElementById('game-container').appendChild(createdChatContainer);
+		jogo.estado = gameStatus.OBSERVANDO;	
 }
 
-function desenhaMaos(){
-	var createdMao1 = document.createElement("div");
-	createdMao1.setAttribute("class", "ingame-hand-container");
-	createdMao1.setAttribute("id", "hand-jogador");
-	document.getElementById('game-container').appendChild(createdMao1);
-	
-	var createdMao2 = document.createElement("div");
-	createdMao2.setAttribute("class", "ingame-hand-container");
-	createdMao2.setAttribute("id", "hand-oponente");
-	document.getElementById('game-container').appendChild(createdMao2);
+function puxarCartasIniciais(jogador){
+	for(var i = 0; i < 5; i++){
+		setTimeout(function(){
+			delay = puxarCarta(jogador);
+		}, i * 200);
+	}};
+	return 800;
 }
 
-function desenhaCampo(){
-	var createdBackLine1 = document.createElement("div");
-	createdBackLine1.setAttribute("class", "ingame-line");
-	createdBackLine1.setAttribute("id", "backline-jogador");
-	document.getElementById('game-container').appendChild(createdBackLine1);
-	
-	var createdFrontLine1 = document.createElement("div");
-	createdFrontLine1.setAttribute("class", "ingame-line");
-	createdFrontLine1.setAttribute("id", "frontline-jogador");
-	document.getElementById('game-container').appendChild(createdFrontLine1);
-	
-	var createdSlot1 = document.createElement("div");
-	createdSlot1.setAttribute("class", "ingame-card-slot");
-	
-	createdFrontLine1.appendChild(createdSlot1);
-}
-
-//function desenhaCampo(){
-//	desenhaMaos();
-//	
-//	var createdSlot1 = document.createElement("div");
-//	createdSlot1.setAttribute("class", "ingame-card-slot");
-//	
-//	document.getElementById('game-container').appendChild(createdSlot1);
-//}
-
-var jogo = {
-		tipo : 0,
+function puxarCarta(jogador){
+	if(jogador.baralho.cartas.length > 0){
+		var delay;
+		var aux;
+		jogo.estado = gameStatus.ESPERANDO;	
 		
-		jogador1 : null,
-		baralho1 : [],
-		mao1 : [],
-		campo1: {
-			frente : [],
-			tras : []
-		},
-		descarte1 : [],
-		recarga1 : [],
-		//--------------
-		jogador2 : null,
-		baralho2 : [],
-		mao2 : [],
-		campo2: {
-			frente : [],
-			tras : []
-		},
-		descarte2 : [],
-		recarga2 : []
+		aux = jogador.baralho.cartas[0];
+		jogador.mao.push(aux);
+		jogador.baralho.cartas.splice(0,1);
+		
+		delay = drawPuxarCarta(jogador, aux);
+		return delay;
+	}
+	return 0;
 }
+
+function chamarCampeao(jogador){	
+	chamarHeroi(jogador, jogador.baralho.campeao, "front");
+}
+
+function chamarHeroi(jogador, heroi, line){
+	var slot = -1;
+	if(line == "front"){
+		if(jogador.campo.frente[1] == null || jogador.campo.frente[1] == undefined){
+			jogador.campo.frente[1] = heroi;
+			slot = 1;
+		} else if(jogador.campo.frente[2] == null || jogador.campo.frente[2] == undefined){
+			jogador.campo.frente[2] = heroi;
+			slot = 2;
+		} else if(jogador.campo.frente[0] == null || jogador.campo.frente[0] == undefined){
+			jogador.campo.frente[0] = heroi;
+			slot = 0;
+		}
+	} else {
+		
+	}
+	
+	if(slot > -1){
+		drawPosicionarHeroi(jogador, heroi, line, slot);
+	}
+}
+
+function escolherUsuario(){
+	
+}
+
+function escolherAlvo(){
+	
+}
+
+function destruirHeroi(){
+	
+}
+
+function usarMagia(){
+	
+}
+
+function usarPostura(){
+	
+}
+
+function usarConsumivel(){
+	
+}
+
+function atacar(){
+	
+}
+
+function moverHeroi(){
+	
+}
+
+function causarDanoMagico(){
+	
+}
+
+function causarDanoFisico(){
+	
+}
+
+function retornarPraMao(){
+	
+}
+
+function equiparHeroi(){
+	
+}
+
+

@@ -207,6 +207,7 @@
 	margin-left:auto;
 	margin-top:15px;
 	background-color:snow;
+	background-image: linear-gradient(to bottom, rgb(57,63,117), rgb(142,88,138), rgb(219,122,144), rgb(254,151,142), rgb(254,187,141), rgb(253,218,157));
 	border:solid 2px rgba(0,149,255,1);
 	box-shadow: 0px 0px 4px 3px rgba(0,100,200,0.5);
 	overflow:hidden;
@@ -335,42 +336,193 @@
 	font-family: 'Roboto', sans serif;
 	font-size:80%;
 }
+#ingame-veil{
+	position:absolute;
+	width:calc(100% - 230px);
+	height:100%;
+	background-color:rgba(90,90,185,0.75);
+	z-index:11;	
+	display:none;
+}
+#ingame-big-card{
+	position:absolute;
+	width:calc(370px / 1);
+	height:calc(530px / 1);
+	//background-color:snow;
+	margin: 0;
+  	top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
 .ingame-hand-container{
 	position:absolute;
 	left: calc(10px + 75px + 15px);
 	right: calc(10px + 75px + 15px + 230px);	
 	width: calc(1200px - 230px - 100 - 100);
-	height: 80px;	
-	background-color:orange;
+	height: 90px;	
+	/*background-color:rgba(240,255,255,0.33);*/
+	overflow-x:auto;
+	overflow-y:hidden;
+}
+#inside-card-hand-jogador{
+	position:absolute;
+	left: 0;
+	right: 0;
+	margin-left:auto;
+	margin-right:auto;	
+	height:100%;
+	width:calc(370px / 6 + 5px);
+}
+#inside-card-hand-oponente{
+	position:absolute;
+	left: 0;
+	right: 0;
+	margin-left:auto;
+	margin-right:auto;	
+	height:100%;
+	width:calc(370px / 6 + 5px);
 }
 #hand-jogador{
-	bottom:10px;
+	bottom:0px;
 }
 #hand-oponente{
-	top:10px;
+	top:0px;
 }
+.ingame-card-hand{
+	position:relative;
+	width:calc(370px / 6);
+	height:calc(530px / 6);
+	margin-left:5px;
+	display:inline-block;
+	cursor:pointer;
+}
+.ingame-card-hand-oponente{
+	position:relative;
+	width:62px;
+	height:93px;
+	background: url(../img/jogo/back.png) no-repeat;
+	background-size:100%;
+	margin-left:5px;
+	display:inline-block;
+}
+
 .ingame-line{
 	position:absolute;
 	width: 700px;
-	height: 80px;
-	left:150px;
-	background-color:red;
+	height:calc(530px / 6 + 2px);
+	left:135px;
+	background: url(../img/jogo/grass.jpg);
+	background-size: 90px 90px;
+	border:solid 2px transparent;
 }
 #backline-jogador{
-	bottom: 100px;
+	bottom: 93px;
+	border:solid 2px rgba(0,149,255,1);
 }
 #frontline-jogador{
 	bottom: 190px;
+	border:solid 2px orange;
+}
+#backline-oponente{
+	transform: rotate(180deg);
+	top: 93px;
+}
+#frontline-oponente{
+	transform: rotate(180deg);
+	top: 190px;
 }
 
 .ingame-card-slot{
 	position:absolute;
 	border:solid 1px black;
-	width:calc(370px / 7);
-	height:calc(530px / 7);
-	background: url(../img/cards/1.jpg) no-repeat;
+	width:calc(370px / 6);
+	height:calc(530px / 6);
+	/*background: url(../img/cards/1.jpg) no-repeat;*/
 	background-size:100%;
-	bottom: 10px;
 	bottom:0px;
 	left: 50px;
+	border:solid 1px black;
+}
+#card-slot-hero{
+	border-right:solid 1px rgba(121,121,121,1);
+	background: url(../img/jogo/helmet.png) no-repeat;
+	background-size:100%;
+	background-color:white;
+}
+#card-slot-weapon{
+	border-left:none;
+	background: url(../img/jogo/swords.png) no-repeat;
+	background-size:100%;
+	background-color:rgb(200,210,0,1);
+}
+.ingame-deck{
+	position:absolute;
+	width:62px;
+	height:93px;
+	line-height:93px;
+	background: url(../img/jogo/back.png) no-repeat;
+	background-size:100%;
+	font-weight:800;
+	text-align:center;
+	font-size:150%;
+	font-family:'Roboto', sans serif;
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+	color:white;
+}
+#deck-jogador{
+	bottom: 10px;
+	right: calc(230px + 10px);
+}
+#deck-oponente{
+	top: 10px;
+	left: 10px;
+}
+.ingame-descarte{
+	position:absolute;
+	border:solid 1px rgba(247,73,73,1);
+	background: url(../img/jogo/skull.png) no-repeat;
+	background-size:100%;
+	width:calc(370px / 6);
+	height:calc(530px / 6);
+}
+#descarte-jogador{
+	left: 10px;
+	bottom: 10px;
+}
+#descarte-oponente{
+	right: calc(230px + 10px);
+	top: 10px;
+	transform: rotate(180deg);
+}
+.ingame-recarga{
+	position:absolute;
+	border:solid 1px rgba(87,255,127,1);
+	background: url(../img/jogo/clock.png) no-repeat;
+	background-size:100%;
+	width:calc(370px / 6);
+	height:calc(530px / 6);
+}
+#recarga-jogador{
+	left: 10px;
+	bottom: calc(10px + (530px / 6) + 10px);
+}
+#recarga-oponente{
+	right: calc(230px + 10px);
+	top: calc(10px + (530px / 6) + 10px);
+	transform: rotate(180deg);
+}
+
+.ingame-carta{
+	position:absolute;
+	width:calc(370px / 6);
+	height:calc(530px / 6);
+	cursor:pointer;
+}
+.ingame-carta-oponente{
+	position:absolute;
+	width:calc(370px / 6);
+	height:calc(530px / 6);
+	cursor:pointer;
+	transform: rotate(180deg);
 }
