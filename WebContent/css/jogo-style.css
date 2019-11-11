@@ -336,6 +336,15 @@
 	font-family: 'Roboto', sans serif;
 	font-size:80%;
 }
+.msg-info{
+	color: rgb(0,0,0);
+}
+.msg-error{
+	color: rgba(255,85,85,1);
+}
+.msg-advice{
+	color: rgba(241,140,24,1);
+}
 .ingame-btn{
 	position:absolute;
 	width:100px;
@@ -360,6 +369,7 @@
 	border:solid 2px rgba(181,62,62,1);
 	top: calc(580px / 2 + 5px);
 }
+
 #ingame-veil{
 	position:absolute;
 	width:calc(100% - 230px);
@@ -420,6 +430,7 @@
 	margin-left:5px;
 	display:inline-block;
 	cursor:pointer;
+	bottom:0px;
 }
 .ingame-card-hand-oponente{
 	position:relative;

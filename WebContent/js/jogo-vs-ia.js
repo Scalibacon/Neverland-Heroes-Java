@@ -74,7 +74,7 @@ function separaCartas(cartas){
 		cartas[i].usouMagia = 0;
 		cartas[i].atacou = 0;
 		cartas[i].moveu = 0;
-		cartas[i].div = null;
+		cartas[i].id_div = null;
 	}
 	return cartas;
 }
@@ -95,7 +95,6 @@ function shuffle(cartas) {
 	}
 	return cartas;
 }
-
 
 
 //*************** pseudo interfaces *************
@@ -180,25 +179,30 @@ function chamarCampeao(jogador){
 }
 
 function chamarHeroi(jogador, heroi, line, isTheChampion){
-	if(moverHeroi(jogador, heroi, line)){
+	if(setarHeroiNoSlot(jogador, heroi, line)){
 		if(!isTheChampion){
 			removerCartaDaMao(jogador, heroi);
 		}
-		efeitoDeInvocacao(heroi);		
+		efeitoDeInvocacao(heroi);	
+		return true;
 	}
+	return false;		
 }
 
 function removerCartaDaMao(jogador, carta){
 	for(var i = 0; i < jogador.mao.length; i++){
 		if(jogador.mao[i] == carta){
 			if(jogador == jogo.jogador1){
-				document.getElementById('inside-card-hand-jogador').removeChild(carta.div);
+				jogador.mao.splice(i, 1);
+				var remove = document.getElementById(carta.id_div);
+				document.getElementById('inside-card-hand-jogador').removeChild(remove);
+				document.getElementById('inside-card-hand-jogador').style.width = (jogador.mao.length * 67) + "px";
 			}
 		}
 	}
 }
 
-function moverHeroi(jogador, heroi, line){
+function setarHeroiNoSlot(jogador, heroi, line){
 	var slot = -1;
 	if(line == "front"){
 		if(jogador.campo.front[1] == null || jogador.campo.front[1] == undefined){
@@ -233,11 +237,15 @@ function moverHeroi(jogador, heroi, line){
 }
 
 function passarTurno(){
-	alert('passou o turno');
+	if(jogo.estado = gameStatus.JOGANDO){
+		alert('passou o turno');
+	}
 }
 
 function desistir(){
-	alert("desistiu!");
+	if(jogo.estado = gameStatus.JOGANDO){
+		alert("desistiu!");
+	}
 }
 
 function escolherUsuario(){
