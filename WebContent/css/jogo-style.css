@@ -369,6 +369,14 @@
 	border:solid 2px rgba(181,62,62,1);
 	top: calc(580px / 2 + 5px);
 }
+#atk-move-container{
+	position:absolute;
+	width:80px;
+	height:60px;
+	background-color:lightblue;
+	display:none;
+	z-index:10;
+}
 
 #ingame-veil{
 	position:absolute;
@@ -453,11 +461,11 @@
 }
 #backline-jogador{
 	bottom: 93px;
-	border:solid 2px rgba(0,149,255,1);
+	/*border:solid 2px rgba(0,149,255,1);*/
 }
 #frontline-jogador{
 	bottom: 190px;
-	border:solid 2px orange;
+	/*border:solid 2px orange;*/
 }
 #backline-oponente{
 	transform: rotate(180deg);

@@ -45,6 +45,7 @@
 	</div>		
 	
 	<script type="text/javascript" src="js/jogo-scripts.js" charset="utf-8"></script>
+	<script type="text/javascript" src="js/jogo-global.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/jogo-draw.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/jogo-vs-ia.js" charset="utf-8"></script>
 	<script type="text/javascript" src="js/jogo-efeitos.js" charset="utf-8"></script>

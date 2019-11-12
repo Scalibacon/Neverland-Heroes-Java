@@ -1,44 +1,3 @@
-var gameStatus = {
-		ESPERANDO : 0,
-		JOGANDO : 1,
-		ESCOLHENDO : 2,
-		OBSERVANDO : 3
-}
-
-var jogo = {
-		tipo : 0,
-		turno : 0,
-		estado : gameStatus.ESPERANDO,
-		iniciante : null,
-		
-		jogador1 : {
-			jogador : null,
-			baralho : [],
-			mao : [],
-			campo : {
-				front : [],
-				back : []
-			},			
-			descarte : [],
-			recarga : [],
-			efeitos : []
-		},
-		
-		jogador2 : {
-			jogador : null,
-			baralho : [],
-			mao : [],
-			campo : {
-				front : [],
-				back : []
-			},
-			descarte : [],
-			recarga : [],	
-			efeitos : []
-		}		
-		
-}
-
 function startVsIa(){
 	$.ajax({
 		url : 'buscaBaralhoServlet',
@@ -61,41 +20,19 @@ function startVsIa(){
 	});	
 }
 
-function separaCartas(cartas){
-	for(var i = 0; i < cartas.length; i++){
-		for(var j = 1; j < cartas[i].quantidade; j++){
-			var carta = {carta : cartas[i].carta, quantidade : 1};
-			cartas.push(carta);			
-		}
-		cartas[i].quantidade = 1;
-		cartas[i].buffs = [];
-		cartas[i].debuff = [];
-		cartas[i].arma = null;
-		cartas[i].usouMagia = 0;
-		cartas[i].atacou = 0;
-		cartas[i].moveu = 0;
-		cartas[i].id_div = null;
-	}
-	return cartas;
-}
-
 function shuffle(cartas) {
 	var indexAtual = cartas.length, aux, indexAleatorio;
-
-	// While there remain elements to shuffle...
+	
 	while (indexAtual !== 0) {
-	    // Pick a remaining element...
 	    indexAleatorio = Math.floor(Math.random() * indexAtual);
 	    indexAtual -= 1;
-	
-	    // And swap it with the current element.
+	    
 	    aux = cartas[indexAtual];
 	    cartas[indexAtual] = cartas[indexAleatorio];
 	    cartas[indexAleatorio] = aux;
 	}
 	return cartas;
 }
-
 
 //*************** pseudo interfaces *************
 

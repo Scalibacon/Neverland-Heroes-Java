@@ -144,6 +144,11 @@ function desenhaCampo(){
 	createdVeil.appendChild(createdBigCard);
 	document.getElementById('game-container').appendChild(createdVeil);
 	
+	//**************************** div atacar/mover ***********************************
+	var createdContainerAtkMove = document.createElement("div");
+	createdContainerAtkMove.setAttribute("id", "atk-move-container");
+	document.getElementById('game-container').appendChild(createdContainerAtkMove);
+	
 	//**************************** Espaço pras mãos **********************************
 	var createdMao1 = document.createElement("div");
 	createdMao1.setAttribute("class", "ingame-hand-container");
@@ -161,17 +166,21 @@ function desenhaCampo(){
 	createdMao2.appendChild(createdInsideMao2);
 	document.getElementById('game-container').appendChild(createdMao2);
 	
-	//**************************** Linhas de heróis **********************************
+	//**************************** Lines de heróis **********************************
 	var createdBackLine1 = document.createElement("div");
 	createdBackLine1.setAttribute("class", "ingame-line");
 	createdBackLine1.setAttribute("id", "backline-jogador");
-	createdBackLine1.addEventListener("click", function(){ selecionarLinha("back") });
+	createdBackLine1.addEventListener("click", function(){ selecionarLine("back") });
+	createdBackLine1.addEventListener("mouseover", function(){ destacaLine(createdBackLine1); });
+	createdBackLine1.addEventListener("mouseleave", function(){ removeDestaqueLine(createdBackLine1); });
 	document.getElementById('game-container').appendChild(createdBackLine1);
 	
 	var createdFrontLine1 = document.createElement("div");
 	createdFrontLine1.setAttribute("class", "ingame-line");
 	createdFrontLine1.setAttribute("id", "frontline-jogador");
-	createdFrontLine1.addEventListener("click", function(){ selecionarLinha("front") });
+	createdFrontLine1.addEventListener("click", function(){ selecionarLine("front") });
+	createdFrontLine1.addEventListener("mouseover", function(){ destacaLine(createdFrontLine1); });
+	createdFrontLine1.addEventListener("mouseleave", function(){ removeDestaqueLine(createdFrontLine1); });
 	document.getElementById('game-container').appendChild(createdFrontLine1);
 	
 	var createdBackLine2 = document.createElement("div");
@@ -244,6 +253,19 @@ function desenhaCampo(){
 	document.getElementById('game-container').appendChild(createdRecarga2);
 }
 
+function destacaLine(line){
+	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
+		line.style.cursor = "pointer";
+		line.style.boxShadow = "0px 0px 5px 3px orange";
+	} else {
+		removeDestaqueLine(line);
+	}
+}
+function removeDestaqueLine(line){
+	line.style.boxShadow = "0px 0px 5px 3px transparent";
+	line.style.cursor = "default";
+}
+
 function escondeCartona(){
 	document.getElementById('ingame-veil').style.display = "none";
 }
@@ -255,46 +277,6 @@ function mostraCartona(carta){
 		document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";
 	}
 	document.getElementById('ingame-big-card').style.backgroundSize = "100%";
-}
-
-//left dentro da div (c/ offset = +135px)
-//armas x = +62px
-//y com base em bottom (jogador) /top (oponente)
-var card_positions = {
-		jogador_backline : [
-			{x : 50,              y : 93},
-			{x : 50 + 237,        y : 93},
-			{x : 50 + 237 + 237,  y : 93}
-		],
-		jogador_frontline : [
-			{x : 50,              y : 190},
-			{x : 50 + 237,        y : 190},
-			{x : 50 + 237 + 237,  y : 190}
-		],
-		
-		oponente_backline : [
-			{x : 50,              y : 93},
-			{x : 50 + 237,        y : 93},
-			{x : 50 + 237 + 237,  y : 93}
-		],
-		oponente_frontline : [
-			{x : 50,              y : 190},
-			{x : 50 + 237,        y : 190},
-			{x : 50 + 237 + 237,  y : 190}
-		],
-		
-		jogador_descarte :  {x : 10,          y : 10},
-		oponente_descarte : {x : 230 + 10,    y : 10}, 
-		
-		jogador_recarga :  {x: 10,            y: 10 + (530 / 6) + 10},
-		oponente_recarga : {x: 230 + 10,      y: 10 + (530 / 6) + 10},		
-}
-
-var selecionando = {
-		portador : false,
-		usuario : false,
-		alvo : false,
-		linha : false
 }
 
 //****************************************************************************************************************
@@ -404,9 +386,14 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 function selecionaHeroiEmCampo(jogador, line, slot){
 	if(jogo.estado == gameStatus.ESCOLHENDO){
 		//do choicing stuff
-	} else {
+	} else {		
 		if(line == "front"){			
-			console.log(jogador.campo.front[slot].carta.nome);						
+			console.log(jogador.campo.front[slot].carta.nome);	
+			var carta_div = document.getElementById(jogador.campo.front[slot].id_div);
+			var atk_move = document.getElementById('atk-move-container');
+			atk_move.style.bottom = (190 + 15) + "px";
+			atk_move.style.left = (card_positions.jogador_frontline[slot].x + 135 - 80 - 8) + "px";
+			atk_move.style.display = "block";
 		} else {
 			console.log(jogador.campo.back[slot].carta.nome);
 		}
@@ -417,15 +404,16 @@ var interval_selecionando;
 function selecionarCartaNaMao(carta){
 	if(jogo.estado == gameStatus.JOGANDO){
 		limparEscolha();
-		jogo.estado = gameStatus.ESCOLHENDO;
+		jogo.estado = gameStatus.ESCOLHENDO;		
 		var div_selecionada = document.getElementById(carta.id_div);
 		switch(carta.carta.tipo_carta){
 			case "HEROI":
-				escreveLog('Selecione a linha do herói...', 'a');
+				escreveLog('Selecione a line do herói...', 'a');
+				selecionando.line = false;
 				interval_selecionando = setInterval(function(){
-					if(selecionando.linha){
-						if(!chamarHeroi(jogo.jogador1, carta, selecionando.linha, false)){
-							escreveLog('Linha cheia!', 'e');
+					if(selecionando.line){
+						if(!chamarHeroi(jogo.jogador1, carta, selecionando.line, false)){
+							escreveLog('Line cheia!', 'e');
 						}
 						limparEscolha();
 					}
@@ -447,9 +435,9 @@ function selecionarCartaNaMao(carta){
 	}
 }
 
-function selecionarLinha(linha){
-	if(jogo.estado == gameStatus.ESCOLHENDO){
-		selecionando.linha = linha;		
+function selecionarLine(line){
+	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.linha == false){
+		selecionando.line = line;		
 	}
 }
 
@@ -461,8 +449,8 @@ function cancelarEscolha(){
 function limparEscolha(){
 	jogo.estado = gameStatus.JOGANDO;
 	clearInterval(interval_selecionando);
-	selecionando.portador = false;
-	selecionando.usuario = false;
-	selecionando.alvo = false;
-	selecionando.linha = false;	
+	selecionando.portador = null;
+	selecionando.usuario = null;
+	selecionando.alvo = null;
+	selecionando.line = null;	
 }
