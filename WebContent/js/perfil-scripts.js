@@ -37,7 +37,7 @@ function verificaConquistas(){
 		   	processaConquista(conquistas_json);
 	   },
 	   error: function(){
-		   fetch('json/conquistas.json')
+		   fetch('WEB-INF/json/conquistas.json')
 		   .then(response => response.json())
 		   .then(jsonResponse => processaConquista(jsonResponse))   
 	   }

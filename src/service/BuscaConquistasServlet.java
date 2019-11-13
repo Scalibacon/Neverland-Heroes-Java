@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,9 +21,10 @@ public class BuscaConquistasServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		
-		ClassLoader classLoader = getClass().getClassLoader();		
-		URL resource = classLoader.getResource("conquistas.json");		 
-		File file = new File(resource.getFile());
+		ServletContext context = getServletContext();
+		String caminho = context.getRealPath("/WEB-INF/json/conquistas.json");
+		
+		File file = new File(caminho);
 		
 		BufferedReader reader = new BufferedReader(new FileReader(file));		
 		

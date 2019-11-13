@@ -372,10 +372,34 @@
 #atk-move-container{
 	position:absolute;
 	width:80px;
-	height:60px;
-	background-color:lightblue;
+	height:65px;
+	background-color:snow;
 	display:none;
 	z-index:10;
+}
+.atk-move-btn{
+	position:relative;
+	width:70px;
+	height:25px;
+	margin-left:5px;
+	margin-top:5px;
+	line-height:22px;
+	box-sizing: border-box;
+	font-size:80%;
+	font-weight:800;
+	color:white;
+	font-family: 'Roboto', sans serif;
+	text-align:center;
+	cursor:pointer;
+	float:left;	
+}
+#atk-btn{
+	background-color:rgba(255,85,85,1);
+	border:solid 2px rgba(181,62,62,1);
+}
+#move-btn{
+	background-color:rgba(241,140,24,1);
+	border:solid 2px rgba(204,115,15,1);
 }
 
 #ingame-veil{

@@ -5,10 +5,13 @@ function startVsIa(){
 		success : function(data) {
 			var jogador = JSON.parse(data);			
 			jogo.jogador1.jogador = jogador.jogador;			
-			jogo.jogador1.baralho = {campeao : jogador.campeao, cartas : shuffle(separaCartas(jogador.cartas))};
+			jogo.jogador1.baralho = {campeao : atribuiValores(jogador.campeao), cartas : shuffle(separaCartas(jogador.cartas))};
+			jogo.jogador1.baralho.campeao.id_div = "ingame-card" + jogo.jogador1.baralho.campeao.carta.id + "-" + 0;
+			
 			
 			jogo.jogador2.jogador = oponente;
-			jogo.jogador2.baralho = {campeao : oponente.baralho.campeao, cartas : shuffle(separaCartas(oponente.baralho.cartas))};
+			jogo.jogador2.baralho = {campeao : atribuiValores(oponente.baralho.campeao), cartas : shuffle(separaCartas(oponente.baralho.cartas))};
+			jogo.jogador2.baralho.campeao.id_div = "ingame-card" + jogo.jogador2.baralho.campeao.carta.id + "-" + 1;
 			
 			jogo.tipo = 0;
 			jogo.iniciante = jogador.jogador.id;
@@ -116,11 +119,13 @@ function chamarCampeao(jogador){
 }
 
 function chamarHeroi(jogador, heroi, line, isTheChampion){
-	if(setarHeroiNoSlot(jogador, heroi, line)){
+	var slot = setarHeroiNoSlot(jogador, heroi, line);
+	if(slot > -1){
+		drawPosicionarHeroi(jogador, heroi, line, slot);
 		if(!isTheChampion){
 			removerCartaDaMao(jogador, heroi);
 		}
-		efeitoDeInvocacao(heroi);	
+		efeitoDeInvocacao(heroi);
 		return true;
 	}
 	return false;		
@@ -131,7 +136,7 @@ function removerCartaDaMao(jogador, carta){
 		if(jogador.mao[i] == carta){
 			if(jogador == jogo.jogador1){
 				jogador.mao.splice(i, 1);
-				var remove = document.getElementById(carta.id_div);
+				var remove = document.getElementById(carta.id_div + "hand");
 				document.getElementById('inside-card-hand-jogador').removeChild(remove);
 				document.getElementById('inside-card-hand-jogador').style.width = (jogador.mao.length * 67) + "px";
 			}
@@ -164,12 +169,36 @@ function setarHeroiNoSlot(jogador, heroi, line){
 			slot = 0;
 		}
 	}
-	
-	if(slot > -1){
-		drawPosicionarHeroi(jogador, heroi, line, slot);
-		return true;
-	} else {
-		return false;
+			
+	return slot;	
+}
+
+function moverHeroi(jogador, line, slot){
+	if(jogador == jogo.jogador1){
+		console.log(line + " - " + slot);
+		if(line == "front"){				
+			var carta = jogador.campo.front[slot];				
+			var newLine = "back";
+			var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
+			if(newSlot > -1){
+				var card_div = document.getElementById(carta.id_div + "field");
+				var container = document.getElementById('frontline-jogador');
+				jogador.campo.front[slot] = null;
+				container.removeChild(card_div);				
+				drawPosicionarHeroi(jogador, carta, newLine, newSlot);				
+			}
+		} else {
+			var carta = jogador.campo.back[slot];	
+			var newLine = "front";
+			var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
+			if(newSlot > -1){
+				var card_div = document.getElementById(carta.id_div + "field");
+				var container = document.getElementById('backline-jogador');
+				jogador.campo.back[slot] = null;
+				container.removeChild(card_div);				
+				drawPosicionarHeroi(jogador, carta, newLine, newSlot);				
+			}
+		}	
 	}
 }
 

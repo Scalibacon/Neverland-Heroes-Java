@@ -77,7 +77,8 @@ var selecionando = {
 		portador : null,
 		usuario : null,
 		alvo : null,
-		line : null
+		line : null,
+		opcao : null
 }
 
 //separa a quantidade de cartas em unidades e dá os atributos do jogo
@@ -87,14 +88,19 @@ function separaCartas(cartas){
 			var carta = {carta : cartas[i].carta, quantidade : 1};
 			cartas.push(carta);			
 		}
-		cartas[i].quantidade = 1;
-		cartas[i].buffs = [];
-		cartas[i].debuff = [];
-		cartas[i].arma = null;
-		cartas[i].usouMagia = 0;
-		cartas[i].atacou = 0;
-		cartas[i].moveu = 0;
-		cartas[i].id_div = null;
+		atribuiValores(cartas[i]);
 	}
 	return cartas;
+}
+
+function atribuiValores(carta){
+	carta.quantidade = 1;
+	carta.buffs = [];
+	carta.debuff = [];
+	carta.arma = null;
+	carta.usouMagia = 0;
+	carta.atacou = 0;
+	carta.moveu = 0;
+	carta.id_div = null;
+	return carta;
 }

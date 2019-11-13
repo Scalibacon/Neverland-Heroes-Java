@@ -147,6 +147,19 @@ function desenhaCampo(){
 	//**************************** div atacar/mover ***********************************
 	var createdContainerAtkMove = document.createElement("div");
 	createdContainerAtkMove.setAttribute("id", "atk-move-container");
+	
+	var createdAtkMoveAtk = document.createElement("div");
+	createdAtkMoveAtk.setAttribute("class", "atk-move-btn");
+	createdAtkMoveAtk.setAttribute("id", "atk-btn");
+	createdAtkMoveAtk.innerHTML = "Atacar";
+	createdContainerAtkMove.appendChild(createdAtkMoveAtk);
+	
+	var createdAtkMoveMove = document.createElement("div");
+	createdAtkMoveMove.setAttribute("class", "atk-move-btn");
+	createdAtkMoveMove.setAttribute("id", "move-btn");
+	createdAtkMoveMove.innerHTML = "Mover";
+	createdContainerAtkMove.appendChild(createdAtkMoveMove);
+	
 	document.getElementById('game-container').appendChild(createdContainerAtkMove);
 	
 	//**************************** Espaço pras mãos **********************************
@@ -279,15 +292,46 @@ function mostraCartona(carta){
 	document.getElementById('ingame-big-card').style.backgroundSize = "100%";
 }
 
+function mostraAtkMove(line, slot){
+	escreveLog('Escolha o que fazer com o herói selecionado...', 'a');
+	if(line == "front"){
+		var y = card_positions.jogador_frontline[slot].y + 16;
+	} else {
+		var y = card_positions.jogador_backline[slot].y + 16;
+	}
+	var atk_move = document.getElementById('atk-move-container');
+	atk_move.style.bottom = y + "px";
+	atk_move.style.left = (card_positions.jogador_frontline[slot].x + 135 - 80 - 8) + "px";
+	atk_move.style.display = "block";
+}
+
+function escreveLog(texto, tipo){
+	switch(tipo){
+		case "i":
+			document.getElementById('ingame-chat').innerHTML += "<p class='msg-info'>" + texto + "</p>";
+			break;
+		case "e":
+			document.getElementById('ingame-chat').innerHTML += "<p class='msg-error'>" + texto + "</p>";
+			break;
+		case "a":
+			document.getElementById('ingame-chat').innerHTML += "<p class='msg-advice'>" + texto + "</p>";
+			break;
+		default:
+			document.getElementById('ingame-chat').innerHTML += "<p class='msg-info'>" + texto + "</p>";
+			break;
+	}
+}
+
 //****************************************************************************************************************
 
 //*********************************************** JOGO ***********************************************************
-var ctrlDivId = 0;
+var ctrlDivId = 2;
 function drawPuxarCarta(jogador, carta){
 	var num_cartas = jogador.mao.length; 
-	var createdCard = document.createElement("div");	
-	createdCard.setAttribute("id", "ingame-card-hand" + carta.carta.id + "-" + ctrlDivId);
-	carta.id_div = "ingame-card-hand" + carta.carta.id + "-" + ctrlDivId;	
+	var createdCard = document.createElement("div");
+	carta.id_div = "ingame-card" + carta.carta.id + "-" + ctrlDivId;
+	createdCard.setAttribute("id", carta.id_div + "hand");
+		
 	
 	if(jogador == jogo.jogador1){		
 		createdCard.setAttribute("class", "ingame-card-hand");
@@ -316,23 +360,6 @@ function atualizaQtdeDeck(jogador){
 		document.getElementById("deck-jogador").innerHTML = jogo.jogador1.baralho.cartas.length;
 	} else {
 		document.getElementById("deck-oponente").innerHTML = jogo.jogador2.baralho.cartas.length;
-	}
-}
-
-function escreveLog(texto, tipo){
-	switch(tipo){
-		case "i":
-			document.getElementById('ingame-chat').innerHTML += "<p class='msg-info'>" + texto + "</p>";
-			break;
-		case "e":
-			document.getElementById('ingame-chat').innerHTML += "<p class='msg-error'>" + texto + "</p>";
-			break;
-		case "a":
-			document.getElementById('ingame-chat').innerHTML += "<p class='msg-advice'>" + texto + "</p>";
-			break;
-		default:
-			document.getElementById('ingame-chat').innerHTML += "<p class='msg-info'>" + texto + "</p>";
-			break;
 	}
 }
 
@@ -365,19 +392,19 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 	
 	var createdHeroi = document.createElement("div");
 	createdHeroi.setAttribute("class", "ingame-carta");
+	createdHeroi.setAttribute("id", heroi.id_div + "field");
 	
 	if(jogador == jogo.jogador1){
 		createdHeroi.setAttribute("class", "ingame-carta");		
 	} else {
-		createdHeroi.setAttribute("id", "ingame-carta-oponente");
-	}
+		createdHeroi.setAttribute("class", "ingame-carta-oponente");
+	}	
 	
 	createdHeroi.style.background = "url(img/cards/" + heroi.carta.id + ".jpg) no-repeat";	
 	
 	createdHeroi.style.backgroundSize = "100%";	
 	createdHeroi.style.left = x + "px";
 	createdHeroi.style.top = "1px";
-	heroi.div = createdHeroi;
 	createdHeroi.addEventListener("contextmenu", function(){ mostraCartona(heroi); event.preventDefault(); });
 	createdHeroi.addEventListener("click", function(){ selecionaHeroiEmCampo(jogador, line, slot); });	
 	container.appendChild(createdHeroi);	
@@ -385,19 +412,21 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 
 function selecionaHeroiEmCampo(jogador, line, slot){
 	if(jogo.estado == gameStatus.ESCOLHENDO){
-		//do choicing stuff
-	} else {		
-		if(line == "front"){			
-			console.log(jogador.campo.front[slot].carta.nome);	
-			var carta_div = document.getElementById(jogador.campo.front[slot].id_div);
-			var atk_move = document.getElementById('atk-move-container');
-			atk_move.style.bottom = (190 + 15) + "px";
-			atk_move.style.left = (card_positions.jogador_frontline[slot].x + 135 - 80 - 8) + "px";
-			atk_move.style.display = "block";
-		} else {
-			console.log(jogador.campo.back[slot].carta.nome);
-		}
+		alert('teste');
+		//do choicing stuff usuario / alvo / portador
+	} else {
+		jogo.estado = gameStatus.ESCOLHENDO;
+		selecionando.opcao = false;			
+		mostraAtkMove(line, slot);
+		
+		document.getElementById('move-btn').addEventListener("mousedown", function(){ moverHeroi(jogador, line, slot); });
+		//document.getElementById('move-btn').removeEventListener("mousedown");		
 	}
+}
+
+function escondeAtkMove(){
+	var atk_move = document.getElementById('atk-move-container');
+	atk_move.style.display = "none";
 }
 
 var interval_selecionando;
@@ -405,7 +434,7 @@ function selecionarCartaNaMao(carta){
 	if(jogo.estado == gameStatus.JOGANDO){
 		limparEscolha();
 		jogo.estado = gameStatus.ESCOLHENDO;		
-		var div_selecionada = document.getElementById(carta.id_div);
+		var div_selecionada = document.getElementById(carta.id_div + "hand");
 		switch(carta.carta.tipo_carta){
 			case "HEROI":
 				escreveLog('Selecione a line do herói...', 'a');
@@ -435,8 +464,9 @@ function selecionarCartaNaMao(carta){
 	}
 }
 
+
 function selecionarLine(line){
-	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.linha == false){
+	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
 		selecionando.line = line;		
 	}
 }
@@ -453,4 +483,8 @@ function limparEscolha(){
 	selecionando.usuario = null;
 	selecionando.alvo = null;
 	selecionando.line = null;	
+	selecionando.opcao = null;
+	
+	escondeCartona();
+	escondeAtkMove();
 }
