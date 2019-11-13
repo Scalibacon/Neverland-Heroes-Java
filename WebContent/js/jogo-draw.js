@@ -293,6 +293,27 @@ function mostraCartona(carta){
 }
 
 function mostraAtkMove(line, slot){
+	var container = document.getElementById("game-container");
+	var oldAtkMove = document.getElementById("atk-move-container");
+	container.removeChild(oldAtkMove);
+	
+	var createdContainerAtkMove = document.createElement("div");
+	createdContainerAtkMove.setAttribute("id", "atk-move-container");
+	
+	var createdAtkMoveAtk = document.createElement("div");
+	createdAtkMoveAtk.setAttribute("class", "atk-move-btn");
+	createdAtkMoveAtk.setAttribute("id", "atk-btn");
+	createdAtkMoveAtk.innerHTML = "Atacar";
+	createdContainerAtkMove.appendChild(createdAtkMoveAtk);
+	
+	var createdAtkMoveMove = document.createElement("div");
+	createdAtkMoveMove.setAttribute("class", "atk-move-btn");
+	createdAtkMoveMove.setAttribute("id", "move-btn");
+	createdAtkMoveMove.innerHTML = "Mover";
+	createdContainerAtkMove.appendChild(createdAtkMoveMove);
+	
+	container.appendChild(createdContainerAtkMove);
+	
 	escreveLog('Escolha o que fazer com o herói selecionado...', 'a');
 	if(line == "front"){
 		var y = card_positions.jogador_frontline[slot].y + 16;
@@ -419,7 +440,7 @@ function selecionaHeroiEmCampo(jogador, line, slot){
 		selecionando.opcao = false;			
 		mostraAtkMove(line, slot);
 		
-		document.getElementById('move-btn').addEventListener("mousedown", function(){ moverHeroi(jogador, line, slot); });
+		document.getElementById('move-btn').addEventListener("click", function(){ moverHeroi(jogador, line, slot); });
 		//document.getElementById('move-btn').removeEventListener("mousedown");		
 	}
 }

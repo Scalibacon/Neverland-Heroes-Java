@@ -185,7 +185,8 @@ function moverHeroi(jogador, line, slot){
 				var container = document.getElementById('frontline-jogador');
 				jogador.campo.front[slot] = null;
 				container.removeChild(card_div);				
-				drawPosicionarHeroi(jogador, carta, newLine, newSlot);				
+				drawPosicionarHeroi(jogador, carta, newLine, newSlot);
+				limparEscolha();
 			}
 		} else {
 			var carta = jogador.campo.back[slot];	
@@ -196,7 +197,8 @@ function moverHeroi(jogador, line, slot){
 				var container = document.getElementById('backline-jogador');
 				jogador.campo.back[slot] = null;
 				container.removeChild(card_div);				
-				drawPosicionarHeroi(jogador, carta, newLine, newSlot);				
+				drawPosicionarHeroi(jogador, carta, newLine, newSlot);
+				limparEscolha();
 			}
 		}	
 	}

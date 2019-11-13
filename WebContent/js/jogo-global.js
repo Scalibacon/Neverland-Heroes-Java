@@ -18,8 +18,8 @@ var jogo = {
 			baralho : [],
 			mao : [],
 			campo : {
-				front : [],
-				back : []
+				front : [null, null, null],
+				back : [null, null, null]
 			},			
 			descarte : [],
 			recarga : [],
@@ -31,8 +31,8 @@ var jogo = {
 			baralho : [],
 			mao : [],
 			campo : {
-				front : [],
-				back : []
+				front : [null, null, null],
+				back : [null, null, null]
 			},
 			descarte : [],
 			recarga : [],	
