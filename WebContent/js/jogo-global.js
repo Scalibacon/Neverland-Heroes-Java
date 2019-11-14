@@ -99,8 +99,8 @@ function atribuiValores(carta){
 	carta.debuff = [];
 	carta.arma = null;
 	carta.usouMagia = 0;
-	carta.atacou = 0;
-	carta.moveu = 0;
+	carta.ataques_disponiveis = 1;
+	carta.movimentos_disponiveis = 1;
 	carta.id_div = null;
 	return carta;
 }

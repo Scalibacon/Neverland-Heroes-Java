@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import dao.JogadorDAO;
 import dao.JogadorDAOImpl;
-import dao.PseuDAO;
 import model.Jogador;
 
 @WebServlet("/loginServlet")
@@ -23,29 +22,17 @@ public class LoginServlet extends HttpServlet {
 		String usuario = request.getParameter("usuario");
 		String senha = request.getParameter("senha");
 		HttpSession session = request.getSession();
-		
-		/* depois tirar daqui... */
-//		if(usuario.equals("Scalibacon")) { 
-//			Jogador j = PseuDAO.pseudoLogin();
-//			session.setAttribute("id", j.getId());
-//			session.setAttribute("usuario", j.getUsuario());
-//			session.setAttribute("tipo", j.getTipo().getValor());
-//			// out.println("<meta http-equiv='refresh' content='3;URL=novidades.jsp'></head>");//redirects after 3 seconds
-//			response.sendRedirect("novidades.jsp");		 
-//		}else { /* ... até aqui */
-			JogadorDAO jDao = new JogadorDAOImpl();
-			Jogador jogador = jDao.buscaJogadorLogin(usuario, senha);
-			if (jogador == null) {
-				session.setAttribute("dialog", "nao_logou");
-				response.sendRedirect("index.jsp");
-			} else {
-				session.setAttribute("id", jogador.getId());
-				session.setAttribute("usuario", jogador.getUsuario());
-				session.setAttribute("tipo", jogador.getTipo().getValor());
-				response.sendRedirect("novidades.jsp");
-			}
-//		}//aqui tb
-
+		JogadorDAO jDao = new JogadorDAOImpl();
+		Jogador jogador = jDao.buscaJogadorLogin(usuario, senha);
+		if (jogador == null) {
+			session.setAttribute("dialog", "nao_logou");
+			response.sendRedirect("index.jsp");
+		} else {
+			session.setAttribute("id", jogador.getId());
+			session.setAttribute("usuario", jogador.getUsuario());
+			session.setAttribute("tipo", jogador.getTipo().getValor());
+			response.sendRedirect("novidades.jsp");
+		}
 	}
 
 	@Override

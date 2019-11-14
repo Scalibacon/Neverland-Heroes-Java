@@ -63,6 +63,7 @@ function carregaTelaInicial(isVsIA){
 function mostraJogo(){
 	document.addEventListener("keydown", function(){
 		if(event.key === "Escape"){
+			escondeCartona();
 			if(jogo.estado == gameStatus.ESCOLHENDO){
 				cancelarEscolha();
 			}
@@ -142,6 +143,10 @@ function desenhaCampo(){
 	var createdBigCard = document.createElement("div");
 	createdBigCard.setAttribute("id", "ingame-big-card");
 	createdVeil.appendChild(createdBigCard);
+	var createdDeepInfo= document.createElement("div");
+	createdDeepInfo.setAttribute("id", "ingame-deep-info");
+	createdDeepInfo.innerHTML = "HP: 8<br>MANA: 6<br>PROT: 0<br>FOR: 5<br>POD: 3<br>DEF: 2<br>RES: 2<br>CRIT: 1<br>ESQ: 1";
+	createdVeil.appendChild(createdDeepInfo);
 	document.getElementById('game-container').appendChild(createdVeil);
 	
 	//**************************** div atacar/mover ***********************************
@@ -405,14 +410,9 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 			var x = card_positions.oponente_backline[slot].x;
 			var y = card_positions.oponente_backline[slot].y;
 		}
-	}
-	
-	if(heroi.arma != null){
-		
-	}
+	}	
 	
 	var createdHeroi = document.createElement("div");
-	createdHeroi.setAttribute("class", "ingame-carta");
 	createdHeroi.setAttribute("id", heroi.id_div + "field");
 	
 	if(jogador == jogo.jogador1){
@@ -421,27 +421,72 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 		createdHeroi.setAttribute("class", "ingame-carta-oponente");
 	}	
 	
-	createdHeroi.style.background = "url(img/cards/" + heroi.carta.id + ".jpg) no-repeat";	
-	
+	createdHeroi.style.background = "url(img/cards/" + heroi.carta.id + ".jpg) no-repeat";		
 	createdHeroi.style.backgroundSize = "100%";	
 	createdHeroi.style.left = x + "px";
 	createdHeroi.style.top = "1px";
 	createdHeroi.addEventListener("contextmenu", function(){ mostraCartona(heroi); event.preventDefault(); });
 	createdHeroi.addEventListener("click", function(){ selecionaHeroiEmCampo(jogador, line, slot); });	
 	container.appendChild(createdHeroi);	
+	
+	if(heroi.arma != null){		
+		var div_old_arma = document.getElementById(heroi.arma.id_div + "field");
+		div_old_arma.remove();
+		drawArma(jogador, line, slot);
+	}
+}
+
+function drawArma(jogador, line, slot){
+	if(jogador == jogo.jogador1){
+		if(line == "front"){
+			var heroi = jogador.campo.front[slot];
+			var container = document.getElementById('frontline-jogador');
+			var x = card_positions.jogador_frontline[slot].x + 62;
+			var y = card_positions.jogador_frontline[slot].y;
+		} else {
+			var heroi = jogador.campo.back[slot];
+			var container = document.getElementById('backline-jogador');
+			var x = card_positions.jogador_backline[slot].x + 62;
+			var y = card_positions.jogador_backline[slot].y;
+		}
+		
+		var arma = heroi.arma;
+		
+		var createdArma = document.createElement("div");
+		createdArma.setAttribute("class", "ingame-carta");
+		createdArma.setAttribute("id", arma.id_div + "field");
+		createdArma.style.background = "url(img/cards/" + arma.carta.id + ".jpg) no-repeat";		
+		createdArma.style.backgroundSize = "100%";	
+		createdArma.style.left = x + "px";
+		createdArma.style.top = "1px";
+		createdArma.addEventListener("contextmenu", function(){ mostraCartona(arma); event.preventDefault(); });
+		container.appendChild(createdArma);
+	}
 }
 
 function selecionaHeroiEmCampo(jogador, line, slot){
 	if(jogo.estado == gameStatus.ESCOLHENDO){
-		alert('teste');
+		if(selecionando.portador == false){
+			selecionando.portador = {jogador: jogador, line : line, slot : slot};
+		}
 		//do choicing stuff usuario / alvo / portador
 	} else {
 		jogo.estado = gameStatus.ESCOLHENDO;
 		selecionando.opcao = false;			
-		mostraAtkMove(line, slot);
+		mostraAtkMove(line, slot);		
+		if(line == "front"){
+			var carta = jogador.campo.front[slot];
+		} else {
+			var carta = jogador.campo.back[slot];
+		}
 		
-		document.getElementById('move-btn').addEventListener("click", function(){ moverHeroi(jogador, line, slot); });
-		//document.getElementById('move-btn').removeEventListener("mousedown");		
+		if(carta.movimentos_disponiveis <= 0){
+			document.getElementById('move-btn').disabled = "true";
+			document.getElementById('move-btn').style.filter = "grayscale(100%)";
+		} else {		
+			document.getElementById('move-btn').addEventListener("click", function(){ moverHeroi(jogador, line, slot); });
+			document.getElementById('move-btn').style.filter = "grayscale(0%)";
+		}
 	}
 }
 
@@ -469,8 +514,21 @@ function selecionarCartaNaMao(carta){
 					}
 				},100);
 				break;
+				
 			case "ARMA":
 				escreveLog('Selecione o portador...', 'a');
+				selecionando.portador = false;
+				interval_selecionando = setInterval(function(){
+					if(selecionando.portador){
+						var jogador = selecionando.portador.jogador;
+						var line = selecionando.portador.line;
+						var slot = selecionando.portador.slot;
+						if(!equiparHeroi(carta, jogador, line, slot)){
+							escreveLog('Herói já equipado!', 'e');
+						}
+						limparEscolha();
+					}
+				},100);
 				break;
 			case "MAGIA":
 				escreveLog('Selecione o usuário...', 'a');
@@ -484,7 +542,6 @@ function selecionarCartaNaMao(carta){
 		}
 	}
 }
-
 
 function selecionarLine(line){
 	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
@@ -504,8 +561,7 @@ function limparEscolha(){
 	selecionando.usuario = null;
 	selecionando.alvo = null;
 	selecionando.line = null;	
-	selecionando.opcao = null;
+	selecionando.opcao = null;	
 	
-	escondeCartona();
 	escondeAtkMove();
 }

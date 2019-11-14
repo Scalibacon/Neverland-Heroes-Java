@@ -14,7 +14,6 @@ import dao.BaralhoDAO;
 import dao.BaralhoDAOImpl;
 import dao.JogadorDAO;
 import dao.JogadorDAOImpl;
-import dao.PseuDAO;
 import model.Baralho;
 import model.Jogador;
 
@@ -26,18 +25,14 @@ public class BuscaBaralhoServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
-		Baralho baralho;			
-//		if(true) { /* depois tirar daqui... */
-//			baralho = PseuDAO.pseudoBaralho();
-//		} else { /* até aqui */
-			BaralhoDAO bDao = new BaralhoDAOImpl();
-			JogadorDAO jDao = new JogadorDAOImpl();
-			Jogador j = new Jogador();
-			j.setId((int) session.getAttribute("id"));
-			j.setUsuario((String) session.getAttribute("usuario")); 
-			jDao.buscarPerfil(j);			
-			baralho = bDao.buscaBaralho(j);
-//		} //aqui tb
+		Baralho baralho;	
+		BaralhoDAO bDao = new BaralhoDAOImpl();
+		JogadorDAO jDao = new JogadorDAOImpl();
+		Jogador j = new Jogador();
+		j.setId((int) session.getAttribute("id"));
+		j.setUsuario((String) session.getAttribute("usuario")); 
+		jDao.buscarPerfil(j);			
+		baralho = bDao.buscaBaralho(j);
 		PrintWriter out = response.getWriter();
 		String json = baralho.toJson();
 		out.println(json);

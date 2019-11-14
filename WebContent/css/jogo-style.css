@@ -420,6 +420,22 @@
   	left: 50%;
   	transform: translate(-50%, -50%);
 }
+#ingame-deep-info{
+	position:relative;
+	height:450px;
+	line-height:50px;
+	width:100px;
+	top: 65px;	
+	left:calc(50% + 185px + 15px);
+	//background-color:snow;	
+	padding:7px;
+	box-sizing:border-box;
+	font-family:'Roboto', sans serif;
+	font-size:105%;
+	font-weight:800;
+	color:white;
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+}
 
 .ingame-hand-container{
 	position:absolute;

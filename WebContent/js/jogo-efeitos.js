@@ -4,3 +4,10 @@ function efeitoDeInvocacao(heroi){
 			console.log("Adicione uma espada do deck pra mão");
 	}
 }
+
+function efeitoAoEquipar(heroi){
+	var arma = heroi.arma;
+	switch(arma.carta.id){
+		
+	}
+}

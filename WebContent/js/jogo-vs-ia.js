@@ -139,6 +139,8 @@ function removerCartaDaMao(jogador, carta){
 				var remove = document.getElementById(carta.id_div + "hand");
 				document.getElementById('inside-card-hand-jogador').removeChild(remove);
 				document.getElementById('inside-card-hand-jogador').style.width = (jogador.mao.length * 67) + "px";
+			} else {
+				console.log('jogador2');
 			}
 		}
 	}
@@ -182,10 +184,10 @@ function moverHeroi(jogador, line, slot){
 			var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
 			if(newSlot > -1){
 				var card_div = document.getElementById(carta.id_div + "field");
-				var container = document.getElementById('frontline-jogador');
 				jogador.campo.front[slot] = null;
-				container.removeChild(card_div);				
+				card_div.remove();				
 				drawPosicionarHeroi(jogador, carta, newLine, newSlot);
+				carta.movimentos_disponiveis--;
 				limparEscolha();
 			}
 		} else {
@@ -194,13 +196,34 @@ function moverHeroi(jogador, line, slot){
 			var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
 			if(newSlot > -1){
 				var card_div = document.getElementById(carta.id_div + "field");
-				var container = document.getElementById('backline-jogador');
 				jogador.campo.back[slot] = null;
-				container.removeChild(card_div);				
+				card_div.remove();				
 				drawPosicionarHeroi(jogador, carta, newLine, newSlot);
+				carta.movimentos_disponiveis--;
 				limparEscolha();
 			}
 		}	
+	}
+}
+
+function equiparHeroi(arma, jogador, line, slot){
+	if(jogador == jogo.jogador1){
+		if(line == "front"){
+			var heroi = jogador.campo.front[slot];
+		} else {
+			var heroi = jogador.campo.back[slot];
+		}
+		if(heroi.arma == null){
+			heroi.arma = arma;
+			efeitoAoEquipar(heroi);
+			removerCartaDaMao(jogador, arma);
+			drawArma(jogador, line, slot);
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		console.log("jogador 2");
 	}
 }
 
@@ -253,10 +276,6 @@ function causarDanoFisico(){
 }
 
 function retornarPraMao(){
-	
-}
-
-function equiparHeroi(){
 	
 }
 
