@@ -94,13 +94,22 @@ function separaCartas(cartas){
 }
 
 function atribuiValores(carta){
+	carta.carta.critico = 1;
+	carta.carta.esquiva = 1;
+	carta.carta.protecao = 0;
 	carta.quantidade = 1;
-	carta.buffs = [];
-	carta.debuff = [];
+	carta.buffs = {hp : 0, mana : 0, protecao : 0, forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
+	carta.debuff = {hp : 0, mana : 0, protecao : 0, forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
 	carta.arma = null;
 	carta.usouMagia = 0;
 	carta.ataques_disponiveis = 1;
 	carta.movimentos_disponiveis = 1;
 	carta.id_div = null;
 	return carta;
+}
+
+function pegaValor(atributo, buff, debuff){
+	var valor;
+	valor = atributo + buff - debuff;
+	return valor;
 }

@@ -7,8 +7,7 @@ function startVsIa(){
 			jogo.jogador1.jogador = jogador.jogador;			
 			jogo.jogador1.baralho = {campeao : atribuiValores(jogador.campeao), cartas : shuffle(separaCartas(jogador.cartas))};
 			jogo.jogador1.baralho.campeao.id_div = "ingame-card" + jogo.jogador1.baralho.campeao.carta.id + "-" + 0;
-			
-			
+						
 			jogo.jogador2.jogador = oponente;
 			jogo.jogador2.baralho = {campeao : atribuiValores(oponente.baralho.campeao), cartas : shuffle(separaCartas(oponente.baralho.cartas))};
 			jogo.jogador2.baralho.campeao.id_div = "ingame-card" + jogo.jogador2.baralho.campeao.carta.id + "-" + 1;

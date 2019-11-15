@@ -144,8 +144,7 @@ function desenhaCampo(){
 	createdBigCard.setAttribute("id", "ingame-big-card");
 	createdVeil.appendChild(createdBigCard);
 	var createdDeepInfo= document.createElement("div");
-	createdDeepInfo.setAttribute("id", "ingame-deep-info");
-	createdDeepInfo.innerHTML = "HP: 8<br>MANA: 6<br>PROT: 0<br>FOR: 5<br>POD: 3<br>DEF: 2<br>RES: 2<br>CRIT: 1<br>ESQ: 1";
+	createdDeepInfo.setAttribute("id", "ingame-deep-info");	
 	createdVeil.appendChild(createdDeepInfo);
 	document.getElementById('game-container').appendChild(createdVeil);
 	
@@ -288,11 +287,14 @@ function escondeCartona(){
 	document.getElementById('ingame-veil').style.display = "none";
 }
 function mostraCartona(carta){
-	document.getElementById('ingame-veil').style.display = "block";	
-	if(carta.carta == null || carta.carta == undefined){
-		document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.id + ".jpg) no-repeat";
-	} else {		
-		document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";
+	document.getElementById('ingame-veil').style.display = "block";		
+	document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";
+	if(carta.carta.tipo_carta == "HEROI"){
+		document.getElementById('ingame-deep-info').style.display = "block";
+		document.getElementById('inagme-deep-info').innerHTML = 
+			"HP: " + pegaValor(carta.carta.hp, carta.buff.hp, carta.debuff.hp) + "<br>MANA: 6<br>PROT: 0<br>FOR: 5<br>POD: 3<br>DEF: 2<br>RES: 2<br>CRIT: 1<br>ESQ: 1";
+	} else {
+		document.getElementById('ingame-deep-info').style.display = "none";
 	}
 	document.getElementById('ingame-big-card').style.backgroundSize = "100%";
 }
