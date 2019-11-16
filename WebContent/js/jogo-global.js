@@ -78,38 +78,80 @@ var selecionando = {
 		usuario : null,
 		alvo : null,
 		line : null,
-		opcao : null
+		opcao : null,
+		baralho : null
 }
 
 //separa a quantidade de cartas em unidades e dá os atributos do jogo
+var ctrlDivId = 2;
 function separaCartas(cartas){
 	for(var i = 0; i < cartas.length; i++){
 		for(var j = 1; j < cartas[i].quantidade; j++){
 			var carta = {carta : cartas[i].carta, quantidade : 1};
+			carta = atribuiValores(carta);
 			cartas.push(carta);			
 		}
-		atribuiValores(cartas[i]);
+		cartas[i] = atribuiValores(cartas[i]);
 	}
 	return cartas;
 }
 
+var ctrlDivId = 0;
 function atribuiValores(carta){
+	carta.carta.dano_recebido = 0;
+	carta.carta.mana_gasta = 0;
 	carta.carta.critico = 1;
 	carta.carta.esquiva = 1;
 	carta.carta.protecao = 0;
 	carta.quantidade = 1;
-	carta.buffs = {hp : 0, mana : 0, protecao : 0, forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
-	carta.debuff = {hp : 0, mana : 0, protecao : 0, forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
+	carta.buff = {forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
+	carta.arma_buff = {forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
 	carta.arma = null;
 	carta.usouMagia = 0;
 	carta.ataques_disponiveis = 1;
 	carta.movimentos_disponiveis = 1;
-	carta.id_div = null;
+	carta.id_div = "ingame-card" + carta.carta.id + "-" + ctrlDivId;
+	ctrlDivId++;
 	return carta;
 }
 
-function pegaValor(atributo, buff, debuff){
+function buscaAtributo(carta, atributo){
 	var valor;
-	valor = atributo + buff - debuff;
+	switch(atributo){
+		case "HP":
+			valor = carta.carta.hp - carta.carta.dano_recebido;
+			break;
+		case "MANA":
+			valor = carta.carta.mana - carta.carta.mana_gasta;
+			break;
+		case "PROT":
+			valor = carta.carta.protecao;
+			break;
+		case "FOR":
+			valor = carta.carta.forca + carta.buff.forca + carta.arma_buff.forca;
+			break;
+		case "POD":
+			valor = carta.carta.poder + carta.buff.poder + carta.arma_buff.poder;
+			break;
+		case "DEF":
+			valor = carta.carta.defesa + carta.buff.defesa + carta.arma_buff.defesa;
+			break;
+		case "RES":
+			valor = carta.carta.resistencia + carta.buff.resistencia + carta.arma_buff.resistencia;
+			break;
+		case "CRIT":
+			valor = carta.carta.critico + carta.buff.critico + carta.arma_buff.critico;
+			break;
+		case "ESQ":
+			valor = carta.carta.esquiva + carta.buff.esquiva + carta.arma_buff.esquiva;
+			break;
+	}
+	
+	valor += buscaFieldAlter(atributo);
+	
+	if(valor < 0){
+		valor = 0;
+	}
+	
 	return valor;
 }

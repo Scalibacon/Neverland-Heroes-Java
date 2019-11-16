@@ -6,11 +6,11 @@ function startVsIa(){
 			var jogador = JSON.parse(data);			
 			jogo.jogador1.jogador = jogador.jogador;			
 			jogo.jogador1.baralho = {campeao : atribuiValores(jogador.campeao), cartas : shuffle(separaCartas(jogador.cartas))};
-			jogo.jogador1.baralho.campeao.id_div = "ingame-card" + jogo.jogador1.baralho.campeao.carta.id + "-" + 0;
-						
+			jogo.jogador1.divs = {mao : null, front : null, back : null, recarga : null, descarte : null, deck : null};
+			
 			jogo.jogador2.jogador = oponente;
 			jogo.jogador2.baralho = {campeao : atribuiValores(oponente.baralho.campeao), cartas : shuffle(separaCartas(oponente.baralho.cartas))};
-			jogo.jogador2.baralho.campeao.id_div = "ingame-card" + jogo.jogador2.baralho.campeao.carta.id + "-" + 1;
+			jogo.jogador2.divs = {mao : null, front : null, back : null, recarga : null, descarte : null, deck : null};
 			
 			jogo.tipo = 0;
 			jogo.iniciante = jogador.jogador.id;
@@ -100,8 +100,7 @@ function puxarCartasIniciais(jogador){
 function puxarCarta(jogador){
 	if(jogador.baralho.cartas.length > 0){
 		var delay;
-		var aux;
-		jogo.estado = gameStatus.ESPERANDO;	
+		var aux;	
 		
 		aux = jogador.baralho.cartas[0];
 		jogador.mao.push(aux);
@@ -133,14 +132,10 @@ function chamarHeroi(jogador, heroi, line, isTheChampion){
 function removerCartaDaMao(jogador, carta){
 	for(var i = 0; i < jogador.mao.length; i++){
 		if(jogador.mao[i] == carta){
-			if(jogador == jogo.jogador1){
-				jogador.mao.splice(i, 1);
-				var remove = document.getElementById(carta.id_div + "hand");
-				document.getElementById('inside-card-hand-jogador').removeChild(remove);
-				document.getElementById('inside-card-hand-jogador').style.width = (jogador.mao.length * 67) + "px";
-			} else {
-				console.log('jogador2');
-			}
+			var remove = document.getElementById(carta.id_div);			
+			jogador.mao.splice(i, 1);
+			remove.remove();
+			jogador.divs.mao.style.width = (jogador.mao.length * 67) + "px";
 		}
 	}
 }
@@ -175,55 +170,49 @@ function setarHeroiNoSlot(jogador, heroi, line){
 }
 
 function moverHeroi(jogador, line, slot){
-	if(jogador == jogo.jogador1){
-		console.log(line + " - " + slot);
-		if(line == "front"){				
-			var carta = jogador.campo.front[slot];				
-			var newLine = "back";
-			var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
-			if(newSlot > -1){
-				var card_div = document.getElementById(carta.id_div + "field");
-				jogador.campo.front[slot] = null;
-				card_div.remove();				
-				drawPosicionarHeroi(jogador, carta, newLine, newSlot);
-				carta.movimentos_disponiveis--;
-				limparEscolha();
-			}
-		} else {
-			var carta = jogador.campo.back[slot];	
-			var newLine = "front";
-			var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
-			if(newSlot > -1){
-				var card_div = document.getElementById(carta.id_div + "field");
-				jogador.campo.back[slot] = null;
-				card_div.remove();				
-				drawPosicionarHeroi(jogador, carta, newLine, newSlot);
-				carta.movimentos_disponiveis--;
-				limparEscolha();
-			}
-		}	
-	}
+	if(line == "front"){				
+		var carta = jogador.campo.front[slot];				
+		var newLine = "back";
+		var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
+		if(newSlot > -1){
+			var card_div = document.getElementById(carta.id_div);
+			jogador.campo.front[slot] = null;
+			card_div.remove();				
+			drawPosicionarHeroi(jogador, carta, newLine, newSlot);
+			carta.movimentos_disponiveis--;
+			limparEscolha();
+		}
+	} else {
+		var carta = jogador.campo.back[slot];	
+		var newLine = "front";
+		var newSlot = setarHeroiNoSlot(jogador, carta, newLine);
+		if(newSlot > -1){
+			var card_div = document.getElementById(carta.id_div);
+			jogador.campo.back[slot] = null;
+			card_div.remove();				
+			drawPosicionarHeroi(jogador, carta, newLine, newSlot);
+			carta.movimentos_disponiveis--;
+			limparEscolha();
+		}
+	}	
+	
 }
 
 function equiparHeroi(arma, jogador, line, slot){
-	if(jogador == jogo.jogador1){
-		if(line == "front"){
-			var heroi = jogador.campo.front[slot];
-		} else {
-			var heroi = jogador.campo.back[slot];
-		}
-		if(heroi.arma == null){
-			heroi.arma = arma;
-			efeitoAoEquipar(heroi);
-			removerCartaDaMao(jogador, arma);
-			drawArma(jogador, line, slot);
-			return true;
-		} else {
-			return false;
-		}
+	if(line == "front"){
+		var heroi = jogador.campo.front[slot];
 	} else {
-		console.log("jogador 2");
+		var heroi = jogador.campo.back[slot];
 	}
+	if(heroi.arma == null){
+		heroi.arma = arma;
+		efeitoAoEquipar(heroi);
+		removerCartaDaMao(jogador, arma);
+		drawArma(jogador, line, slot);
+		return true;
+	} else {
+		return false;
+	}	
 }
 
 function passarTurno(){
@@ -250,8 +239,29 @@ function destruirHeroi(){
 	
 }
 
-function usarMagia(){
+function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
+	console.log(usuario_jogador);
+	if(usuario_line == "front"){
+		var usuario = usuario_jogador.campo.front[usuario_slot];
+	} else {
+		var usuario = usuario_jogador.campo.back[usuario_slot];
+	}
 	
+	if(buscaAtributo(usuario,"MANA") >= magia.carta.custo){
+		if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO"){
+			efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
+		} else {
+			escreveLog('Afinidades divergentes!', 'e');
+			limparEscolha();
+		}		
+	} else {
+		escreveLog('Mana Insuficiente!', 'e');
+		limparEscolha();
+	}
+}
+
+function alvoValido(magia, usuario, alvo){
+	return true;
 }
 
 function usarPostura(){
