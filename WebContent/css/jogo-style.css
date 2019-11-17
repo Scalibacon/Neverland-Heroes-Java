@@ -214,7 +214,7 @@
 	text-overflow: ellipsis;
 	transition: width 0.8s;
 	opacity:0;
-	z-index:89;
+	z-index:75;
 }
 
 .player-info{
@@ -407,7 +407,7 @@
 	width:calc(100% - 230px);
 	height:100%;
 	background-color:rgba(90,90,185,0.75);
-	z-index:11;	
+	z-index:77;	
 	display:none;
 }
 #ingame-big-card{
@@ -443,8 +443,11 @@
   	left: 50%;
   	transform: translate(-50%, -50%);
   	overflow-x: auto;
-  	width: 777px;
-  	height: 550px;
+  	width: 857px;
+  	min-height: calc(530px / 2 + 20px);
+  	max-height: calc(530px / 2 + 70px);
+  	box-sizing:border-box;
+  	padding: 10px;
   	background-color:snow;
   	box-shadow: 0px 0px 4px 3px rgba(0,100,200,0.5);
 }
@@ -494,11 +497,27 @@
 }
 .ingame-card-select{
 	position:relative;
-	width:calc(370px / 3);
-	height:calc(530px / 3);
-	margin:12px;
+	width:calc(370px / 2);
+	height:calc(530px / 2);
 	float:left;
+	margin:10px;
 	cursor:pointer;
+	display: inline-block;
+}
+.ingame-time-container{
+	width:auto;
+	height:calc(530px / 2);
+	box-sizing:border-box;
+	margin-right:15px;
+	float:left;
+	padding:8px;
+	font-weight:800;
+	text-align:center;
+	font-size:150%;
+	font-family:'Roboto', sans serif;
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+	color:white;
+	line-height:calc(530px / 2);
 }
 .ingame-card-hand-oponente{
 	position:relative;
@@ -627,4 +646,15 @@
 	width:calc(370px / 6);
 	height:calc(530px / 6);
 	cursor:pointer;
+}
+.ingame-damage-txt{
+	position:absolute;
+	font-weight:800;
+	text-align:center;
+	font-size:175%;
+	font-family:'Roboto', sans serif;
+	text-shadow: 3px 0 0 black, -3px 0 0 black, 0 3px 0 black, 0 -3px 0 black, 2px 2px black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black;
+	color:white;
+	transition: all 1s;
+	z-index:76;
 }

@@ -283,6 +283,7 @@ function desenhaCampo(){
 	recargaIcon.setAttribute("class", "ingame-recarga-icon");
 	createdRecarga1.appendChild(recargaIcon);
 	jogo.jogador1.divs.recarga = createdRecarga1;
+	createdRecarga1.addEventListener("click", function(){ mostraRecargas(jogo.jogador1); })
 	document.getElementById('game-container').appendChild(createdRecarga1);
 	
 	var createdRecarga2 = document.createElement("div");
@@ -292,9 +293,36 @@ function desenhaCampo(){
 	recargaIcon2.setAttribute("class", "ingame-recarga-icon");
 	createdRecarga2.appendChild(recargaIcon2);
 	jogo.jogador2.divs.recarga = createdRecarga2;
+	createdRecarga2.addEventListener("click", function(){ mostraRecargas(jogo.jogador2); })
 	document.getElementById('game-container').appendChild(createdRecarga2);
 }
 
+function mostraRecargas(jogador){
+	document.getElementById('ingame-veil').style.display = "block";	
+	document.getElementById('ingame-big-card').style.display = "none";
+	document.getElementById('ingame-deep-info').style.display = "none";
+	document.getElementById('busca-container').style.display = "block";
+	document.getElementById('busca-container').innerHTML = "";
+	
+	for(var i = 0; i < jogador.recarga.length; i++){
+		var createdCard = document.createElement("div");
+		createdCard.setAttribute("class", "ingame-card-select");
+		createdCard.style.background = "url(img/cards/" + jogador.recarga[i].carta.id + ".jpg) no-repeat";
+		createdCard.style.backgroundSize = "100%";
+		document.getElementById('busca-container').appendChild(createdCard);
+		
+		var createdTime = document.createElement("div");
+		createdTime.setAttribute("class", "ingame-time-container");
+		createdTime.innerHTML = jogador.recarga[i].recarga;
+		document.getElementById('busca-container').appendChild(createdTime);
+	}
+}
+
+function selecionarLine(line){
+	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
+		selecionando.line = line;		
+	}
+}
 function destacaLine(line){
 	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
 		line.style.cursor = "pointer";
@@ -312,7 +340,6 @@ function escondeVeil(){
 	document.getElementById('ingame-veil').style.display = "none";
 }
 function mostraCartona(carta){
-	console.log(carta);
 	document.getElementById('busca-container').style.display = "none";
 	document.getElementById('ingame-veil').style.display = "block";	
 	document.getElementById('ingame-big-card').style.display = "block";
@@ -340,27 +367,31 @@ function buscarNoDeck(tipo, spec){
 	selecionando.baralho = false;
 	document.getElementById('ingame-veil').style.display = "block";	
 	document.getElementById('ingame-big-card').style.display = "none";
+	document.getElementById('ingame-deep-info').style.display = "none";
 	document.getElementById('busca-container').style.display = "block";
 	document.getElementById('busca-container').innerHTML = "";
 	
 	for(var i = 0; i < jogo.jogador1.baralho.cartas.length; i++){
-		if(jogo.jogador1.baralho.cartas[i].carta.tipo_carta == tipo){
-			if(tipo == "ARMA"){
-				if(jogo.jogador1.baralho.cartas[i].carta.tipo_arma == spec){
-					var createdCartinha = document.createElement("div");
-					createdCartinha.setAttribute("class", "ingame-card-select");
-					createdCartinha.style.background = "url(img/cards/" + jogo.jogador1.baralho.cartas[i].carta.id + ".jpg) no-repeat";
-					createdCartinha.style.backgroundSize = "100%";
-					var carta = jogo.jogador1.baralho.cartas[i];
-					createdCartinha.addEventListener("click", function(){ adicionaDeckMao(jogo.jogador1, carta); });
-					document.getElementById('busca-container').appendChild(createdCartinha);
+		(function(){
+			if(jogo.jogador1.baralho.cartas[i].carta.tipo_carta == tipo){
+				if(tipo == "ARMA"){
+					if(jogo.jogador1.baralho.cartas[i].carta.tipo_arma == spec){
+						var carta = jogo.jogador1.baralho.cartas[i];
+						var createdCartinha = document.createElement("div");
+						createdCartinha.setAttribute("class", "ingame-card-select");
+						createdCartinha.setAttribute("id", carta.id_div + "search");
+						createdCartinha.style.background = "url(img/cards/" + jogo.jogador1.baralho.cartas[i].carta.id + ".jpg) no-repeat";
+						createdCartinha.style.backgroundSize = "100%";		
+						createdCartinha.addEventListener("click", function(){ adicionaDeckMao(jogo.jogador1, carta, i) });
+						document.getElementById('busca-container').appendChild(createdCartinha);
+					}
 				}
 			}
-		}
+		}());
 	}
 }
 
-function adicionaDeckMao(jogador, carta){
+function adicionaDeckMao(jogador, carta,i){
 	for(var i = 0; i < jogador.baralho.cartas.length; i++){
 		if(jogador.baralho.cartas[i] == carta){
 			jogador.baralho.cartas.splice(i, 1);
@@ -632,12 +663,6 @@ function enviarPraRecarga(jogador, carta){
 	jogador.divs.recarga.appendChild(createdCard);
 }
 
-function selecionarLine(line){
-	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
-		selecionando.line = line;		
-	}
-}
-
 function cancelarEscolha(){
 	escreveLog('Escolha cancelada!', 'e');
 	limparEscolha();
@@ -654,4 +679,99 @@ function limparEscolha(){
 	selecionando.baralho = null;
 	
 	escondeAtkMove();
+}
+
+
+// *************************** ANIMATIONS ******************
+function drawMagicDamage(dano, alvo){
+	var drawnEff = document.createElement("div");
+	drawnEff.style.position = "absolute";
+	drawnEff.style.width = "78px";
+	drawnEff.style.height = "78px";
+	drawnEff.style.zIndex = 75;
+	
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 39;
+	var y = local.offsetTop + parent.offsetTop + 44 - 39;
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (60);
+	}
+	
+	drawnEff.style.left = x + "px";
+	drawnEff.style.top = y + "px";
+	
+	console.log(local.parentElement.id);	
+	
+	document.getElementById('game-container').appendChild(drawnEff);
+	drawDamageTaken(dano, x, y);
+	
+	for(var i = 0; i <= 8; i++){
+		(function(j){
+			setTimeout(function(){
+				if(j < 8){
+					drawnEff.style.background = "url(img/jogo/sprites/m-damage" + j + ".png) no-repeat";
+					drawnEff.style.backgroundSize = "100%";
+				} else {
+					drawnEff.remove();
+				}
+			},j * 100);
+		}(i));
+	}
+}
+
+function drawPhysicalDamage(dano, alvo){
+	var drawnEff = document.createElement("div");
+	drawnEff.style.position = "absolute";
+	drawnEff.style.width = "78px";
+	drawnEff.style.height = "78px";
+	drawnEff.style.zIndex = 75;
+	
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 39;
+	var y = local.offsetTop + parent.offsetTop + 44 - 39;
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (60);
+	}
+	
+	drawnEff.style.left = x + "px";
+	drawnEff.style.top = y + "px";
+	
+	document.getElementById('game-container').appendChild(drawnEff);
+	drawDamageTaken(dano, x, y);
+	
+	for(var i = 0; i <= 6; i++){
+		(function(j){
+			setTimeout(function(){
+				if(j < 6){
+					drawnEff.style.background = "url(img/jogo/sprites/f-damage" + j + ".png) no-repeat";
+					drawnEff.style.backgroundSize = "100%";
+				} else {
+					drawnEff.remove();
+				}
+			},j * 125);
+		}(i));
+	}
+}
+
+function drawDamageTaken(dano, x, y){
+	var drawnDamageTxt = document.createElement("div");
+	drawnDamageTxt.setAttribute("class", "ingame-damage-txt");
+	drawnDamageTxt.innerHTML = "-" + dano;
+	drawnDamageTxt.style.left = (x + 30) + "px";
+	drawnDamageTxt.style.top = (y + 40)  + "px";
+	
+	document.getElementById('game-container').appendChild(drawnDamageTxt);
+	
+	setTimeout(function(){
+		drawnDamageTxt.style.left = (x + 100) + "px";
+		drawnDamageTxt.style.top = (y - 20)  + "px";
+		setTimeout(function(){
+			drawnDamageTxt.remove();
+		},1100);
+	}, 0);
+	
 }

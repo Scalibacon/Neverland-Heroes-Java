@@ -44,22 +44,30 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 	}
 	
 	switch(magia.carta.id){
-		case 12:
+		case 12: //Bola de fogo
 			escreveLog('Selecione o alvo...', 'a');
 			selecionando.alvo = false;
 			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){
-					if(alvoValido(magia, usuario, selecionando.alvo)){
+				if(selecionando.alvo){					
+					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){						
+						if(selecionando.alvo.line == "front"){
+							var alvo = selecionando.alvo.jogador.campo.front[selecionando.alvo.slot];
+						} else {
+							var alvo = selecionando.alvo.jogador.campo.back[selecionando.alvo.slot];
+						}
+						
+						var danoM = buscaAtributo(usuario, "POD");
+						
 						pagarMana(magia, usuario);
-						enviarPraRecarga(usuario_jogador, magia);
-						escreveLog("Causou um daninho");
+						causarDanoMagico(danoM, usuario, alvo);
+						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
 				}
-			},100);
-			
+			},100);			
 			break;
-		case 16:
+			
+		case 16: //Portal de um mundo paralelo
 			pagarMana(magia, usuario);
 			puxarCarta(usuario_jogador);
 			enviarPraRecarga(usuario_jogador, magia);
@@ -70,4 +78,11 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 
 function pagarMana(magia, usuario){
 	usuario.carta.mana_gasta += magia.carta.custo;
+}
+
+function causarDanoMagico(dano, usuario, alvo){
+	dano_em_si = dano - alvo.carta.resistencia;
+	alvo.carta.dano_recebido += dano_em_si;
+	escreveLog(alvo.carta.nome + " recebeu dano mágico = " + dano_em_si, "a");
+	drawMagicDamage(dano_em_si, alvo, "M");
 }

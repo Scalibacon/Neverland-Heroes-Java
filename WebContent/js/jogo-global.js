@@ -96,7 +96,7 @@ function separaCartas(cartas){
 	return cartas;
 }
 
-var ctrlDivId = 0;
+var ctrlIdDiv = 0;
 function atribuiValores(carta){
 	carta.carta.dano_recebido = 0;
 	carta.carta.mana_gasta = 0;
@@ -109,10 +109,18 @@ function atribuiValores(carta){
 	carta.arma = null;
 	carta.usouMagia = 0;
 	carta.ataques_disponiveis = 1;
-	carta.movimentos_disponiveis = 1;
-	carta.id_div = "ingame-card" + carta.carta.id + "-" + ctrlDivId;
-	ctrlDivId++;
+	recarregaMovimento(carta);
+	carta.id_div = "ingame-card" + carta.carta.id + "-" + ctrlIdDiv;
+	ctrlIdDiv++;
 	return carta;
+}
+
+function recarregaMovimento(carta){
+	if(carta.carta.id == 48 || carta.carta.id == 52 || carta.carta.id == 53){
+		carta.movimentos_disponiveis = 2;
+	} else {
+		carta.movimentos_disponiveis = 1;
+	}
 }
 
 function buscaAtributo(carta, atributo){

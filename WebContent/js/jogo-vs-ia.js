@@ -215,6 +215,19 @@ function equiparHeroi(arma, jogador, line, slot){
 	}	
 }
 
+function iniciaTurno(jogador){
+	for(var i = 0; i < jogador.campo.front.length; i++){
+		jogador.campo.front[i].usouMagia = false;
+		jogador.campo.front[i].ataques_disponiveis = 1;
+		recarregaMovimento(jogador.campo.front[i]);
+		//reseta efeitos
+	}
+}
+
+function foiDerrotado(usuario, alvo){
+	
+}
+
 function passarTurno(){
 	if(jogo.estado = gameStatus.JOGANDO){
 		alert('passou o turno');
@@ -225,14 +238,6 @@ function desistir(){
 	if(jogo.estado = gameStatus.JOGANDO){
 		alert("desistiu!");
 	}
-}
-
-function escolherUsuario(){
-	
-}
-
-function escolherAlvo(){
-	
 }
 
 function destruirHeroi(){
@@ -260,7 +265,7 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 	}
 }
 
-function alvoValido(magia, usuario, alvo){
+function alvoMagiaValido(magia, usuario, alvo){
 	return true;
 }
 
@@ -273,14 +278,6 @@ function usarConsumivel(){
 }
 
 function atacar(){
-	
-}
-
-function causarDanoMagico(){
-	
-}
-
-function causarDanoFisico(){
 	
 }
 
