@@ -49,7 +49,8 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			selecionando.alvo = false;
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){						
+					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
+						usuario.usouMagia += 1;
 						if(selecionando.alvo.line == "front"){
 							var alvo = selecionando.alvo.jogador.campo.front[selecionando.alvo.slot];
 						} else {
@@ -59,7 +60,8 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 						var danoM = buscaAtributo(usuario, "POD");
 						
 						pagarMana(magia, usuario);
-						causarDanoMagico(danoM, usuario, alvo);
+						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
+													
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
@@ -80,9 +82,46 @@ function pagarMana(magia, usuario){
 	usuario.carta.mana_gasta += magia.carta.custo;
 }
 
-function causarDanoMagico(dano, usuario, alvo){
-	dano_em_si = dano - alvo.carta.resistencia;
+function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
+	if(usuario_line == "front"){
+		var usuario = usuario_jogador.campo.front[usuario_slot];
+	} else {
+		var usuario = usuario_jogador.campo.back[usuario_slot];
+	}
+	
+	dano_em_si = dano - buscaAtributo(alvo, "DEF");
+	alvo.carta.dano_recebido += dano_em_si;
+	escreveLog(alvo.carta.nome + " recebeu dano físico = " + dano_em_si, "a");
+	drawPhysicalDamage(dano_em_si, alvo, "M");
+	
+	if(buscaAtributo(alvo, "HP") <= 0){
+		return true;
+	} else {
+		return false;
+	}	
+}
+
+function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
+	if(usuario_line == "front"){
+		var usuario = usuario_jogador.campo.front[usuario_slot];
+	} else {
+		var usuario = usuario_jogador.campo.back[usuario_slot];
+	}
+	
+	if(alvo_line == "front"){
+		var alvo = alvo_jogador.campo.front[alvo_slot];
+	} else {
+		var alvo = alvo_jogador.campo.back[alvo_slot];
+	}
+	
+	dano_em_si = dano - buscaAtributo(alvo, "RES");
 	alvo.carta.dano_recebido += dano_em_si;
 	escreveLog(alvo.carta.nome + " recebeu dano mágico = " + dano_em_si, "a");
-	drawMagicDamage(dano_em_si, alvo, "M");
+	drawMagicDamage(dano_em_si, usuario, alvo, "M");
+	
+	if(buscaAtributo(alvo, "HP") <= 0){
+		return true;
+	} else {
+		return false;
+	}	
 }

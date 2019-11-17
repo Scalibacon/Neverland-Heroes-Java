@@ -4,11 +4,15 @@ function startVsIa(){
 		type : 'post',
 		success : function(data) {
 			var jogador = JSON.parse(data);			
-			jogo.jogador1.jogador = jogador.jogador;			
+			jogo.jogador1.jogador = jogador.jogador;
+			jogo.jogador1.efeitos = [];
+			jogo.jogador1.estado = null;
 			jogo.jogador1.baralho = {campeao : atribuiValores(jogador.campeao), cartas : shuffle(separaCartas(jogador.cartas))};
 			jogo.jogador1.divs = {mao : null, front : null, back : null, recarga : null, descarte : null, deck : null};
 			
 			jogo.jogador2.jogador = oponente;
+			jogo.jogador2.efeitos = [];
+			jogo.jogador2.estado = null;
 			jogo.jogador2.baralho = {campeao : atribuiValores(oponente.baralho.campeao), cartas : shuffle(separaCartas(oponente.baralho.cartas))};
 			jogo.jogador2.divs = {mao : null, front : null, back : null, recarga : null, descarte : null, deck : null};
 			
@@ -39,7 +43,8 @@ function shuffle(cartas) {
 //*************** pseudo interfaces *************
 
 function startGame(isVsIA){	
-	jogo.estado = gameStatus.ESPERANDO;
+	jogo.jogador1.estado = game_status.ESPERANDO;
+	jogo.jogador2.estado = game_status.ESPERANDO;
 	
 	var delay = 500;	
 	
@@ -53,21 +58,9 @@ function startGame(isVsIA){
 	}, 1000 + 200);	
 	
 	if(jogo.iniciante == jogo.jogador1.jogador.id){
-		jogo.estado = gameStatus.JOGANDO;
+		jogo.jogador1.estado = game_status.JOGANDO;
 	} else {
-		jogo.estado = gameStatus.OBSERVANDO;	
-}
-
-function iniciaTurno(jogador){
-	if(jogador == jogo.jogador1){
-		jogo.estado = gameStatus.JOGANDO;		
-	} else {
-		jogo.estado = gameStatus.OBSERVANDO;
-	}
-	
-	if(jogo.turno == 0){
-		chamarCampeao(jogador);
-	}
+		jogo.jogador1.estado = game_status.OBSERVANDO;	
 }
 	
 function escolhePrimeiroJogador(isVsIA){
@@ -215,13 +208,79 @@ function equiparHeroi(arma, jogador, line, slot){
 	}	
 }
 
-function iniciaTurno(jogador){
-	for(var i = 0; i < jogador.campo.front.length; i++){
-		jogador.campo.front[i].usouMagia = false;
-		jogador.campo.front[i].ataques_disponiveis = 1;
-		recarregaMovimento(jogador.campo.front[i]);
-		//reseta efeitos
+function iniciaTurno(jogador){	
+	if(jogador == jogo.jogador1){
+		jogo.jogador1.estado = game_status.JOGANDO;	
+		jogo.jogador2.estado = game_status.OBSERVANDO;	
+	} else {
+		jogo.jogador1.estado = game_status.OBSERVANDO;
+		jogo.jogador2.estado = game_status.JOGANDO;	
 	}
+	
+	if(jogo.turno == 0){
+		chamarCampeao(jogador);
+	} else 
+	if(jogo.iniciante == jogador){
+			jogo.turno++;
+	}
+	
+	//reseta efeitos no começo do turno
+	for(var i = 0; i < 3; i++){
+		if(jogador.campo.front[i] != null){
+			var heroi = jogador.campo.front[i];
+			heroi.usouMagia = false;
+			heroi.ataques_disponiveis = 1;
+			heroi.foiAtacado = 0;
+			heroi.usouMagia = 0;
+			recarregaMovimento(heroi);
+		}
+		if(jogador.campo.back[i] != null){
+			
+		}
+	}
+	
+	//reduz a recarga em 1
+	for(var i = 0; i < jogador.recarga.length; i++){
+		reduzirRecarga(jogador, jogador.recarga[i]);
+	}
+}
+
+function reduzirRecarga(jogador, carta){
+	carta.recarga--;
+	if(recarga <= 0){
+		//tira da recarga e retorna pra mão
+	}
+}
+
+function desarmarHeroi(heroi){
+	heroi.arma = null;
+	heroi.arma_buff = {forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
+}
+
+function finalizaTurno(jogador){
+	//reseta efeitos no final do turno
+	for(var i = 0; i < 3; i++){
+		if(jogador.campo.front[i] != null){
+			var heroi = jogador.campo.front[i];
+			heroi.efeitos[18] = null;
+			heroi.efeitos[30] = null;
+			heroi.efeitos[58] = null;
+			
+			switch (heroi.carta.id){
+				case 45:
+					if(heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){
+						console.log("Cura geral");
+					}
+				break;
+				
+			}
+			
+		}
+		if(jogador.campo.back[i] != null){
+			
+		}
+	}
+	jogador.estado == game_status.OBSERVANDO;
 }
 
 function foiDerrotado(usuario, alvo){
@@ -229,23 +288,23 @@ function foiDerrotado(usuario, alvo){
 }
 
 function passarTurno(){
-	if(jogo.estado = gameStatus.JOGANDO){
-		alert('passou o turno');
+	if(jogo.jogador1.estado = game_status.JOGANDO){
+		//alert('passou o turno');
+		finalizaTurno(jogo.jogador1);
 	}
 }
 
 function desistir(){
-	if(jogo.estado = gameStatus.JOGANDO){
+	if(jogo.jogador1.estado = game_status.JOGANDO){
 		alert("desistiu!");
 	}
 }
 
-function destruirHeroi(){
+function destruirHeroi(jogador, line, slot){
 	
 }
 
 function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
-	console.log(usuario_jogador);
 	if(usuario_line == "front"){
 		var usuario = usuario_jogador.campo.front[usuario_slot];
 	} else {
@@ -267,22 +326,6 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 
 function alvoMagiaValido(magia, usuario, alvo){
 	return true;
-}
-
-function usarPostura(){
-	
-}
-
-function usarConsumivel(){
-	
-}
-
-function atacar(){
-	
-}
-
-function retornarPraMao(){
-	
 }
 
 

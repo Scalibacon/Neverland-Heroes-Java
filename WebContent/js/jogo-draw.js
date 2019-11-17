@@ -64,7 +64,7 @@ function mostraJogo(){
 	document.addEventListener("keydown", function(){
 		if(event.key === "Escape"){
 			escondeVeil();
-			if(jogo.estado == gameStatus.ESCOLHENDO){
+			if(jogo.jogador1.estado == game_status.ESCOLHENDO){
 				cancelarEscolha();
 			}
 		}
@@ -319,12 +319,12 @@ function mostraRecargas(jogador){
 }
 
 function selecionarLine(line){
-	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
+	if(jogo.jogador1.estado == game_status.ESCOLHENDO && selecionando.line == false){
 		selecionando.line = line;		
 	}
 }
 function destacaLine(line){
-	if(jogo.estado == gameStatus.ESCOLHENDO && selecionando.line == false){
+	if(jogo.jogador1.estado == game_status.ESCOLHENDO && selecionando.line == false){
 		line.style.cursor = "pointer";
 		line.style.boxShadow = "0px 0px 5px 3px orange";
 	} else {
@@ -363,7 +363,7 @@ function mostraCartona(carta){
 }
 
 function buscarNoDeck(tipo, spec){
-	jogo.estado = gameStatus.ESCOLHENDO;
+	jogo.jogador1.estado = game_status.ESCOLHENDO;
 	selecionando.baralho = false;
 	document.getElementById('ingame-veil').style.display = "block";	
 	document.getElementById('ingame-big-card').style.display = "none";
@@ -556,35 +556,73 @@ function drawArma(jogador, line, slot){
 
 function selecionaHeroiEmCampo(jogador, line, slot){
 	//do choicing stuff usuario / alvo / portador
-	if(jogo.estado == gameStatus.ESCOLHENDO){
-		if(selecionando.portador == false){
-			selecionando.portador = {jogador: jogador, line : line, slot : slot};
-		} else 
-		if(selecionando.usuario == false){
-			selecionando.usuario = {jogador: jogador, line : line, slot : slot};
-		} else 
+	if(jogo.jogador1.estado == game_status.ESCOLHENDO){
+		if(jogo.jogador1 == jogador){
+			if(selecionando.portador == false){
+				selecionando.portador = {jogador: jogador, line : line, slot : slot};
+			} else 
+			if(selecionando.usuario == false){
+				selecionando.usuario = {jogador: jogador, line : line, slot : slot};
+			}			
+		}
 		if(selecionando.alvo == false){
 			selecionando.alvo = {jogador: jogador, line : line, slot : slot};
 		}
 	} else {
+		if(jogo.jogador1 == jogador){
 		//possibilita mover/atacar
-		jogo.estado = gameStatus.ESCOLHENDO;
-		selecionando.opcao = false;			
-		mostraAtkMove(line, slot);		
-		if(line == "front"){
-			var carta = jogador.campo.front[slot];
-		} else {
-			var carta = jogador.campo.back[slot];
-		}
-		
-		if(carta.movimentos_disponiveis <= 0){
-			document.getElementById('move-btn').disabled = "true";
-			document.getElementById('move-btn').style.filter = "grayscale(100%)";
-		} else {		
-			document.getElementById('move-btn').addEventListener("click", function(){ moverHeroi(jogador, line, slot); });
-			document.getElementById('move-btn').style.filter = "grayscale(0%)";
+			jogo.jogador1.estado = game_status.ESCOLHENDO;
+			selecionando.opcao = false;			
+			mostraAtkMove(line, slot);		
+			if(line == "front"){
+				var carta = jogador.campo.front[slot];
+			} else {
+				var carta = jogador.campo.back[slot];
+			}
+			
+			if(carta.ataques_disponiveis <= 0){
+				document.getElementById('atk-btn').disabled = "true";
+				document.getElementById('atk-btn').style.filter = "grayscale(100%)";
+			} else {		
+				document.getElementById('atk-btn').addEventListener("click", function(){ atacar(jogador, line, slot); });
+				document.getElementById('atk-btn').style.filter = "grayscale(0%)";
+			}
+			
+			if(carta.movimentos_disponiveis <= 0){
+				document.getElementById('move-btn').disabled = "true";
+				document.getElementById('move-btn').style.filter = "grayscale(100%)";
+			} else {		
+				document.getElementById('move-btn').addEventListener("click", function(){ moverHeroi(jogador, line, slot); });
+				document.getElementById('move-btn').style.filter = "grayscale(0%)";
+			}
 		}
 	}
+}
+
+function atacar(jogador, line, slot){
+	if(line == "front"){
+		var atacante = jogador.campo.front[slot];
+	} else {
+		var atacante = jogador.campo.back[slot];
+	}
+	jogo.jogador1.estado = game_status.ESCOLHENDO;	
+	escreveLog('Selecione o alvo do ataque...', 'a');
+	selecionando.alvo = false;
+	interval_selecionando = setInterval(function(){
+		if(selecionando.alvo){
+			if(selecionando.alvo.line == "front"){
+				var alvo = selecionando.alvo.jogador.campo.front[selecionando.alvo.slot];
+			} else {
+				var alvo = selecionando.alvo.jogador.campo.back[selecionando.alvo.slot];
+			}
+			
+			//Validar ataque
+			
+			escreveLog(alvo.carta.nome + " foi atacado", 'a');
+			limparEscolha();
+		}
+	},100);
+	atacante.ataques_disponiveis--;
 }
 
 function escondeAtkMove(){
@@ -594,9 +632,9 @@ function escondeAtkMove(){
 
 var interval_selecionando;
 function selecionarCartaNaMao(carta){
-	if(jogo.estado == gameStatus.JOGANDO){
+	if(jogo.jogador1.estado == game_status.JOGANDO){
 		limparEscolha();
-		jogo.estado = gameStatus.ESCOLHENDO;		
+		jogo.jogador1.estado = game_status.ESCOLHENDO;		
 		var div_selecionada = document.getElementById(carta.id_div);
 		switch(carta.carta.tipo_carta){
 			case "HEROI":
@@ -669,7 +707,7 @@ function cancelarEscolha(){
 }
 
 function limparEscolha(){
-	jogo.estado = gameStatus.JOGANDO;
+	jogo.jogador1.estado = game_status.JOGANDO;
 	clearInterval(interval_selecionando);
 	selecionando.portador = null;
 	selecionando.usuario = null;
@@ -683,7 +721,7 @@ function limparEscolha(){
 
 
 // *************************** ANIMATIONS ******************
-function drawMagicDamage(dano, alvo){
+function drawMagicDamage(dano, usuario, alvo){
 	var drawnEff = document.createElement("div");
 	drawnEff.style.position = "absolute";
 	drawnEff.style.width = "78px";
@@ -700,12 +738,15 @@ function drawMagicDamage(dano, alvo){
 	}
 	
 	drawnEff.style.left = x + "px";
-	drawnEff.style.top = y + "px";
-	
-	console.log(local.parentElement.id);	
+	drawnEff.style.top = y + "px";	
 	
 	document.getElementById('game-container').appendChild(drawnEff);
 	drawDamageTaken(dano, x, y);
+	
+	document.getElementById(usuario.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,0,255,0.75)";
+	if(usuario.arma != null){
+		document.getElementById(usuario.arma.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,0,255,0.75)";
+	}
 	
 	for(var i = 0; i <= 8; i++){
 		(function(j){
@@ -715,13 +756,17 @@ function drawMagicDamage(dano, alvo){
 					drawnEff.style.backgroundSize = "100%";
 				} else {
 					drawnEff.remove();
+					document.getElementById(usuario.id_div).style.boxShadow = "none";
+					if(usuario.arma != null){
+						document.getElementById(usuario.arma.id_div).style.boxShadow = "none";
+					}
 				}
-			},j * 100);
+			},100 + j * 100);
 		}(i));
 	}
 }
 
-function drawPhysicalDamage(dano, alvo){
+function drawPhysicalDamage(dano, usuario, alvo){
 	var drawnEff = document.createElement("div");
 	drawnEff.style.position = "absolute";
 	drawnEff.style.width = "78px";
@@ -743,6 +788,11 @@ function drawPhysicalDamage(dano, alvo){
 	document.getElementById('game-container').appendChild(drawnEff);
 	drawDamageTaken(dano, x, y);
 	
+	document.getElementById(usuario.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,172,63,0.75)";
+	if(usuario.arma != null){
+		document.getElementById(usuario.arma.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,172,63,0.75)";
+	}
+	
 	for(var i = 0; i <= 6; i++){
 		(function(j){
 			setTimeout(function(){
@@ -751,6 +801,10 @@ function drawPhysicalDamage(dano, alvo){
 					drawnEff.style.backgroundSize = "100%";
 				} else {
 					drawnEff.remove();
+					document.getElementById(usuario.id_div).style.boxShadow = "none";
+					if(usuario.arma != null){
+						document.getElementById(usuario.arma.id_div).style.boxShadow = "none";
+					}
 				}
 			},j * 125);
 		}(i));

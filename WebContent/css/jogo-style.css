@@ -646,6 +646,7 @@
 	width:calc(370px / 6);
 	height:calc(530px / 6);
 	cursor:pointer;
+	transition: box-shadow 0.2s ease;
 }
 .ingame-damage-txt{
 	position:absolute;

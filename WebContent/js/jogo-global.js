@@ -1,5 +1,5 @@
 //estados do jogador
-var gameStatus = {
+var game_status = {
 		ESPERANDO : 0,
 		JOGANDO : 1,
 		ESCOLHENDO : 2,
@@ -10,7 +10,6 @@ var gameStatus = {
 var jogo = {
 		tipo : 0,
 		turno : 0,
-		estado : gameStatus.ESPERANDO,
 		iniciante : null,
 		
 		jogador1 : {
@@ -107,7 +106,9 @@ function atribuiValores(carta){
 	carta.buff = {forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
 	carta.arma_buff = {forca : 0, poder : 0, defesa : 0, resistencia : 0, critico : 0, esquiva : 0};
 	carta.arma = null;
+	carta.efeitos = [];
 	carta.usouMagia = 0;
+	carta.foiAtacado = 0;
 	carta.ataques_disponiveis = 1;
 	recarregaMovimento(carta);
 	carta.id_div = "ingame-card" + carta.carta.id + "-" + ctrlIdDiv;
