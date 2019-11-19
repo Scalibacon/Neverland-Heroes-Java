@@ -156,7 +156,7 @@ function buscaAtributo(carta, atributo){
 			break;
 	}
 	
-	valor += buscaFieldAlter(atributo);
+	valor += buscaFieldAlter(carta, atributo);
 	
 	if(valor < 0){
 		valor = 0;

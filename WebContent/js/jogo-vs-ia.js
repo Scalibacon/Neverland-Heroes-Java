@@ -304,6 +304,56 @@ function destruirHeroi(jogador, line, slot){
 	
 }
 
+function atacar(jogador, line, slot){
+	if(line == "front"){
+		var atacante = jogador.campo.front[slot];
+	} else {
+		var atacante = jogador.campo.back[slot];
+	}
+	jogo.jogador1.estado = game_status.ESCOLHENDO;	
+	escreveLog('Selecione o alvo do ataque...', 'a');
+	selecionando.alvo = false;
+	interval_selecionando = setInterval(function(){
+		if(selecionando.alvo){
+			if(selecionando.alvo.line == "front"){
+				var alvo = selecionando.alvo.jogador.campo.front[selecionando.alvo.slot];
+			} else {
+				var alvo = selecionando.alvo.jogador.campo.back[selecionando.alvo.slot];
+			}
+			
+			//Validar ataque
+			var podeAtacar = true;
+			if(line == "front"){
+				//validar efeitos depois
+				if(selecionando.alvo.line == "back"){
+					console.log(atacante);
+					if(atacante.arma == null || atacante.arma.carta.tipo_arma != "ARCO"){
+						escreveLog('O alvo está muito distante!', 'e');
+						podeAtacar = false;
+					}
+				}
+			} else {
+				if(selecionando.alvo.line == "front"){
+					if(atacante.arma == null || atacante.arma.carta.tipo_arma != "ARCO"){
+						escreveLog('O alvo está muito distante!', 'e');
+						podeAtacar = false;
+					}
+				} else {
+					escreveLog('O alvo está muito distante!', 'e');
+					podeAtacar = false;
+				}
+			}
+			
+			if(podeAtacar){
+				escreveLog(alvo.carta.nome + " foi atacado por ", + alvo.carta.nome + 'a');
+				efeitoAtaque(jogador, line, slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
+				atacante.ataques_disponiveis--;
+			}
+			limparEscolha();
+		}
+	},100);	
+}
+
 function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 	if(usuario_line == "front"){
 		var usuario = usuario_jogador.campo.front[usuario_slot];

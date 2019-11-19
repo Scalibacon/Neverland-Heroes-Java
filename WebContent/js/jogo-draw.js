@@ -453,6 +453,7 @@ function escreveLog(texto, tipo){
 			document.getElementById('ingame-chat').innerHTML += "<p class='msg-info'>" + texto + "</p>";
 			break;
 	}
+	$("#ingame-chat").scrollTop($("#ingame-chat")[0].scrollHeight);
 }
 
 //****************************************************************************************************************
@@ -597,32 +598,6 @@ function selecionaHeroiEmCampo(jogador, line, slot){
 			}
 		}
 	}
-}
-
-function atacar(jogador, line, slot){
-	if(line == "front"){
-		var atacante = jogador.campo.front[slot];
-	} else {
-		var atacante = jogador.campo.back[slot];
-	}
-	jogo.jogador1.estado = game_status.ESCOLHENDO;	
-	escreveLog('Selecione o alvo do ataque...', 'a');
-	selecionando.alvo = false;
-	interval_selecionando = setInterval(function(){
-		if(selecionando.alvo){
-			if(selecionando.alvo.line == "front"){
-				var alvo = selecionando.alvo.jogador.campo.front[selecionando.alvo.slot];
-			} else {
-				var alvo = selecionando.alvo.jogador.campo.back[selecionando.alvo.slot];
-			}
-			
-			//Validar ataque
-			
-			escreveLog(alvo.carta.nome + " foi atacado", 'a');
-			limparEscolha();
-		}
-	},100);
-	atacante.ataques_disponiveis--;
 }
 
 function escondeAtkMove(){

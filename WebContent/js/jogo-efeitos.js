@@ -30,10 +30,37 @@ function checaPericia(heroi){
 	return 0;
 }
 
-function buscaFieldAlter(atributo){
+function buscaFieldAlter(carta, atributo){
 	var valor = 0;
 	
 	return valor;
+}
+
+function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot){
+	if(atacante_line == "front"){
+		var atacante = atacante_jogador.campo.front[atacante_slot];
+	} else {
+		var atacante = atacante_jogador.campo.back[atacante_slot];
+	}
+	
+	if(alvo_line == "front"){
+		var alvo = alvo_jogador.campo.front[alvo_slot];
+	} else {
+		var alvo = alvo_jogador.campo.back[alvo_slot];
+	}
+	
+	var danoF = buscaAtributo(atacante, "FOR");
+	
+	switch(atacante.carta.id){
+	
+	}
+	
+	switch(alvo.carta.id){
+	
+	}
+	
+	causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+	
 }
 
 function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
@@ -89,10 +116,19 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 		var usuario = usuario_jogador.campo.back[usuario_slot];
 	}
 	
+	if(alvo_line == "front"){
+		var alvo = alvo_jogador.campo.front[alvo_slot];
+	} else {
+		var alvo = alvo_jogador.campo.back[alvo_slot];
+	}
+	
 	dano_em_si = dano - buscaAtributo(alvo, "DEF");
+	if(dano_em_si <= 0){
+		dano_em_si = 0;
+	}
 	alvo.carta.dano_recebido += dano_em_si;
 	escreveLog(alvo.carta.nome + " recebeu dano físico = " + dano_em_si, "a");
-	drawPhysicalDamage(dano_em_si, alvo, "M");
+	drawPhysicalDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo, "HP") <= 0){
 		return true;
@@ -115,6 +151,9 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	}
 	
 	dano_em_si = dano - buscaAtributo(alvo, "RES");
+	if(dano_em_si <= 0){
+		dano_em_si = 0;
+	}
 	alvo.carta.dano_recebido += dano_em_si;
 	escreveLog(alvo.carta.nome + " recebeu dano mágico = " + dano_em_si, "a");
 	drawMagicDamage(dano_em_si, usuario, alvo, "M");
