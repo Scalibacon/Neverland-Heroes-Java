@@ -266,13 +266,21 @@ function desenhaCampo(){
 	var createdDescarte1 = document.createElement("div");
 	createdDescarte1.setAttribute("class", "ingame-descarte");
 	createdDescarte1.setAttribute("id", "descarte-jogador");
+	var descarteIcon = document.createElement("div");
+	descarteIcon.setAttribute("class", "ingame-descarte-icon");
+	createdDescarte1.appendChild(descarteIcon);
 	jogo.jogador1.divs.descarte = createdDescarte1;
+	createdDescarte1.addEventListener("click", function(){ mostraDescarte(jogo.jogador1); })
 	document.getElementById('game-container').appendChild(createdDescarte1);
 	
 	var createdDescarte2 = document.createElement("div");
 	createdDescarte2.setAttribute("class", "ingame-descarte");
 	createdDescarte2.setAttribute("id", "descarte-oponente");
+	var descarteIcon2 = document.createElement("div");
+	descarteIcon2.setAttribute("class", "ingame-descarte-icon");
+	createdDescarte2.appendChild(descarteIcon2);
 	jogo.jogador2.divs.descarte = createdDescarte2;
+	createdDescarte2.addEventListener("click", function(){ mostraDescarte(jogo.jogador2); })
 	document.getElementById('game-container').appendChild(createdDescarte2);
 	
 	//****************************** Pilha de recarga ************************************
@@ -318,6 +326,22 @@ function mostraRecargas(jogador){
 	}
 }
 
+function mostraDescarte(jogador){
+	document.getElementById('ingame-veil').style.display = "block";	
+	document.getElementById('ingame-big-card').style.display = "none";
+	document.getElementById('ingame-deep-info').style.display = "none";
+	document.getElementById('busca-container').style.display = "block";
+	document.getElementById('busca-container').innerHTML = "";
+	
+	for(var i = 0; i < jogador.descarte.length; i++){
+		var createdCard = document.createElement("div");
+		createdCard.setAttribute("class", "ingame-card-select");
+		createdCard.style.background = "url(img/cards/" + jogador.descarte[i].carta.id + ".jpg) no-repeat";
+		createdCard.style.backgroundSize = "100%";
+		document.getElementById('busca-container').appendChild(createdCard);
+	}
+}
+
 function selecionarLine(line){
 	if(jogo.jogador1.estado == game_status.ESCOLHENDO && selecionando.line == false){
 		selecionando.line = line;		
@@ -339,27 +363,44 @@ function removeDestaqueLine(line){
 function escondeVeil(){
 	document.getElementById('ingame-veil').style.display = "none";
 }
+
 function mostraCartona(carta){
 	document.getElementById('busca-container').style.display = "none";
 	document.getElementById('ingame-veil').style.display = "block";	
+	document.getElementById('ingame-deep-info').style.display = "none";
 	document.getElementById('ingame-big-card').style.display = "block";
-	document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";
+	document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";	
+	document.getElementById('ingame-big-card').style.backgroundSize = "100%";	
+}
+
+function mostraCartonaCampo(jogador, line, slot){
+	if(line == "front"){
+		var carta = jogador.campo.front[slot];
+	} else {
+		var carta = jogador.campo.back[slot];
+	}
+	
+	document.getElementById('busca-container').style.display = "none";
+	document.getElementById('ingame-veil').style.display = "block";	
+	document.getElementById('ingame-big-card').style.display = "block";
+	document.getElementById('ingame-big-card').style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";	
+	document.getElementById('ingame-big-card').style.backgroundSize = "100%";
+	
 	if(carta.carta.tipo_carta == "HEROI"){
 		document.getElementById('ingame-deep-info').style.display = "block";
 		document.getElementById('ingame-deep-info').innerHTML = 
-			"HP: " + buscaAtributo(carta, "HP") + 
-			"<br>MANA: " + buscaAtributo(carta, "MANA") +
-			"<br>PROT: " + buscaAtributo(carta, "PROT") + 
-			"<br>FOR: " + buscaAtributo(carta, "FOR") + 
-			"<br>POD: " + buscaAtributo(carta, "POD") + 
-			"<br>DEF: " + buscaAtributo(carta, "DEF") + 
-			"<br>RES: " + buscaAtributo(carta, "RES") + 
-			"<br>CRIT: " + buscaAtributo(carta, "CRIT") +
-			"<br>ESQ: " + buscaAtributo(carta, "ESQ");
+			"HP: " + buscaAtributo(jogador, line, slot, "HP") + 
+			"<br>MANA: " + buscaAtributo(jogador, line, slot, "MANA") +
+			"<br>PROT: " + buscaAtributo(jogador, line, slot, "PROT") + 
+			"<br>FOR: " + buscaAtributo(jogador, line, slot, "FOR") + 
+			"<br>POD: " + buscaAtributo(jogador, line, slot, "POD") + 
+			"<br>DEF: " + buscaAtributo(jogador, line, slot, "DEF") + 
+			"<br>RES: " + buscaAtributo(jogador, line, slot, "RES") + 
+			"<br>CRIT: " + buscaAtributo(jogador, line, slot, "CRIT") +
+			"<br>ESQ: " + buscaAtributo(jogador, line, slot, "ESQ");
 	} else {
 		document.getElementById('ingame-deep-info').style.display = "none";
 	}
-	document.getElementById('ingame-big-card').style.backgroundSize = "100%";
 }
 
 function buscarNoDeck(tipo, spec){
@@ -478,7 +519,6 @@ function drawPuxarCarta(jogador, carta){
 	jogador.divs.mao.appendChild(createdCard);
 	
 	atualizaQtdeDeck(jogador);
-	return 200;
 }
 
 function atualizaQtdeDeck(jogador){
@@ -512,7 +552,7 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 	createdHeroi.style.backgroundSize = "100%";	
 	createdHeroi.style.left = x + "px";
 	createdHeroi.style.top = "1px";
-	createdHeroi.addEventListener("contextmenu", function(){ mostraCartona(heroi); event.preventDefault(); });
+	createdHeroi.addEventListener("contextmenu", function(){ mostraCartonaCampo(jogador, line, slot); event.preventDefault(); });
 	createdHeroi.addEventListener("click", function(){ selecionaHeroiEmCampo(jogador, line, slot); });	
 	container.appendChild(createdHeroi);	
 	
@@ -670,7 +710,7 @@ function enviarPraRecarga(jogador, carta){
 	
 	var createdCard = document.createElement("div");
 	createdCard.setAttribute("class", "ingame-carta");
-	createdCard.setAttribute("id", carta.div_id);
+	createdCard.setAttribute("id", carta.id_div);
 	createdCard.style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";		
 	createdCard.style.backgroundSize = "100%";
 	jogador.divs.recarga.appendChild(createdCard);
@@ -786,6 +826,51 @@ function drawPhysicalDamage(dano, usuario, alvo){
 	}
 }
 
+function drawTrueDamage(dano, usuario, alvo){
+	var drawnEff = document.createElement("div");
+	drawnEff.style.position = "absolute";
+	drawnEff.style.width = "107px";
+	drawnEff.style.height = "107px";
+	drawnEff.style.zIndex = 75;
+	
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
+	var y = local.offsetTop + parent.offsetTop + 44 - 53;
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (70);
+	}
+	
+	drawnEff.style.left = x + "px";
+	drawnEff.style.top = y + "px";
+	
+	document.getElementById('game-container').appendChild(drawnEff);
+	drawDamageTaken(dano, x, y);
+	
+	document.getElementById(usuario.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,172,63,0.75)";
+	if(usuario.arma != null){
+		document.getElementById(usuario.arma.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,172,63,0.75)";
+	}
+	
+	for(var i = 0; i <= 5; i++){
+		(function(j){
+			setTimeout(function(){
+				if(j < 5){
+					drawnEff.style.background = "url(img/jogo/sprites/t-damage" + j + ".png) no-repeat";
+					drawnEff.style.backgroundSize = "100%";
+				} else {
+					drawnEff.remove();
+					document.getElementById(usuario.id_div).style.boxShadow = "none";
+					if(usuario.arma != null){
+						document.getElementById(usuario.arma.id_div).style.boxShadow = "none";
+					}
+				}
+			},j * 125);
+		}(i));
+	}
+}
+
 function drawDamageTaken(dano, x, y){
 	var drawnDamageTxt = document.createElement("div");
 	drawnDamageTxt.setAttribute("class", "ingame-damage-txt");
@@ -803,4 +888,22 @@ function drawDamageTaken(dano, x, y){
 		},1100);
 	}, 0);
 	
+}
+
+function drawDestruirCarta(jogador, carta){
+	var div_carta = document.getElementById(carta.id_div);
+	div_carta.style.transition = "all 1.5s ease";
+	div_carta.style.transform = "rotate(540deg)";
+	div_carta.style.width = "0px";
+	div_carta.style.width = "0px";
+	
+	var createdCard = document.createElement("div");
+	createdCard.setAttribute("class", "ingame-carta");
+	createdCard.setAttribute("id", carta.id_div);
+	createdCard.style.background = "url(img/cards/" + carta.carta.id + ".jpg) no-repeat";		
+	createdCard.style.backgroundSize = "100%";
+	setTimeout(function(){
+		div_carta.remove();
+		jogador.divs.descarte.appendChild(createdCard);
+	},1500);	
 }

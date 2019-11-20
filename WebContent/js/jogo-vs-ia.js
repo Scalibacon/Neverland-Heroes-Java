@@ -5,19 +5,14 @@ function startVsIa(){
 		success : function(data) {
 			var jogador = JSON.parse(data);			
 			jogo.jogador1.jogador = jogador.jogador;
-			jogo.jogador1.efeitos = [];
-			jogo.jogador1.estado = null;
 			jogo.jogador1.baralho = {campeao : atribuiValores(jogador.campeao), cartas : shuffle(separaCartas(jogador.cartas))};
 			jogo.jogador1.divs = {mao : null, front : null, back : null, recarga : null, descarte : null, deck : null};
 			
 			jogo.jogador2.jogador = oponente;
-			jogo.jogador2.efeitos = [];
-			jogo.jogador2.estado = null;
 			jogo.jogador2.baralho = {campeao : atribuiValores(oponente.baralho.campeao), cartas : shuffle(separaCartas(oponente.baralho.cartas))};
 			jogo.jogador2.divs = {mao : null, front : null, back : null, recarga : null, descarte : null, deck : null};
 			
 			jogo.tipo = 0;
-			jogo.iniciante = jogador.jogador.id;
 			carregaTelaInicial(true);
 		},
 		error : function() {
@@ -239,17 +234,22 @@ function iniciaTurno(jogador){
 		}
 	}
 	
-	//reduz a recarga em 1
-	for(var i = 0; i < jogador.recarga.length; i++){
-		reduzirRecarga(jogador, jogador.recarga[i]);
-	}
+	reduzirRecarga(jogador);
 }
 
-function reduzirRecarga(jogador, carta){
-	carta.recarga--;
-	if(recarga <= 0){
-		//tira da recarga e retorna pra mão
-	}
+function reduzirRecarga(jogador){
+	for(var i = 0; i < jogador.recarga.length; i++){
+		jogador.recarga[i].recarga--;
+		if(jogador.recarga[i].recarga <= 0){
+			var carta = jogador.recarga[i];
+			var div_carta = document.getElementById(carta.id_div);
+			jogador.recarga.splice(i,1);
+			div_carta.remove();
+			jogador.mao.push(carta);
+			drawPuxarCarta(jogador, carta);
+			i--;
+		}
+	}	
 }
 
 function desarmarHeroi(heroi){
@@ -298,10 +298,6 @@ function desistir(){
 	if(jogo.jogador1.estado = game_status.JOGANDO){
 		alert("desistiu!");
 	}
-}
-
-function destruirHeroi(jogador, line, slot){
-	
 }
 
 function atacar(jogador, line, slot){
@@ -361,7 +357,7 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		var usuario = usuario_jogador.campo.back[usuario_slot];
 	}
 	
-	if(buscaAtributo(usuario,"MANA") >= magia.carta.custo){
+	if(buscaAtributo(usuario_jogador, usuario_line, usuario_slot,"MANA") >= magia.carta.custo){
 		if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO"){
 			efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
 		} else {
@@ -371,6 +367,49 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 	} else {
 		escreveLog('Mana Insuficiente!', 'e');
 		limparEscolha();
+	}
+}
+
+function destruirHeroi(jogador, line, slot){
+	if(line == "front"){
+		var heroi = jogador.campo.front[slot];		
+	} else {
+		var heroi = jogador.campo.back[slot];		
+	}
+	
+	if(heroi.arma != null){		
+		destruirArma(jogador, line, slot, "true");
+	}
+	
+	if(line == "front"){
+		jogador.campo.front[slot] = null;
+	} else {
+		jogador.campo.back[slot] = null;
+	}
+	
+	jogador.descarte.push(heroi);	
+	escreveLog(heroi.carta.nome + ' foi derrotado!', 'a');	
+	drawDestruirCarta(jogador, heroi);	
+}
+
+function destruirArma(jogador, line, slot, porBatalha){
+	if(line == "front"){
+		var heroi = jogador.campo.front[slot];
+	} else {
+		var heroi = jogador.campo.back[slot];
+	}
+	
+	var arma = heroi.arma;
+	
+	if(arma.carta.id == 87){
+		//retorna pra mão
+	} else 
+	if(porBatalha && heroi.carta.id == 29){
+		//retorna pra mão
+	} else {
+		heroi.arma = null;
+		jogador.descarte.push(arma);
+		drawDestruirCarta(jogador, arma);
 	}
 }
 

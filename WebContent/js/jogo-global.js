@@ -22,7 +22,8 @@ var jogo = {
 			},			
 			descarte : [],
 			recarga : [],
-			efeitos : []
+			efeitos : [],
+			estado : null
 		},
 		
 		jogador2 : {
@@ -35,7 +36,8 @@ var jogo = {
 			},
 			descarte : [],
 			recarga : [],	
-			efeitos : []
+			efeitos : [],
+			estado : null
 		}			
 }
 
@@ -124,7 +126,13 @@ function recarregaMovimento(carta){
 	}
 }
 
-function buscaAtributo(carta, atributo){
+function buscaAtributo(jogador, line, slot, atributo){
+	if(line == "front"){
+		var carta = jogador.campo.front[slot];
+	} else {
+		var carta = jogador.campo.back[slot];
+	}
+	
 	var valor;
 	switch(atributo){
 		case "HP":
