@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import dao.JogadorDAO;
 import dao.JogadorDAOImpl;
 import model.Jogador;
+import model.TipoJogador;
 
 @WebServlet("/loginServlet")
 public class LoginServlet extends HttpServlet {
@@ -21,6 +22,10 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String usuario = request.getParameter("usuario");
 		String senha = request.getParameter("senha");
+//		Jogador jogador = new Jogador();
+//		jogador.setUsuario(usuario);
+//		jogador.setId(2);
+//		jogador.setTipo(TipoJogador.ADMINISTRADOR);
 		HttpSession session = request.getSession();
 		JogadorDAO jDao = new JogadorDAOImpl();
 		Jogador jogador = jDao.buscaJogadorLogin(usuario, senha);
