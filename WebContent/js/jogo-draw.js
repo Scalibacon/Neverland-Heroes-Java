@@ -698,6 +698,10 @@ function selecionarCartaNaMao(carta){
 				break;
 			case "CONSUMIVEL":
 				escreveLog('Selecione o usuário...', 'a');
+				selecionando.usuario = false;
+				interval_selecionando = setInterval(function(){
+					
+				},100);
 				break;
 		}
 	}
@@ -873,8 +877,8 @@ function drawTrueDamage(dano, usuario, alvo){
 
 function drawDamageTaken(dano, x, y){
 	var drawnDamageTxt = document.createElement("div");
-	drawnDamageTxt.setAttribute("class", "ingame-damage-txt");
-	drawnDamageTxt.innerHTML = "-" + dano;
+	drawnDamageTxt.setAttribute("class", "ingame-float-txt ingame-hp-txt");
+	drawnDamageTxt.innerHTML = "-" + dano + " HP";
 	drawnDamageTxt.style.left = (x + 30) + "px";
 	drawnDamageTxt.style.top = (y + 40)  + "px";
 	
@@ -886,8 +890,61 @@ function drawDamageTaken(dano, x, y){
 		setTimeout(function(){
 			drawnDamageTxt.remove();
 		},1100);
-	}, 0);
+	}, 0);	
+}
+
+function drawDamageProtTaken(dano, alvo){
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
+	var y = local.offsetTop + parent.offsetTop + 44 - 53;
 	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (70);
+	}
+	
+	var drawnDamageTxt = document.createElement("div");
+	drawnDamageTxt.setAttribute("class", "ingame-float-txt ingame-prot-txt");
+	drawnDamageTxt.innerHTML = "-" + dano + " PROT";
+	drawnDamageTxt.style.left = (x + 30) + "px";
+	drawnDamageTxt.style.top = (y + 40)  + "px";
+	
+	document.getElementById('game-container').appendChild(drawnDamageTxt);
+	
+	setTimeout(function(){
+		drawnDamageTxt.style.left = (x - 100) + "px";
+		drawnDamageTxt.style.top = (y - 25)  + "px";
+		setTimeout(function(){
+			drawnDamageTxt.remove();
+		},1100);
+	}, 0);	
+}
+
+function drawManaPay(mana, alvo){
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
+	var y = local.offsetTop + parent.offsetTop + 44 - 53;
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (70);
+	}
+	
+	var drawnDamageTxt = document.createElement("div");
+	drawnDamageTxt.setAttribute("class", "ingame-float-txt ingame-mana-txt");
+	drawnDamageTxt.innerHTML = "-" + mana + " MANA";
+	drawnDamageTxt.style.left = (x + 30) + "px";
+	drawnDamageTxt.style.top = (y + 40)  + "px";
+	
+	document.getElementById('game-container').appendChild(drawnDamageTxt);
+	
+	setTimeout(function(){
+		drawnDamageTxt.style.left = (x - 100) + "px";
+		drawnDamageTxt.style.top = (y - 25)  + "px";
+		setTimeout(function(){
+			drawnDamageTxt.remove();
+		},1100);
+	}, 0);	
 }
 
 function drawDestruirCarta(jogador, carta){
@@ -906,4 +963,77 @@ function drawDestruirCarta(jogador, carta){
 		div_carta.remove();
 		jogador.divs.descarte.appendChild(createdCard);
 	},1500);	
+}
+
+function drawBuff(quantidade, alvo, atributo, isBuff){
+	var drawnEff = document.createElement("div");
+	drawnEff.style.position = "absolute";
+	drawnEff.style.width = "107px";
+	drawnEff.style.height = "107px";
+	drawnEff.style.zIndex = 75;
+	
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
+	var y = local.offsetTop + parent.offsetTop + 44 - 53;
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (70);
+	}
+	
+	drawnEff.style.left = x + "px";
+	drawnEff.style.top = y + "px";
+	
+	document.getElementById('game-container').appendChild(drawnEff);
+	drawBuffTxt(quantidade, alvo, atributo, isBuff);
+	
+	for(var i = 0; i <= 11; i++){
+		(function(j){
+			setTimeout(function(){
+				if(j < 11){
+					drawnEff.style.background = "url(img/jogo/sprites/buff" + j + ".png) no-repeat";
+					drawnEff.style.backgroundSize = "100%";
+				} else {
+					drawnEff.remove();
+				}
+			},j * 100);
+		}(i));
+	}
+}
+
+function drawBuffTxt(quantidade, alvo, atributo, isBuff){
+	var local = document.getElementById(alvo.id_div);
+	var parent = local.parentElement;
+	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
+	var y = local.offsetTop + parent.offsetTop + 44 - 53;
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x += (70);
+	}
+	
+	var drawnTxt = document.createElement("div");	
+	if(isBuff){
+		drawnTxt.setAttribute("class", "ingame-float-txt ingame-buff-txt");
+		drawnTxt.innerHTML = "+" + quantidade + " " + atributo;
+	} else {
+		drawnTxt.setAttribute("class", "ingame-float-txt ingame-debuff-txt");
+		drawnTxt.innerHTML = "-" + quantidade + " " + atributo;
+	}
+	drawnTxt.style.left = (x + 30) + "px";
+	drawnTxt.style.top = (y + 40)  + "px";
+	
+	document.getElementById('game-container').appendChild(drawnTxt);
+	
+	setTimeout(function(){
+		if(isBuff){
+			drawnTxt.style.left = (x + 50) + "px";
+			drawnTxt.style.top = (y - 15)  + "px";
+		} else {
+			drawnTxt.style.left = (x + 20) + "px";
+			drawnTxt.style.top = (y + 70)  + "px";
+		}
+		setTimeout(function(){
+			drawnTxt.remove();
+		},1100);
+	}, 0);	
 }

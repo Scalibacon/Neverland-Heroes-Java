@@ -283,10 +283,6 @@ function finalizaTurno(jogador){
 	jogador.estado == game_status.OBSERVANDO;
 }
 
-function foiDerrotado(usuario, alvo){
-	
-}
-
 function passarTurno(){
 	if(jogo.jogador1.estado = game_status.JOGANDO){
 		//alert('passou o turno');
@@ -322,7 +318,9 @@ function atacar(jogador, line, slot){
 			if(line == "front"){
 				//validar efeitos depois
 				if(selecionando.alvo.line == "back"){
-					console.log(atacante);
+					if(!verificaExistencia(selecionando.alvo.jogador, "front")){
+						escreveLog('Barra tá limpa!', 'a');
+					} else					
 					if(atacante.arma == null || atacante.arma.carta.tipo_arma != "ARCO"){
 						escreveLog('O alvo está muito distante!', 'e');
 						podeAtacar = false;
@@ -348,6 +346,36 @@ function atacar(jogador, line, slot){
 			limparEscolha();
 		}
 	},100);	
+}
+
+function verificaExistencia(jogador, line){
+	if(line == "front"){
+		for(var i = 0; i < 3; i++){
+			if(jogador.campo.front[i] != null){
+				return true;
+			}
+		}
+	} else 
+	if(line == "back"){
+		for(var i = 0; i < 3; i++){
+			if(jogador.campo.back[i] != null){
+				return true;
+			}
+		}
+	} else 
+	if(line == "all"){
+		for(var i = 0; i < 3; i++){
+			if(jogador.campo.front[i] != null){
+				return true;
+			}
+		}
+		for(var i = 0; i < 3; i++){
+			if(jogador.campo.back[i] != null){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){

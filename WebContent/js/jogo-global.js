@@ -88,7 +88,7 @@ var ctrlDivId = 2;
 function separaCartas(cartas){
 	for(var i = 0; i < cartas.length; i++){
 		for(var j = 1; j < cartas[i].quantidade; j++){
-			var carta = {carta : cartas[i].carta, quantidade : 1};
+			var carta = {carta : JSON.parse(JSON.stringify(cartas[i].carta)), quantidade : 1};
 			carta = atribuiValores(carta);
 			cartas.push(carta);			
 		}
