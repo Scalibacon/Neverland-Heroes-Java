@@ -111,7 +111,7 @@ function chamarHeroi(jogador, heroi, line, isTheChampion){
 		if(!isTheChampion){
 			removerCartaDaMao(jogador, heroi);
 		}
-		efeitoDeInvocacao(heroi);
+		efeitoDeInvocacao(jogador, line, slot);
 		return true;
 	}
 	return false;		
@@ -187,14 +187,11 @@ function moverHeroi(jogador, line, slot){
 }
 
 function equiparHeroi(arma, jogador, line, slot){
-	if(line == "front"){
-		var heroi = jogador.campo.front[slot];
-	} else {
-		var heroi = jogador.campo.back[slot];
-	}
+	var heroi = retornaCarta(jogador, line, slot);
+	
 	if(heroi.arma == null){
 		heroi.arma = arma;
-		efeitoAoEquipar(heroi);
+		efeitoAoEquipar(jogador, line, slot);
 		removerCartaDaMao(jogador, arma);
 		drawArma(jogador, line, slot);
 		return true;
@@ -297,11 +294,8 @@ function desistir(){
 }
 
 function atacar(jogador, line, slot){
-	if(line == "front"){
-		var atacante = jogador.campo.front[slot];
-	} else {
-		var atacante = jogador.campo.back[slot];
-	}
+	var atacante = retornaCarta(jogador, line, slot);
+	
 	jogo.jogador1.estado = game_status.ESCOLHENDO;	
 	escreveLog('Selecione o alvo do ataque...', 'a');
 	selecionando.alvo = false;
@@ -399,11 +393,7 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 }
 
 function destruirHeroi(jogador, line, slot){
-	if(line == "front"){
-		var heroi = jogador.campo.front[slot];		
-	} else {
-		var heroi = jogador.campo.back[slot];		
-	}
+	var heroi = retornaCarta(jogador, line, slot);		
 	
 	if(heroi.arma != null){		
 		destruirArma(jogador, line, slot, "true");
@@ -421,11 +411,7 @@ function destruirHeroi(jogador, line, slot){
 }
 
 function destruirArma(jogador, line, slot, porBatalha){
-	if(line == "front"){
-		var heroi = jogador.campo.front[slot];
-	} else {
-		var heroi = jogador.campo.back[slot];
-	}
+	var heroi = retornaCarta(jogador, line, slot);
 	
 	var arma = heroi.arma;
 	

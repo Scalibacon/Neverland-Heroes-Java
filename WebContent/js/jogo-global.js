@@ -127,11 +127,7 @@ function recarregaMovimento(carta){
 }
 
 function buscaAtributo(jogador, line, slot, atributo){
-	if(line == "front"){
-		var carta = jogador.campo.front[slot];
-	} else {
-		var carta = jogador.campo.back[slot];
-	}
+	var carta = retornaCarta(jogador, line, slot);	
 	
 	var valor;
 	switch(atributo){
@@ -171,4 +167,12 @@ function buscaAtributo(jogador, line, slot, atributo){
 	}
 	
 	return valor;
+}
+
+function retornaCarta(jogador, line, slot){
+	if(line == "front"){
+		return jogador.campo.front[slot];
+	} else {
+		return jogador.campo.back[slot];
+	}	
 }

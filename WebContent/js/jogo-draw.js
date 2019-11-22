@@ -621,7 +621,7 @@ function selecionaHeroiEmCampo(jogador, line, slot){
 				var carta = jogador.campo.back[slot];
 			}
 			
-			if(carta.ataques_disponiveis <= 0){
+			if(carta.ataques_disponiveis <= 0 || carta.efeitos[30] == true){
 				document.getElementById('atk-btn').disabled = "true";
 				document.getElementById('atk-btn').style.filter = "grayscale(100%)";
 			} else {		
