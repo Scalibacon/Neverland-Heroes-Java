@@ -374,11 +374,7 @@ function mostraCartona(carta){
 }
 
 function mostraCartonaCampo(jogador, line, slot){
-	if(line == "front"){
-		var carta = jogador.campo.front[slot];
-	} else {
-		var carta = jogador.campo.back[slot];
-	}
+	var carta = retornaCarta(jogador, line, slot);
 	
 	document.getElementById('busca-container').style.display = "none";
 	document.getElementById('ingame-veil').style.display = "block";	
@@ -564,9 +560,10 @@ function drawPosicionarHeroi(jogador, heroi, line, slot){
 }
 
 function drawArma(jogador, line, slot){	
+	var heroi = retornaCarta(jogador, line, slot);
+	
 	if(line == "front"){
 		var container = jogador.divs.front;
-		var heroi = jogador.campo.front[slot];
 		if(jogador == jogo.jogador1){
 			var x = card_positions.jogador_frontline[slot].x + 62;
 		} else {
@@ -574,7 +571,6 @@ function drawArma(jogador, line, slot){
 		}
 	} else {
 		var container = jogador.divs.back;
-		var heroi = jogador.campo.back[slot];
 		if(jogador == jogo.jogador1){
 			var x = card_positions.jogador_backline[slot].x + 62;
 		} else {
