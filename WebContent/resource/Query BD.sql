@@ -85,7 +85,8 @@ primary key (id_jogador, id_carta),
 foreign key (id_jogador) references jogador(id),
 foreign key (id_carta) references carta(id)
 )
-
+--insert into colecao_carta values(2,103,99)
+--update colecao_carta set quantidade = 99 where id_jogador = 2
 create table baralho(
 id_jogador int not null,
 nome_baralho varchar(100) not null,
@@ -145,7 +146,7 @@ foreign key (id2) references jogador(id),
 
 INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,partidas,vitorias,icone, conquistas)
 	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',18,300,99999,2,33,25,12, '1-2-3-4-5-6-7-')
---UPDATE jogador set dinheiro = 5000 where id = 4
+--UPDATE jogador set dinheiro = 99999999 where id = 2
 
 select * from carta
 select * from heroi

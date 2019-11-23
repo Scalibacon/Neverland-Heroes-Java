@@ -412,7 +412,7 @@ function buscarNoDeck(tipo, spec){
 		(function(){
 			if(jogo.jogador1.baralho.cartas[i].carta.tipo_carta == tipo){
 				if(tipo == "ARMA"){
-					if(jogo.jogador1.baralho.cartas[i].carta.tipo_arma == spec){
+					if(jogo.jogador1.baralho.cartas[i].carta.tipo_arma == spec || spec == "ALL"){
 						var carta = jogo.jogador1.baralho.cartas[i];
 						var createdCartinha = document.createElement("div");
 						createdCartinha.setAttribute("class", "ingame-card-select");
@@ -625,7 +625,7 @@ function selecionaHeroiEmCampo(jogador, line, slot){
 				document.getElementById('atk-btn').style.filter = "grayscale(0%)";
 			}
 			
-			if(carta.movimentos_disponiveis <= 0){
+			if(carta.movimentos_disponiveis <= 0 || carta.efeitos[58] == true){
 				document.getElementById('move-btn').disabled = "true";
 				document.getElementById('move-btn').style.filter = "grayscale(100%)";
 			} else {		
@@ -1021,13 +1021,10 @@ function drawBuffTxt(quantidade, alvo, atributo, isBuff){
 	document.getElementById('game-container').appendChild(drawnTxt);
 	
 	setTimeout(function(){
-		if(isBuff){
-			drawnTxt.style.left = (x + 50) + "px";
-			drawnTxt.style.top = (y - 15)  + "px";
-		} else {
-			drawnTxt.style.left = (x + 20) + "px";
-			drawnTxt.style.top = (y + 70)  + "px";
-		}
+		var randomX = Math.floor(Math.random() * 300) - 150;
+		var randomY = Math.floor(Math.random() * 300) - 150;
+		drawnTxt.style.left = (x + randomX) + "px";
+		drawnTxt.style.top = (y + randomY)  + "px";
 		setTimeout(function(){
 			drawnTxt.remove();
 		},1100);

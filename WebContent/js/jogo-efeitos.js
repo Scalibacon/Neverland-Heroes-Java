@@ -1,3 +1,7 @@
+document.write("<script type='text/javascript' src='js/ataque-efeitos.js'></script>");
+document.write("<script type='text/javascript' src='js/magia-efeitos.js'></script>");
+document.write("<script type='text/javascript' src='js/heroi-efeitos.js'></script>");
+
 function efeitoDeInvocacao(jogador, line, slot){
 	var heroi = retornaCarta(jogador, line, slot);
 	
@@ -44,277 +48,9 @@ function buscaFieldAlter(carta, atributo){
 	return valor;
 }
 
-function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot){
-	var atacante = retornaCarta(atacante_jogador, atacante_line, atacante_slot);
-	var alvo = retornaCarta(alvo_jogador, alvo_line, alvo_slot);	
-	
-	var danoF = buscaAtributo(atacante_jogador, atacante_line, atacante_slot, "FOR");
-	var foiCritico = critar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
-	var foiDesviado = desviar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
-	
-	switch(atacante.carta.id){
-	
-	}
-	
-	switch(alvo.carta.id){
-	
-	}
-	
-	if(!foiDesviado){
-		if(foiCritico){ //efeitos de crítico
-			danoF = danoF * 2;
-			escreveLog("O ataque foi um acerto crítico!", "a");
-			switch(atacante.carta.id){
-				case 5:
-					puxarCarta(atacante_jogador);
-					puxarCarta(atacante_jogador);
-				break;
-				case 42:
-					//Broadcast
-					var prot = 2;
-					for(var i = 0; i < 3; i++){
-						(function(j){
-							if(atacante_jogador.campo.front[j] != null){
-								buffar(prot, "PROT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "front", j);
-							}
-						}(i));
-					}
-					for(var i = 0; i < 3; i++){
-						(function(j){
-							if(atacante_jogador.campo.back[j] != null){
-								buffar(prot, "PROT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "back", j);
-							}
-						}(i));
-					}
-				break;
-			}
-		}
-		causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);		
-	} else {
-		escreveLog("O ataque foi esquivado!", "a");
-	}
-	
-}
 
-function desviar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot){
-	var atacante = retornaCarta(atacante_jogador, atacante_line, atacante_slot);
-	var alvo = retornaCarta(alvo_jogador, alvo_line, alvo_slot);
-	
-	if(alvo_jogador.efeitos[17] == true){ //gravidade zero
-		return false;
-	} else 
-	if(atacante.carta.id == 28 && atacante.efeitos[54] != true){ //yarne
-		return false;
-	}
-	
-	var desv_index = Math.floor(Math.random() * 20) + 1;
-	if(desv_index <= buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "ESQ")){
-		return true;
-	} else {
-		return false;
-	}
-}
 
-function critar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot){
-	var atacante = retornaCarta(atacante_jogador, atacante_line, atacante_slot);
-	var alvo = retornaCarta(alvo_jogador, alvo_line, alvo_slot);
-	
-	var crit_index = Math.floor(Math.random() * 20) + 1;
-	if(crit_index <= buscaAtributo(atacante_jogador, atacante_line, atacante_slot, "CRIT")){
-		return true;
-	} else {
-		return false;
-	}
-}
 
-function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
-	var usuario = retornaCarta(usuario_jogador, usuario_line, usuario_slot);	
-	
-	if(usuario.efeitos[18] == true){
-		escreveLog('Herói silenciado!', 'e');
-		limparEscolha();
-		return;
-	}
-	
-	switch(magia.carta.id){
-		case 12: //Bola de fogo
-			escreveLog('Selecione o alvo...', 'a');
-			selecionando.alvo = false;
-			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){					
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
-						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
-													
-						enviarPraRecarga(usuario_jogador, magia);						
-					}
-					limparEscolha();
-				}
-			},100);			
-		break;
-			
-		case 13: //rajada de vento
-			escreveLog('Selecione o alvo...', 'a');
-			selecionando.alvo = false;
-			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						if(alvo.arma != null){
-							var arma = JSON.parse(JSON.stringify(alvo.arma));
-							document.getElementById(arma.id_div).remove();
-							alvo.arma = null;
-							drawBuff(1, alvo, "ARMA", false);
-							selecionando.alvo.jogador.mao.push(arma);
-							drawPuxarCarta(usuario_jogador, arma);
-						}
-						pagarMana(magia, usuario);													
-						enviarPraRecarga(usuario_jogador, magia);						
-					}
-					limparEscolha();
-				}
-			},100);			
-		break;
-			
-		case 14: //fluxo de energia
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
-			var cura = 2;
-			var restauracao = 1;
-			for(var i = 0; i < 3; i++){
-				(function(j){
-					if(usuario_jogador.campo.front[j] != null){
-						buffar(cura, "HP", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "front", j);
-						setTimeout(function(){
-							buffar(restauracao, "MANA", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "front", j);
-						},500);
-					}
-				}(i));
-			}
-			for(var i = 0; i < 3; i++){
-				(function(j){
-					if(usuario_jogador.campo.back[j] != null){
-						buffar(cura, "HP", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "back", j);
-						setTimeout(function(){
-							buffar(restauracao, "MANA", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "back", j);
-						},500);
-					}
-				}(i));
-			}
-			enviarPraRecarga(usuario_jogador, magia);
-			limparEscolha();
-		break;
-			
-		case 15: //luz revigoradora
-			escreveLog('Selecione o alvo...', 'a');
-			selecionando.alvo = false;
-			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){					
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var cura = 3;						
-						pagarMana(magia, usuario);
-						buffar(cura, "HP", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
-													
-						enviarPraRecarga(usuario_jogador, magia);						
-					}
-					limparEscolha();
-				}
-			},100);			
-		break;
-			
-		case 16: //Portal de um mundo paralelo
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
-			drawBuff(1, usuario, "CARTA", true);
-			puxarCarta(usuario_jogador);
-			enviarPraRecarga(usuario_jogador, magia);
-			limparEscolha();
-		break;
-			
-		case 17: //Gravidade zero
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
-			drawBuff(10, usuario, "GRAVIDADE", false);
-			jogo.jogador2.efeitos[17] = true;
-			enviarPraRecarga(usuario_jogador, magia);
-			limparEscolha();
-		break;
-			
-		case 18: //círculo de silêncio
-			escreveLog('Selecione o alvo...', 'a');
-			selecionando.alvo = false;
-			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){					
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						alvo.efeitos[18] = true;
-						drawBuff(1, alvo, "SILÊNCIO", false);
-						pagarMana(magia, usuario);					
-						enviarPraRecarga(usuario_jogador, magia);						
-					}
-					limparEscolha();
-				}
-			},100);			
-		break;	
-			
-		case 19: //Barreira arcana
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
-			buffar(usuario.carta.poder, "PROT", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
-			enviarPraRecarga(usuario_jogador, magia);
-			limparEscolha();
-		break;
-			
-		case 30: //prisão de vinhas
-			escreveLog('Selecione o alvo...', 'a');
-			selecionando.alvo = false;
-			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){					
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						alvo.efeitos[30] = true;	
-						drawBuff(1, alvo, "ATAQUE", false);
-						pagarMana(magia, usuario);					
-						enviarPraRecarga(usuario_jogador, magia);						
-					}
-					limparEscolha();
-				}
-			},100);			
-		break;
-		
-		case 31: //erupção cristalina
-			escreveLog('Selecione o alvo...', 'a');
-			selecionando.alvo = false;
-			interval_selecionando = setInterval(function(){
-				if(selecionando.alvo){					
-					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
-						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);			
-						buffar(-1, "ESQ", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);				
-						enviarPraRecarga(usuario_jogador, magia);						
-					}
-					limparEscolha();
-				}
-			},100);			
-			break;
-	}
-}
-
-function pagarMana(magia, usuario){
-	usuario.carta.mana_gasta += magia.carta.custo;
-	drawManaPay(magia.carta.custo, usuario);
-}
 
 function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
 	if(usuario_line == "front"){
@@ -350,9 +86,9 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	drawPhysicalDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
-		setTimeout(function(){
+		//setTimeout(function(){
 			destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
-		}, 1277);		
+		//}, 1277);		
 	}
 	
 	if(dano_em_si > 0){
@@ -362,7 +98,7 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	}	
 }
 
-function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
+function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot, afinidade){
 	if(usuario_line == "front"){
 		var usuario = usuario_jogador.campo.front[usuario_slot];
 	} else {
@@ -391,14 +127,19 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	if(dano_em_si <= 0){
 		dano_em_si = 0;
 	}
+	
+	if(alvo.carta.id == 1 && alvo.efeitos[54] != true && afinidade == "TREVAS"){ //Leanne
+		dano_em_si = 0;
+	}
+	
 	alvo.carta.dano_recebido += dano_em_si;
 	escreveLog(alvo.carta.nome + " recebeu dano mágico = " + dano_em_si, "a");
 	drawMagicDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
-		setTimeout(function(){
+		//setTimeout(function(){
 			destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
-		}, 1277);	
+		//}, 1000);	
 	}
 	
 	if(dano_em_si > 0){
@@ -442,9 +183,9 @@ function causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot,
 	drawTrueDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
-		setTimeout(function(){			
+		//setTimeout(function(){			
 			destruirHeroi(alvo_jogador, alvo_line, alvo_slot);			
-		}, 1277);	
+		//}, 1277);	
 	}
 	
 	if(dano_em_si > 0){

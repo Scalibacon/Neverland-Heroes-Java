@@ -9,7 +9,7 @@
 <title>Loja</title>
 </head>
 <body>
-	<div id="pacote-info">Lorem<br>Impsum<br>ka ka ka</div>
+	<div id="pacote-info"></div>
 
 	<jsp:include page="header.jsp" />
 
@@ -46,7 +46,7 @@
 			<div class="fissure-name" id="name4">Fissura Lendária</div>
 		</div>
 		
-		<div id="money-container">Você possui: $7500</div>
+		<div id="money-container">Você possui: $???</div>
 		
 		<img src="img/miniphisto.png" id="loja-miniphisto">
 	</div>

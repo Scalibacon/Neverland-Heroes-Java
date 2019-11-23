@@ -158,6 +158,10 @@ function setarHeroiNoSlot(jogador, heroi, line){
 }
 
 function moverHeroi(jogador, line, slot){
+	var heroi = retornaCarta(jogador, line, slot);
+	if(heroi.movimentos_disponiveis <= 0 || heroi.efeitos[58] == true)
+		return false;
+	
 	if(line == "front"){				
 		var carta = jogador.campo.front[slot];				
 		var newLine = "back";
@@ -295,6 +299,9 @@ function desistir(){
 
 function atacar(jogador, line, slot){
 	var atacante = retornaCarta(jogador, line, slot);
+	if(atacante.ataques_disponiveis <= 0 || atacante.efeitos[30]){
+		return false;
+	}
 	
 	jogo.jogador1.estado = game_status.ESCOLHENDO;	
 	escreveLog('Selecione o alvo do ataque...', 'a');
@@ -406,8 +413,10 @@ function destruirHeroi(jogador, line, slot){
 	}
 	
 	jogador.descarte.push(heroi);	
-	escreveLog(heroi.carta.nome + ' foi derrotado!', 'a');	
-	drawDestruirCarta(jogador, heroi);	
+	setTimeout(function(){
+		escreveLog(heroi.carta.nome + ' foi derrotado!', 'a');	
+		drawDestruirCarta(jogador, heroi);	
+	},1100);	
 }
 
 function destruirArma(jogador, line, slot, porBatalha){
