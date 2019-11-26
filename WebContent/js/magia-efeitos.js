@@ -480,7 +480,7 @@ function attUsarMagia(jogador, line, slot, magia){
 	pagarMana(magia, usuario);
 	usuario.usouMagia += 1;	
 	
-	if(usuario.carta.id == 26){
+	if(usuario.carta.id == 26 && usuario.efeitos[54] != true){
 		buffar(1, "CRIT", jogador, line, slot, jogador, line, slot);
 	}
 }

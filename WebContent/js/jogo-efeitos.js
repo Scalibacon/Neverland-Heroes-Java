@@ -5,19 +5,17 @@ document.write("<script type='text/javascript' src='js/heroi-efeitos.js'></scrip
 function efeitoDeInvocacao(jogador, line, slot){
 	var heroi = retornaCarta(jogador, line, slot);
 	
-	switch(heroi.carta.id){
-		case 1: //leanne
-			puxarCarta(jogador);
-			setTimeout(function(){puxarCarta(jogador)},200);
-		break;
-		case 39:
-			console.log("Adicione uma POSTURA do deck pra mão");
-			buscarNoDeck("POSTURA", "ALL");
-		break;
-		case 45: //arthur
-			console.log("Adicione uma espada do deck pra mão");
-			buscarNoDeck("ARMA", "ESPADA");
-		break;
+	if(heroi.carta.id == 1 && heroi.efeitos[54] != true){ //leanne
+		puxarCarta(jogador);
+		setTimeout(function(){puxarCarta(jogador)},200);
+	} else
+	if(heroi.carta.id == 39 && heroi.efeitos[54] != true){ //alm
+		console.log("Adicione uma POSTURA do deck pra mão");
+		buscarNoDeck("POSTURA", "ALL");
+	} else 
+	if(heroi.carta.id == 45 && heroi.efeitos[54] != true){ //arthur
+		console.log("Adicione uma espada do deck pra mão");
+		buscarNoDeck("ARMA", "ESPADA");
 	}
 }
 
@@ -133,7 +131,7 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
 		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
 		
-		if(usuario.carta.id == 4){ //raigh
+		if(usuario.carta.id == 4 && usuario.efeitos[54] != true){ //raigh
 			puxarCarta(usuario_jogador); 
 			setTimeout(function(){puxarCarta(usuario_jogador);},400);
 		}
@@ -215,14 +213,14 @@ function buffar(quantidade, atributo, usuario_jogador, usuario_line, usuario_slo
 				quantidade = aux;
 			}
 			
-			if(usuario.carta.id == 1){ //leanne
+			if(usuario.carta.id == 1 && usuario.efeitos[54] != true){ //leanne
 				var prot = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 				buffar(prot, "PROT", usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot);
 			} else 
-			if(usuario.carta.id == 6){ //clarine
+			if(usuario.carta.id == 6 && usuario.efeitos[54] != true){ //clarine
 				puxarCarta(usuario_jogador);
 			} else 
-			if(usuario.carta.id == 24){ //genny
+			if(usuario.carta.id == 24 && usuario.efeitos[54] != true){ //genny
 				buffar(1, "PROT", usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot);
 			}
 			break;

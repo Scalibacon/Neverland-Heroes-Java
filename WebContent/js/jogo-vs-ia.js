@@ -267,20 +267,12 @@ function finalizaTurno(jogador){
 			heroi.efeitos[30] = null;
 			heroi.efeitos[58] = null;
 			
-			switch (heroi.carta.id){
-				case 25: //granmarg
-					if(heroi.ataques_disponiveis > 0){
-						buffar(2, "HP", jogador, "front", i, jogador, "front", i);
-					}
-				break;
-				case 45:
-					if(heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){
-						console.log("Cura geral");
-					}
-				break;
-				
-			}
-			
+			if(heroi.carta.id == 25 && heroi.efeitos[54] != true && heroi.ataques_disponiveis > 0){ //granmarg
+				buffar(2, "HP", jogador, "front", i, jogador, "front", i);
+			} else 
+			if(heroi.carta.id == 45 && heroi.efeitos[54] != true && heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){ //arthur
+				console.log("Cura geral");				
+			}			
 		}
 		if(jogador.campo.back[i] != null){
 			
@@ -429,10 +421,10 @@ function destruirArma(jogador, line, slot, porBatalha){
 	
 	var arma = heroi.arma;
 	
-	if(arma.carta.id == 87){
+	if(arma.carta.id == 87){ //perpectus
 		//retorna pra mão
 	} else 
-	if(porBatalha && heroi.carta.id == 29){
+	if(porBatalha && heroi.carta.id == 29 && heroi.efeitos[54] != true){ //ryoma
 		//retorna pra mão
 	} else {
 		heroi.arma = null;

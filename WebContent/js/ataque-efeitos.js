@@ -6,12 +6,12 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 	var foiCritico = critar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
 	var foiDesviado = desviar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
 	
-	switch(atacante.carta.id){
+	if(atacante.carta.id == "?"){
 	
 	}
 	
-	switch(alvo.carta.id){
-	
+	if(alvo.carta.id == "?"){
+		
 	}
 	
 	if(!foiDesviado){
@@ -43,27 +43,26 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 		if(foiCritico){ //efeitos de crítico
 			danoF = danoF * 2;
 			escreveLog("O ataque foi um acerto crítico!", "a");
-			switch(atacante.carta.id){
-				case 5: //rebecca
-					puxarCarta(atacante_jogador);
-					puxarCarta(atacante_jogador);
-				break;
-				case 42: //jeorge
-					var prot = 2;
-					for(var i = 0; i < 3; i++){
-						(function(j){
-							if(atacante_jogador.campo.front[j] != null){
-								buffar(prot, "PROT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "front", j);
-							}
-						}(i));
-						(function(j){
-							if(atacante_jogador.campo.back[j] != null){
-								buffar(prot, "PROT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "back", j);
-							}
-						}(i));
-					}
-				break;
-			}
+			
+			if(atacante.carta.id == 5 && atacante.efeitos[54] != true){ //rebecca
+				puxarCarta(atacante_jogador);
+				puxarCarta(atacante_jogador);
+			} else 
+			if(atacante.carta.id == 42 && atacante.efeitos[54] != true){ //jeorge
+				var prot = 2;
+				for(var i = 0; i < 3; i++){
+					(function(j){
+						if(atacante_jogador.campo.front[j] != null){
+							buffar(prot, "PROT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "front", j);
+						}
+					}(i));
+					(function(j){
+						if(atacante_jogador.campo.back[j] != null){
+							buffar(prot, "PROT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "back", j);
+						}
+					}(i));
+				}
+			}			
 		}		
 		
 		causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);

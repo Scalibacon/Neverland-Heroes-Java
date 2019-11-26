@@ -119,7 +119,7 @@ function atribuiValores(carta){
 }
 
 function recarregaMovimento(carta){
-	if(carta.carta.id == 48 || carta.carta.id == 52 || carta.carta.id == 53){
+	if((carta.carta.id == 48 || carta.carta.id == 52 || carta.carta.id == 53)  && carta.efeitos[54] != true){
 		carta.movimentos_disponiveis = 2;
 	} else {
 		carta.movimentos_disponiveis = 1;
@@ -161,7 +161,7 @@ function buscaAtributo(jogador, line, slot, atributo){
 	}
 	
 	//********************* Heróis
-	if(carta.carta.id == 3 && atributo == "FOR"){ //tobin
+	if(carta.carta.id == 3 && atributo == "FOR" && carta.efeitos[54] != true){ //tobin
 		var temAliado = false;
 		for(var i = 0; i < 3; i++){
 			if(retornaCarta(jogador, "front", i) != null && retornaCarta(jogador, "front", i) != carta){
@@ -175,7 +175,7 @@ function buscaAtributo(jogador, line, slot, atributo){
 			valor +=1;
 		}			
 	} else 
-	if(carta.carta.id == 22 && atributo == "FOR" && buscaAtributo(jogador, line, slot, "HP") < 5){ //barst
+	if(carta.carta.id == 22 && carta.efeitos[54] != true && atributo == "FOR" && buscaAtributo(jogador, line, slot, "HP") < 5){ //barst
 		valor += 2;
 	}
 	
@@ -183,10 +183,10 @@ function buscaAtributo(jogador, line, slot, atributo){
 	if(atributo == "FOR"){
 		var temCelica = false;
 		for(var i = 0; i < 3; i++){
-			if(retornaCarta(jogador, "front", i) != null && retornaCarta(jogador, "front", i).carta.id == 34){
+			if(retornaCarta(jogador, "front", i) != null && retornaCarta(jogador, "front", i).carta.id == 34 && retornaCarta(jogador, "front", i).efeitos[54] != true){
 				temCelica = true;
 			}	
-			if(retornaCarta(jogador, "back", i) != null && retornaCarta(jogador, "back", i).carta.id == 34){
+			if(retornaCarta(jogador, "back", i) != null && retornaCarta(jogador, "back", i).carta.id == 34 && retornaCarta(jogador, "back", i).efeitos[54] != true){
 				temCelica = true;
 			}	
 		}
