@@ -6,11 +6,15 @@ function efeitoDeInvocacao(jogador, line, slot){
 	var heroi = retornaCarta(jogador, line, slot);
 	
 	switch(heroi.carta.id){
-		case 1:
+		case 1: //leanne
 			puxarCarta(jogador);
 			setTimeout(function(){puxarCarta(jogador)},200);
 		break;
-		case 45:
+		case 39:
+			console.log("Adicione uma POSTURA do deck pra mão");
+			buscarNoDeck("POSTURA", "ALL");
+		break;
+		case 45: //arthur
 			console.log("Adicione uma espada do deck pra mão");
 			buscarNoDeck("ARMA", "ESPADA");
 		break;
@@ -41,16 +45,6 @@ function checaPericia(heroi){
 	}
 	return 0;
 }
-
-function buscaFieldAlter(carta, atributo){
-	var valor = 0;
-	
-	return valor;
-}
-
-
-
-
 
 function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
 	if(usuario_line == "front"){
@@ -137,9 +131,12 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	drawMagicDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
-		//setTimeout(function(){
-			destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
-		//}, 1000);	
+		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
+		
+		if(usuario.carta.id == 4){ //raigh
+			puxarCarta(usuario_jogador); 
+			setTimeout(function(){puxarCarta(usuario_jogador);},400);
+		}
 	}
 	
 	if(dano_em_si > 0){
@@ -216,6 +213,17 @@ function buffar(quantidade, atributo, usuario_jogador, usuario_line, usuario_slo
 			if(alvo.carta.dano_recebido < 0){
 				alvo.carta.dano_recebido = 0;
 				quantidade = aux;
+			}
+			
+			if(usuario.carta.id == 1){ //leanne
+				var prot = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
+				buffar(prot, "PROT", usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot);
+			} else 
+			if(usuario.carta.id == 6){ //clarine
+				puxarCarta(usuario_jogador);
+			} else 
+			if(usuario.carta.id == 24){ //genny
+				buffar(1, "PROT", usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot);
 			}
 			break;
 		case "MANA":			

@@ -141,7 +141,7 @@ function buscaAtributo(jogador, line, slot, atributo){
 			valor = carta.carta.protecao;
 			break;
 		case "FOR":
-			valor = carta.carta.forca + carta.buff.forca + carta.arma_buff.forca;
+			valor = carta.carta.forca + carta.buff.forca + carta.arma_buff.forca;			
 			break;
 		case "POD":
 			valor = carta.carta.poder + carta.buff.poder + carta.arma_buff.poder;
@@ -160,7 +160,40 @@ function buscaAtributo(jogador, line, slot, atributo){
 			break;
 	}
 	
-	valor += buscaFieldAlter(carta, atributo);
+	//********************* Heróis
+	if(carta.carta.id == 3 && atributo == "FOR"){ //tobin
+		var temAliado = false;
+		for(var i = 0; i < 3; i++){
+			if(retornaCarta(jogador, "front", i) != null && retornaCarta(jogador, "front", i) != carta){
+				temAliado = true;
+			}	
+			if(retornaCarta(jogador, "back", i) != null && retornaCarta(jogador, "back", i) != carta){
+				temAliado = true;
+			}
+		}
+		if(temAliado){
+			valor +=1;
+		}			
+	} else 
+	if(carta.carta.id == 22 && atributo == "FOR" && buscaAtributo(jogador, line, slot, "HP") < 5){ //barst
+		valor += 2;
+	}
+	
+	//celica
+	if(atributo == "FOR"){
+		var temCelica = false;
+		for(var i = 0; i < 3; i++){
+			if(retornaCarta(jogador, "front", i) != null && retornaCarta(jogador, "front", i).carta.id == 34){
+				temCelica = true;
+			}	
+			if(retornaCarta(jogador, "back", i) != null && retornaCarta(jogador, "back", i).carta.id == 34){
+				temCelica = true;
+			}	
+		}
+		if(temCelica){
+			valor +=1;
+		}	
+	}
 	
 	if(valor < 0){
 		valor = 0;
@@ -170,9 +203,11 @@ function buscaAtributo(jogador, line, slot, atributo){
 }
 
 function retornaCarta(jogador, line, slot){
+	var carta = null;
 	if(line == "front"){
-		return jogador.campo.front[slot];
+		carta = jogador.campo.front[slot];
 	} else {
-		return jogador.campo.back[slot];
-	}	
+		carta = jogador.campo.back[slot];
+	}
+	return carta;
 }

@@ -268,6 +268,11 @@ function finalizaTurno(jogador){
 			heroi.efeitos[58] = null;
 			
 			switch (heroi.carta.id){
+				case 25: //granmarg
+					if(heroi.ataques_disponiveis > 0){
+						buffar(2, "HP", jogador, "front", i, jogador, "front", i);
+					}
+				break;
 				case 45:
 					if(heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){
 						console.log("Cura geral");
@@ -403,7 +408,7 @@ function destruirHeroi(jogador, line, slot){
 	var heroi = retornaCarta(jogador, line, slot);		
 	
 	if(heroi.arma != null){		
-		destruirArma(jogador, line, slot, "true");
+		setTimeout(function(){destruirArma(jogador, line, slot, "true");},1100);
 	}
 	
 	if(line == "front"){

@@ -14,10 +14,9 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
+						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "FOGO");
 													
 						enviarPraRecarga(usuario_jogador, magia);						
@@ -33,7 +32,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						if(alvo.arma != null){
 							var arma = JSON.parse(JSON.stringify(alvo.arma));
@@ -42,8 +41,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 							drawBuff(1, alvo, "ARMA", false);
 							selecionando.alvo.jogador.mao.push(arma);
 							drawPuxarCarta(usuario_jogador, arma);
-						}
-						pagarMana(magia, usuario);													
+						}													
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
@@ -52,8 +50,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 			
 		case 14: //fluxo de energia
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			var cura = 2;
 			var restauracao = 1;
 			for(var i = 0; i < 3; i++){
@@ -86,12 +83,10 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var cura = 3;						
-						pagarMana(magia, usuario);
-						buffar(cura, "HP", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
-													
+						var cura = 3;			
+						buffar(cura, "HP", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);								
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
@@ -100,8 +95,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 			
 		case 16: //Portal de um mundo paralelo
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			drawBuff(1, usuario, "CARTA", true);
 			puxarCarta(usuario_jogador);
 			enviarPraRecarga(usuario_jogador, magia);
@@ -109,8 +103,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 			
 		case 17: //Gravidade zero
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			drawBuff(10, usuario, "GRAVIDADE", false);
 			jogo.jogador2.efeitos[17] = true;
 			enviarPraRecarga(usuario_jogador, magia);
@@ -123,11 +116,10 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						alvo.efeitos[18] = true;
-						drawBuff(1, alvo, "SILÊNCIO", false);
-						pagarMana(magia, usuario);					
+						drawBuff(1, alvo, "SILÊNCIO", false);				
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
@@ -136,8 +128,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;	
 			
 		case 19: //Barreira arcana
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			var prot = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 			buffar(prot, "PROT", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
 			enviarPraRecarga(usuario_jogador, magia);
@@ -150,11 +141,10 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						alvo.efeitos[30] = true;	
-						drawBuff(1, alvo, "ATAQUE", false);
-						pagarMana(magia, usuario);					
+						drawBuff(1, alvo, "ATAQUE", false);					
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
@@ -168,10 +158,9 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
+						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "ÁGUA");			
 						buffar(-1, "ESQ", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);				
 						enviarPraRecarga(usuario_jogador, magia);						
@@ -187,10 +176,9 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
+						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "TREVAS");			
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
@@ -205,10 +193,9 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
+						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "FOGO");
 						alvo.efeitos[58] = true;													
 						enviarPraRecarga(usuario_jogador, magia);						
@@ -219,8 +206,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 		
 		case 91: //chuva torrencial
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			var dano = 1;
 			var debuff = -2;
 			if(usuario_jogador == jogo.jogador1){
@@ -258,10 +244,9 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
-						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
+						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "VENTO");													
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
@@ -271,8 +256,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 		
 		case 93: //bênção da natureza
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			var forca = 1;
 			var poder = 1;
 			for(var i = 0; i < 3; i++){
@@ -300,8 +284,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 		
 		case 94: //liberação do desespero
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			var cura = usuario.carta.dano_recebido;
 			var forca = 2;
 			var poder = 2;
@@ -318,11 +301,10 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);	
 						var dano_prot = buscaAtributo(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "PROT");	
-						var danoV = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");						
-						pagarMana(magia, usuario);
+						var danoV = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
 						causarDanoVerdadeiro(dano_prot, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
 						causarDanoVerdadeiro(danoV, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);								
 						enviarPraRecarga(usuario_jogador, magia);						
@@ -333,8 +315,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 		
 		case 96: //armadura de magma
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			var cura = usuario.carta.dano_recebido;
 			var defesa = 3;
 			var resistencia = 3;
@@ -351,8 +332,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						pagarMana(magia, usuario);
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");								
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "FOGO");
@@ -371,8 +351,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						usuario.usouMagia += 1;
-						pagarMana(magia, usuario);
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);					
 						buffar(-1, "FOR", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);				
 						buffar(-1, "POD", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);	
@@ -399,8 +378,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						pagarMana(magia, usuario);
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						var danoF = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");								
 						causarDanoFisico(danoF, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
@@ -418,8 +396,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						pagarMana(magia, usuario);
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);								
 						buffar(2, "DEF", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
 						buffar(2, "RES", usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
@@ -432,8 +409,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 		break;
 		
 		case 102: //coração de gaia
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			for(var i = 0; i < 3; i++){
 				if(usuario_jogador.campo.front[i] != null){
 					buffar(2, "FOR", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "front", i);
@@ -459,8 +435,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			interval_selecionando = setInterval(function(){
 				if(selecionando.alvo){					
 					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
-						pagarMana(magia, usuario);
-						usuario.usouMagia += 1;
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");								
 						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "VENTO");
@@ -498,4 +473,14 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 function pagarMana(magia, usuario){
 	usuario.carta.mana_gasta += magia.carta.custo;
 	drawManaPay(magia.carta.custo, usuario);
+}
+
+function attUsarMagia(jogador, line, slot, magia){
+	var usuario = retornaCarta(jogador, line, slot);
+	pagarMana(magia, usuario);
+	usuario.usouMagia += 1;	
+	
+	if(usuario.carta.id == 26){
+		buffar(1, "CRIT", jogador, line, slot, jogador, line, slot);
+	}
 }
