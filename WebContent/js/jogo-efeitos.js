@@ -78,16 +78,16 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	drawPhysicalDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
-		//setTimeout(function(){
-			destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
-		//}, 1277);		
+		var pod_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "POD");
+		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
+		
+		if(usuario.carta.id == 40 && usuario.efeitos[54] != true){ //aversa
+			buffar(pod_alvo, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
+		}
+			
 	}
 	
-	if(dano_em_si > 0){
-		return true;
-	} else {
-		return false;
-	}	
+	return dano_em_si;	
 }
 
 function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot, afinidade){
@@ -129,19 +129,20 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 	drawMagicDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
+		var pod_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "POD");
+		
 		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
 		
 		if(usuario.carta.id == 4 && usuario.efeitos[54] != true){ //raigh
 			puxarCarta(usuario_jogador); 
 			setTimeout(function(){puxarCarta(usuario_jogador);},400);
+		} else 
+		if(usuario.carta.id == 40 && usuario.efeitos[54] != true){ //aversa
+			buffar(pod_alvo, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
 		}
 	}
 	
-	if(dano_em_si > 0){
-		return true;
-	} else {
-		return false;
-	}	
+	return dano_em_si;	
 }
 
 function causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
@@ -178,30 +179,20 @@ function causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot,
 	drawTrueDamage(dano_em_si, usuario, alvo);
 	
 	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
-		//setTimeout(function(){			
-			destruirHeroi(alvo_jogador, alvo_line, alvo_slot);			
-		//}, 1277);	
+		var pod_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "POD");	
+		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);			
+		
+		if(usuario.carta.id == 40 && usuario.efeitos[54] != true){ //aversa
+			buffar(pod_alvo, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
+		}		
 	}
 	
-	if(dano_em_si > 0){
-		return true;
-	} else {
-		return false;
-	}	
+	return dano_em_si;
 }
 
 function buffar(quantidade, atributo, usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot){
-	if(usuario_line == "front"){
-		var usuario = usuario_jogador.campo.front[usuario_slot];
-	} else {
-		var usuario = usuario_jogador.campo.back[usuario_slot];
-	}
-	
-	if(alvo_line == "front"){
-		var alvo = alvo_jogador.campo.front[alvo_slot];
-	} else {
-		var alvo = alvo_jogador.campo.back[alvo_slot];
-	}
+	var usuario = retornaCarta(usuario_jogador, usuario_line, usuario_slot);
+	var alvo = retornaCarta(alvo_jogador, alvo_line, alvo_slot);
 	
 	var valor;
 	switch(atributo){

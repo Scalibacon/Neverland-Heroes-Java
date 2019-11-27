@@ -260,22 +260,33 @@ function desarmarHeroi(heroi){
 
 function finalizaTurno(jogador){
 	//reseta efeitos no final do turno
-	for(var i = 0; i < 3; i++){
-		if(jogador.campo.front[i] != null){
-			var heroi = jogador.campo.front[i];
-			heroi.efeitos[18] = null;
-			heroi.efeitos[30] = null;
-			heroi.efeitos[58] = null;
-			
-			if(heroi.carta.id == 25 && heroi.efeitos[54] != true && heroi.ataques_disponiveis > 0){ //granmarg
-				buffar(2, "HP", jogador, "front", i, jogador, "front", i);
-			} else 
-			if(heroi.carta.id == 45 && heroi.efeitos[54] != true && heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){ //arthur
-				console.log("Cura geral");				
-			}			
-		}
-		if(jogador.campo.back[i] != null){
-			
+	var line = ["front", "back"];
+	for(var k = 0; k < 2; k++){
+		for(var i = 0; i < 3; i++){			
+			var heroi = retornaCarta(jogador, line[k], i);
+			if(heroi != null){
+				heroi.efeitos[18] = null;
+				heroi.efeitos[30] = null;
+				heroi.efeitos[58] = null;
+				
+				if(heroi.carta.id == 25 && heroi.efeitos[54] != true && heroi.ataques_disponiveis > 0){ //granmarg
+					buffar(2, "HP", jogador, line[k], i, jogador, line[k], i);
+				} else 
+					
+				if(heroi.carta.id == 45 && heroi.efeitos[54] != true && heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){ //arthur
+					for(var j = 0; j < 3; j++){
+						if(jogador.campo.front[j] != null && jogador.campo.front[j] != heroi){
+							buffar(2, "HP", jogador, line[k], i, jogador, "front", j);
+						}
+						if(jogador.campo.back[j] != null && jogador.campo.back[j] != heroi){
+							buffar(2, "HP", jogador, line[k], i, jogador, "back", j);
+						}				
+					}				
+				}			
+			}
+			if(jogador.campo.back[i] != null){
+				
+			}
 		}
 	}
 	jogador.estado == game_status.OBSERVANDO;
@@ -382,38 +393,41 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 	} else {
 		var usuario = usuario_jogador.campo.back[usuario_slot];
 	}
-	
+		
 	if(buscaAtributo(usuario_jogador, usuario_line, usuario_slot,"MANA") >= magia.carta.custo){
-		if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO"){
+		if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO" || (usuario.carta.id == 44 && magia.carta.afinidade == "AGUA")){ //azura
 			efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
+			return true;
 		} else {
 			escreveLog('Afinidades divergentes!', 'e');
 			limparEscolha();
+			return false;
 		}		
 	} else {
 		escreveLog('Mana Insuficiente!', 'e');
 		limparEscolha();
+		return false;
 	}
 }
 
 function destruirHeroi(jogador, line, slot){
-	var heroi = retornaCarta(jogador, line, slot);		
-	
-	if(heroi.arma != null){		
-		setTimeout(function(){destruirArma(jogador, line, slot, "true");},1100);
-	}
-	
-	if(line == "front"){
-		jogador.campo.front[slot] = null;
-	} else {
-		jogador.campo.back[slot] = null;
-	}
-	
-	jogador.descarte.push(heroi);	
 	setTimeout(function(){
+		var heroi = retornaCarta(jogador, line, slot);		
+		
+		if(heroi.arma != null){		
+			destruirArma(jogador, line, slot, "true");
+		}
+		
+		if(line == "front"){
+			jogador.campo.front[slot] = null;
+		} else {
+			jogador.campo.back[slot] = null;
+		}
+		
+		jogador.descarte.push(heroi);
 		escreveLog(heroi.carta.nome + ' foi derrotado!', 'a');	
-		drawDestruirCarta(jogador, heroi);	
-	},1100);	
+		drawDestruirCarta(jogador, heroi);
+	},1100);
 }
 
 function destruirArma(jogador, line, slot, porBatalha){

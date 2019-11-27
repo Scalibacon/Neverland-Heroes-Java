@@ -62,10 +62,27 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 						}
 					}(i));
 				}
-			}			
+			} else 
+			if(atacante.carta.id == 21 && atacante.efeitos[54] != true){ //gordin
+				for(var i = 0; i < 3; i++){
+					(function(j){
+						if(atacante_jogador.campo.front[j] != null){
+							buffar(3, "HP", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "front", j);
+							buffar(1, "CRIT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "front", j);
+						}
+					}(i));
+					(function(j){
+						if(atacante_jogador.campo.back[j] != null){
+							buffar(3, "HP", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "back", j);
+							buffar(1, "CRIT", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "back", j);
+						}
+					}(i));
+				}
+			}	
 		}		
 		
-		causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+		var alvo_hp_before = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP");
+		var dano_causado = causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
 		
 		if(atacante.carta.id == 2 && atacante.efeitos[54] != true){ //donnel
 			if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null){
@@ -80,6 +97,15 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 		} else 
 		if(atacante.carta.id == 38 && atacante.efeitos[54] != true && retornaCarta(alvo_jogador, alvo_line, alvo_slot) != null){ //beruka
 			buffar(-2, "DEF", atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+		} else
+		if(atacante.carta.id == 41 && atacante.efeitos[54] != true && retornaCarta(alvo_jogador, alvo_line, alvo_slot) != null){ //camilla
+			if(alvo_hp_before < (alvo.carta.hp/2)){
+				drawBuff(-999, alvo, "VIDA", false);
+				destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
+			}
+		} else 
+		if(atacante.carta.id == 43 && atacante.efeitos[54] != true){ //charlotte
+			buffar(dano_causado, "HP", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, atacante_line, atacante_slot);
 		}
 	} else {
 		escreveLog("O ataque foi esquivado!", "a");

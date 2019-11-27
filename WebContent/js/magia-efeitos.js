@@ -134,6 +134,24 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			enviarPraRecarga(usuario_jogador, magia);
 			limparEscolha();
 		break;
+		
+		case 20: //explosão de energia
+			escreveLog('Selecione o alvo...', 'a');
+			selecionando.alvo = false;
+			interval_selecionando = setInterval(function(){
+				if(selecionando.alvo){					
+					if(alvoMagiaValido(magia, usuario, selecionando.alvo)){	
+						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
+						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
+						var danoM = buscaAtributo(usuario_jogador, usuario_line, usuario_slot, "POD");
+						causarDanoMagico(danoM, usuario_jogador, usuario_line, usuario_slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot, "NEUTRO");
+													
+						enviarPraRecarga(usuario_jogador, magia);						
+					}
+					limparEscolha();
+				}
+			},100);			
+		break;
 			
 		case 30: //prisão de vinhas
 			escreveLog('Selecione o alvo...', 'a');
@@ -480,7 +498,24 @@ function attUsarMagia(jogador, line, slot, magia){
 	pagarMana(magia, usuario);
 	usuario.usouMagia += 1;	
 	
-	if(usuario.carta.id == 26 && usuario.efeitos[54] != true){
+	if(usuario.carta.id == 26 && usuario.efeitos[54] != true){ //leon
 		buffar(1, "CRIT", jogador, line, slot, jogador, line, slot);
+	} else 
+	if(usuario.carta.id == 40 && usuario.efeitos[54] != true){ //aversa
+		buffar(1, "DEF", jogador, line, slot, jogador, line, slot);
+	} else 
+	if(usuario.carta.id == 44 && usuario.efeitos[54] != true){ //azura
+		for(var i = 0; i < 3; i++){
+			(function(j){
+				if(jogador.campo.front[j] != null){
+					buffar(1, "PROT", jogador, line, slot, jogador, "front", j);
+				}
+			}(i));
+			(function(j){
+				if(jogador.campo.back[j] != null){
+					buffar(1, "PROT", jogador, line, slot, jogador, "back", j);
+				}
+			}(i));
+		}
 	}
 }
