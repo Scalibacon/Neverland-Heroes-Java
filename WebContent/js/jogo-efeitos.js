@@ -25,11 +25,73 @@ function efeitoAoEquipar(jogador, line, slot){
 	var arma = heroi.arma;
 	
 	switch(arma.carta.id){
+		case 7:
+			arma_buff.forca += 2 + checaPericia(heroi);
+			arma_buff.defesa += 1 + checaPericia(heroi);
+		break;
+		
+		case 8:
+			arma_buff.forca += 1 + checaPericia(heroi);
+			arma_buff.critico += 2 + checaPericia(heroi);
+		break;
+		
+		case 9:
+			arma_buff.forca += 2 + checaPericia(heroi);
+			arma_buff.defesa += 1 + checaPericia(heroi);
+		break;
+		
+		case 10:
+			arma_buff.poder += 1 + checaPericia(heroi);
+			arma_buff.defesa += 1 + checaPericia(heroi);
+			arma_buff.resistencia += 1 + checaPericia(heroi);
+		break;
+		
+		case 11:
+			arma_buff.poder += 3 + checaPericia(heroi);
+			arma_buff.resistencia += 1 + checaPericia(heroi);
+		break;
+		
+		case 32:
+			arma_buff.forca += 4 + checaPericia(heroi);
+			arma_buff.defesa += 2 + checaPericia(heroi);
+			arma_buff.resistencia += 1 + checaPericia(heroi);
+		break;
+		
+		case 49:
+			arma_buff.forca += 2 + checaPericia(heroi);
+			arma_buff.esquiva += 2 + checaPericia(heroi);
+		break;
+		
+		case 50:
+			arma_buff.forca += 3 + checaPericia(heroi);
+			arma_buff.esquiva += -1 + checaPericia(heroi);
+		break;
+		
 		case 54:
 			arma_buff.forca += 2 + checaPericia(heroi);
 			arma_buff.poder += 2 + checaPericia(heroi);
 			arma_buff.resistencia += 1 + checaPericia(heroi);
 			arma_buff.esquiva += 1 + checaPericia(heroi);
+		break;
+		
+		case 55:
+			arma_buff.poder += 1 + checaPericia(heroi);
+			arma_buff.defesa += 2 + checaPericia(heroi);
+			arma_buff.resistencia += 3 + checaPericia(heroi);
+		break;
+		
+		case 63:
+			arma_buff.poder += 5 + checaPericia(heroi);
+		break;
+		
+		case 74:
+			arma_buff.forca += 3 + checaPericia(heroi);
+			arma_buff.defesa += 1 + checaPericia(heroi);
+		break;
+		
+		case 75:
+			arma_buff.forca += 3 + checaPericia(heroi);
+			arma_buff.defesa += 1 + checaPericia(heroi);
 		break;
 	}
 	
