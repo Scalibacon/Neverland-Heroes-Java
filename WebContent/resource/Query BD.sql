@@ -148,7 +148,8 @@ INSERT INTO jogador(usuario,senha,email,nivel,experiencia,dinheiro,tipo,partidas
 	VALUES('Scalibacon','e8d95a51f3af4a3b134bf6bb680a213a','scalibacon@gmail.com',18,300,99999,2,33,25,12, '1-2-3-4-5-6-7-')
 --UPDATE jogador set dinheiro = 99999999 where id = 2
 
-select * from carta
+select * from carta where id = 64
+--update carta set descricao = '(1) Quando esta carta usar uma magia, todos os heróis aliados ganham +1 ESQ e curam +2 HP.' where id = 64
 select * from heroi
 select * from arma
 select * from magia
@@ -520,6 +521,18 @@ insert into carta_oponente values(1,2,1),
 								 (1,18,1),
 								 (1,20,2),
 								 (1,21,2)
+
+insert into oponente values(2, 'Tyler', 5, '', 3)
+insert into carta_oponente values(2,2,3),
+								 (2,3,2),
+								 (2,4,3),
+								 (2,5,3),
+								 (2,6,3),
+								 (2,21,3),
+								 (2,23,1),
+								 (2,7,1)
+
+
 select * from oponente
 select * from carta_oponente
 /* ponente

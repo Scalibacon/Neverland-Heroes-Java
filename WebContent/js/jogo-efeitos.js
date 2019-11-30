@@ -16,6 +16,14 @@ function efeitoDeInvocacao(jogador, line, slot){
 	if(heroi.carta.id == 45 && heroi.efeitos[54] != true){ //arthur
 		console.log("Adicione uma espada do deck pra mão");
 		buscarNoDeck("ARMA", "ESPADA");
+	} else
+	if(heroi.carta.id == 46 && heroi.efeitos[54] != true){ //berkut
+		console.log("Adicione uma lança do deck pra mão");
+		buscarNoDeck("ARMA", "LANCA");
+	} else
+	if(heroi.carta.id == 64 && heroi.efeitos[54] != true){ ///surt
+		console.log("Adicione um machado do deck pra mão");
+		buscarNoDeck("ARMA", "MACHADO");
 	}
 }
 

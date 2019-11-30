@@ -239,16 +239,12 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 						setTimeout(function(){
 							buffar(debuff, "ESQ", usuario_jogador, usuario_line, usuario_slot, jogador_alvo, "front", j);	
 						},500);
-					}
-				}(i));
-			}
-			for(var i = 0; i < 3; i++){
-				(function(j){
-					if(jogador_alvo.campo.back[j] != null){
-						causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot, jogador_alvo, "back", j);
-						setTimeout(function(){
-							buffar(debuff, "ESQ", usuario_jogador, usuario_line, usuario_slot, jogador_alvo, "back", j);	
-						},500);
+						if(jogador_alvo.campo.back[j] != null){
+							causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot, jogador_alvo, "back", j);
+							setTimeout(function(){
+								buffar(debuff, "ESQ", usuario_jogador, usuario_line, usuario_slot, jogador_alvo, "back", j);	
+							},500);
+						}
 					}
 				}(i));
 			}
@@ -383,8 +379,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 			break;
 			
 		case 99: //bênção da dama do lago
-			pagarMana(magia, usuario);
-			usuario.usouMagia += 1;
+			attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 			buscarNoDeck("ARMA", "ALL");
 			enviarPraRecarga(usuario_jogador, magia);
 			limparEscolha();
@@ -514,6 +509,22 @@ function attUsarMagia(jogador, line, slot, magia){
 			(function(j){
 				if(jogador.campo.back[j] != null){
 					buffar(1, "PROT", jogador, line, slot, jogador, "back", j);
+				}
+			}(i));
+		}
+	} else 
+	if(usuario.carta.id == 62 && usuario.efeitos[54] != true){ //camilla summer
+		for(var i = 0; i < 3; i++){
+			(function(j){
+				if(jogador.campo.front[j] != null){
+					buffar(1, "ESQ", jogador, line, slot, jogador, "front", j);
+					buffar(2, "HP", jogador, line, slot, jogador, "front", j);
+				}
+			}(i));
+			(function(j){
+				if(jogador.campo.back[j] != null){
+					buffar(1, "ESQ", jogador, line, slot, jogador, "back", j);
+					buffar(2, "HP", jogador, line, slot, jogador, "back", j);
 				}
 			}(i));
 		}

@@ -10,11 +10,17 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 	
 	}
 	
-	if(alvo.carta.id == "?"){
-		
+	if(alvo.carta.id == 52 && alvo.efeitos[54] != true && alvo.foiAtacado > 0){
+		escreveLog('Alvo inválido para atacar!', 'e');
+		return false;
 	}
 	
+	escreveLog(alvo.carta.nome + " foi atacado por " + atacante.carta.nome, 'a');
+	
+	atacante.ataques_disponiveis--;
+	
 	if(!foiDesviado){
+		alvo.foiAtacado++;
 		if(alvo.efeitos[96] == true){ //magma
 			causarDanoVerdadeiro(1, alvo_jogador, alvo_line, alvo_slot, atacante_jogador, atacante_line, atacante_slot);
 		}
@@ -38,7 +44,16 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 		} else 
 		if(atacante.carta.id == 37 && atacante.efeitos[54] != true && alvo.carta.afinidade == "TREVAS"){ //abel
 			danoF += 2;
+		} else 
+		if(atacante.carta.id == 53 && atacante.efeitos[54] != true){ //jaffar
+			danoF += alvo.carta.rank;
+		} else 
+		if(atacante.carta.id == 61 && atacante.efeitos[54] != true){ //reinhardt
+			if(alvo.arma != null && alvo.arma.carta.tipo_arma == "LANCA"){
+				danoF += 2;
+			}
 		}
+		
 		
 		if(foiCritico){ //efeitos de crítico
 			danoF = danoF * 2;
@@ -78,14 +93,24 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 						}
 					}(i));
 				}
-			}	
+			} else 
+			if(atacante.carta.id == 60 && atacante.efeitos[54] != true){ //clarisse
+				atacante.ataques_disponiveis += 1;
+			}
 		}		
 		
 		var alvo_hp_before = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP");
-		var dano_causado = causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+		var alvo_def_before = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "DEF");
+		var alvo_res_before = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "RES");
+		
+		if(atacante.carta.id == 59 && atacante.efeitos[54] != true && atacante.usouMagia > 0){
+			var dano_causado = causarDanoMagico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot, "NEUTRO");
+		} else {
+			var dano_causado = causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+		}
 		
 		if(atacante.carta.id == 2 && atacante.efeitos[54] != true){ //donnel
-			if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null){
+			if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null || buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
 				puxarCarta(atacante_jogador); 
 				setTimeout(function(){puxarCarta(atacante_jogador);},400);
 			}
@@ -106,7 +131,35 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 		} else 
 		if(atacante.carta.id == 43 && atacante.efeitos[54] != true){ //charlotte
 			buffar(dano_causado, "HP", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, atacante_line, atacante_slot);
+		} else 
+		if(atacante.carta.id == 46 && atacante.efeitos[54] != true){ //berkut
+			for(var i = 0; i < 3; i++){
+				(function(j){
+					if(alvo_jogador.campo.front[j] != null){
+						causarDanoVerdadeiro(2, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, "front", j);
+					}
+					if(alvo_jogador.campo.back[j] != null){
+						causarDanoVerdadeiro(2, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, "back", j);
+					}				
+				}(i));
+			}
+		} else 
+		if(atacante.carta.id == 47 && atacante.efeitos[54] != true && retornaCarta(alvo_jogador, alvo_line, alvo_slot) != null){ //fjorm
+			buffar(-2, "DEF", atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+			buffar(-2, "RES", atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+		} else 
+		if(atacante.carta.id == 48 && atacante.efeitos[54] != true && atacante.arma == null){ //kagero
+			setTimeout(function() { buscarNoDeck("ARMA", "ADAGA") },500);
+		} else 
+		if(atacante.carta.id == 64 && atacante.efeitos[54] != true){ //surt
+			if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null || buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
+				buffar(alvo_def_before, "DEF", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, atacante_line, atacante_slot);
+				buffar(alvo_res_before, "RES", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, atacante_line, atacante_slot);
+			}
 		}
+		
+		
+			
 	} else {
 		escreveLog("O ataque foi esquivado!", "a");
 	}

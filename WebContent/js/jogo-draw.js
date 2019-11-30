@@ -737,6 +737,7 @@ function limparEscolha(){
 
 // *************************** ANIMATIONS ******************
 function drawMagicDamage(dano, usuario, alvo){
+	var isOponente = false;
 	var drawnEff = document.createElement("div");
 	drawnEff.style.position = "absolute";
 	drawnEff.style.width = "78px";
@@ -749,14 +750,17 @@ function drawMagicDamage(dano, usuario, alvo){
 	var y = local.offsetTop + parent.offsetTop + 44 - 39;
 	
 	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (60);
+		x += (230);
+		drawnEff.style.right = x + "px";
+		isOponente = true;
+	} else {
+		drawnEff.style.left = x + "px";
 	}
 	
-	drawnEff.style.left = x + "px";
 	drawnEff.style.top = y + "px";	
 	
 	document.getElementById('game-container').appendChild(drawnEff);
-	drawDamageTaken(dano, x, y);
+	drawDamageTaken(dano, x, y, isOponente);
 	
 	document.getElementById(usuario.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,0,255,0.75)";
 	if(usuario.arma != null){
@@ -782,6 +786,7 @@ function drawMagicDamage(dano, usuario, alvo){
 }
 
 function drawPhysicalDamage(dano, usuario, alvo){
+	var isOponente = false;
 	var drawnEff = document.createElement("div");
 	drawnEff.style.position = "absolute";
 	drawnEff.style.width = "78px";
@@ -794,14 +799,17 @@ function drawPhysicalDamage(dano, usuario, alvo){
 	var y = local.offsetTop + parent.offsetTop + 44 - 39;
 	
 	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (60);
+		x += (230);
+		drawnEff.style.right = x + "px";
+		isOponente = true;
+	} else {
+		drawnEff.style.left = x + "px";
 	}
 	
-	drawnEff.style.left = x + "px";
 	drawnEff.style.top = y + "px";
 	
 	document.getElementById('game-container').appendChild(drawnEff);
-	drawDamageTaken(dano, x, y);
+	drawDamageTaken(dano, x, y, isOponente);
 	
 	document.getElementById(usuario.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,172,63,0.75)";
 	if(usuario.arma != null){
@@ -827,7 +835,8 @@ function drawPhysicalDamage(dano, usuario, alvo){
 }
 
 function drawTrueDamage(dano, usuario, alvo){
-	var drawnEff = document.createElement("div");
+	var isOponente = false;
+	var drawnEff = document.createElement("div");	
 	drawnEff.style.position = "absolute";
 	drawnEff.style.width = "107px";
 	drawnEff.style.height = "107px";
@@ -839,14 +848,17 @@ function drawTrueDamage(dano, usuario, alvo){
 	var y = local.offsetTop + parent.offsetTop + 44 - 53;
 	
 	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (70);
+		x += (230);
+		drawnEff.style.right = x + "px";
+		isOponente = true;
+	} else {
+		drawnEff.style.left = x + "px";
 	}
 	
-	drawnEff.style.left = x + "px";
 	drawnEff.style.top = y + "px";
 	
 	document.getElementById('game-container').appendChild(drawnEff);
-	drawDamageTaken(dano, x, y);
+	drawDamageTaken(dano, x, y, isOponente);
 	
 	document.getElementById(usuario.id_div).style.boxShadow = "0px 0px 6px 6px rgba(255,172,63,0.75)";
 	if(usuario.arma != null){
@@ -871,17 +883,25 @@ function drawTrueDamage(dano, usuario, alvo){
 	}
 }
 
-function drawDamageTaken(dano, x, y){
+function drawDamageTaken(dano, x, y, isOponente){
 	var drawnDamageTxt = document.createElement("div");
 	drawnDamageTxt.setAttribute("class", "ingame-float-txt ingame-hp-txt");
 	drawnDamageTxt.innerHTML = "-" + dano + " HP";
-	drawnDamageTxt.style.left = (x + 30) + "px";
+	if(isOponente){
+		drawnDamageTxt.style.right = (x - 30) + "px";
+	} else {
+		drawnDamageTxt.style.left = (x + 30) + "px";
+	}
 	drawnDamageTxt.style.top = (y + 40)  + "px";
 	
 	document.getElementById('game-container').appendChild(drawnDamageTxt);
 	
 	setTimeout(function(){
-		drawnDamageTxt.style.left = (x + 100) + "px";
+		if(isOponente){
+			drawnDamageTxt.style.right = (x - 100) + "px";
+		}else{
+			drawnDamageTxt.style.left = (x + 100) + "px";
+		}
 		drawnDamageTxt.style.top = (y - 20)  + "px";
 		setTimeout(function(){
 			drawnDamageTxt.remove();
@@ -895,20 +915,27 @@ function drawDamageProtTaken(dano, alvo){
 	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
 	var y = local.offsetTop + parent.offsetTop + 44 - 53;
 	
-	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (70);
-	}
-	
 	var drawnDamageTxt = document.createElement("div");
 	drawnDamageTxt.setAttribute("class", "ingame-float-txt ingame-prot-txt");
 	drawnDamageTxt.innerHTML = "-" + dano + " PROT";
-	drawnDamageTxt.style.left = (x + 30) + "px";
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x = x + 230;
+		drawnDamageTxt.style.right = (x - 30) + "px";
+	} else {
+		drawnDamageTxt.style.left = (x + 30) + "px";
+	}
+	
 	drawnDamageTxt.style.top = (y + 40)  + "px";
 	
 	document.getElementById('game-container').appendChild(drawnDamageTxt);
 	
 	setTimeout(function(){
-		drawnDamageTxt.style.left = (x - 100) + "px";
+		if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+			drawnDamageTxt.style.right = (x + 100) + "px";
+		} else {
+			drawnDamageTxt.style.left = (x - 100) + "px";
+		}
 		drawnDamageTxt.style.top = (y - 25)  + "px";
 		setTimeout(function(){
 			drawnDamageTxt.remove();
@@ -922,20 +949,27 @@ function drawManaPay(mana, alvo){
 	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
 	var y = local.offsetTop + parent.offsetTop + 44 - 53;
 	
-	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (70);
-	}
-	
 	var drawnDamageTxt = document.createElement("div");
 	drawnDamageTxt.setAttribute("class", "ingame-float-txt ingame-mana-txt");
 	drawnDamageTxt.innerHTML = "-" + mana + " MANA";
-	drawnDamageTxt.style.left = (x + 30) + "px";
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x = x + 230;
+		drawnDamageTxt.style.right = (x - 30) + "px";
+	} else {
+		drawnDamageTxt.style.left = (x + 30) + "px";
+	}	
+	
 	drawnDamageTxt.style.top = (y + 40)  + "px";
 	
 	document.getElementById('game-container').appendChild(drawnDamageTxt);
 	
 	setTimeout(function(){
-		drawnDamageTxt.style.left = (x - 100) + "px";
+		if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+			drawnDamageTxt.style.right = (x + 100) + "px";
+		} else {
+			drawnDamageTxt.style.left = (x - 100) + "px";
+		}
 		drawnDamageTxt.style.top = (y - 25)  + "px";
 		setTimeout(function(){
 			drawnDamageTxt.remove();
@@ -974,10 +1008,12 @@ function drawBuff(quantidade, alvo, atributo, isBuff){
 	var y = local.offsetTop + parent.offsetTop + 44 - 53;
 	
 	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (70);
+		x = x + 230;
+		drawnEff.style.right = (x - 30) + "px";
+	} else {
+		drawnEff.style.left = (x + 30) + "px";
 	}
 	
-	drawnEff.style.left = x + "px";
 	drawnEff.style.top = y + "px";
 	
 	document.getElementById('game-container').appendChild(drawnEff);
@@ -1003,10 +1039,6 @@ function drawBuffTxt(quantidade, alvo, atributo, isBuff){
 	var x = local.offsetLeft + parent.offsetLeft + 31 - 53;
 	var y = local.offsetTop + parent.offsetTop + 44 - 53;
 	
-	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
-		x += (70);
-	}
-	
 	var drawnTxt = document.createElement("div");	
 	if(isBuff){
 		drawnTxt.setAttribute("class", "ingame-float-txt ingame-buff-txt");
@@ -1015,7 +1047,14 @@ function drawBuffTxt(quantidade, alvo, atributo, isBuff){
 		drawnTxt.setAttribute("class", "ingame-float-txt ingame-debuff-txt");
 		drawnTxt.innerHTML = "-" + quantidade + " " + atributo;
 	}
-	drawnTxt.style.left = (x + 30) + "px";
+	
+	if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+		x = x + 230;
+		drawnTxt.style.right = (x - 30) + "px";
+	} else {
+		drawnTxt.style.left = (x + 30) + "px";
+	}
+	
 	drawnTxt.style.top = (y + 40)  + "px";
 	
 	document.getElementById('game-container').appendChild(drawnTxt);
@@ -1023,7 +1062,11 @@ function drawBuffTxt(quantidade, alvo, atributo, isBuff){
 	setTimeout(function(){
 		var randomX = Math.floor(Math.random() * 300) - 150;
 		var randomY = Math.floor(Math.random() * 300) - 150;
-		drawnTxt.style.left = (x + randomX) + "px";
+		if(local.parentElement.id == "backline-oponente" || local.parentElement.id == "frontline-oponente"){
+			drawnTxt.style.right = (x - randomX) + "px";
+		} else {
+			drawnTxt.style.left = (x + randomX) + "px";
+		}
 		drawnTxt.style.top = (y + randomY)  + "px";
 		setTimeout(function(){
 			drawnTxt.remove();

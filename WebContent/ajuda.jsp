@@ -112,7 +112,7 @@
 			</div>
 		</div>
 		
-		<div class="ajuda-topico" onclick="alternaTopico(6, 685)">Consumíveis</div>
+		<!-- <div class="ajuda-topico" onclick="alternaTopico(6, 685)">Consumíveis</div>
 		<div class="ajuda-dentro" id="ajuda6">
 			<div class="texto-ajuda">
 				<p>Consumíveis são itens usados por heróis que são descartados após o uso</p>
@@ -123,7 +123,7 @@
 					<li><b>Efeito:</b> o texto que fala qual efeito a carta possui, que pode variar bastante.</li>					
 				</ul>
 			</div>
-		</div>
+		</div> -->
 		
 		<div class="ajuda-topico" onclick="alternaTopico(7, 10)">Partidas</div>
 		<div class="ajuda-dentro" id="ajuda7">

@@ -347,10 +347,8 @@ function atacar(jogador, line, slot){
 				}
 			}
 			
-			if(podeAtacar){
-				escreveLog(alvo.carta.nome + " foi atacado por ", + alvo.carta.nome + 'a');
-				efeitoAtaque(jogador, line, slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
-				atacante.ataques_disponiveis--;
+			if(podeAtacar){				
+				efeitoAtaque(jogador, line, slot, selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);				
 			}
 			limparEscolha();
 		}
@@ -388,16 +386,33 @@ function verificaExistencia(jogador, line){
 }
 
 function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
-	if(usuario_line == "front"){
-		var usuario = usuario_jogador.campo.front[usuario_slot];
-	} else {
-		var usuario = usuario_jogador.campo.back[usuario_slot];
-	}
+	var usuario = retornaCarta(usuario_jogador, usuario_line, usuario_slot);
 		
 	if(buscaAtributo(usuario_jogador, usuario_line, usuario_slot,"MANA") >= magia.carta.custo){
 		if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO" || (usuario.carta.id == 44 && magia.carta.afinidade == "AGUA")){ //azura
 			efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
 			return true;
+		} else 
+		if(magia.carta.afinidade == "LUZ"){ //Lucius
+			var temLucius = false;
+			for(var i = 0; i < 3; i++){
+				var heroi = retornaCarta(usuario_jogador, "front", i);
+				if(heroi != null && heroi.carta.id == 51 && heroi.efeitos[54] != true){
+					temLucius = true;
+				}	
+				var heroi = retornaCarta(usuario_jogador, "back", i);
+				if(heroi != null && heroi.carta.id == 51 && heroi.efeitos[54] != true){
+					temLucius = true;
+				}
+			}
+			if(temLucius){
+				efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
+				return true;
+			} else {
+				escreveLog('Afinidades divergentes!', 'e');
+				limparEscolha();
+				return false;
+			}		
 		} else {
 			escreveLog('Afinidades divergentes!', 'e');
 			limparEscolha();
@@ -411,19 +426,37 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 }
 
 function destruirHeroi(jogador, line, slot){
+	var heroi = retornaCarta(jogador, line, slot);		
+	
+	if(heroi.arma != null){		
+		destruirArma(jogador, line, slot, "true");
+	}
+	
+	if(heroi.carta.id == 51 && heroi.efeitos[54] != true){ //lucius				
+		for(var i = 0; i < 3; i++){
+			(function(j){
+				if(jogador.campo.front[j] != null && jogador.campo.front[j] != heroi){
+					var cura = retornaCarta(jogador, "front", j).carta.dano_recebido;
+					buffar(cura, "HP", jogador, line, slot, jogador, "front", j);
+				}
+			}(i));
+			(function(j){
+				if(jogador.campo.back[j] != null && jogador.campo.back[j] != heroi){
+					var cura = retornaCarta(jogador, "back", j).carta.dano_recebido;
+					buffar(cura, "HP", jogador, line, slot, jogador, "back", j);
+				}
+			}(i));
+		}		
+	}
+	
+	if(line == "front"){
+		jogador.campo.front[slot] = null;
+	} else {
+		jogador.campo.back[slot] = null;
+	}
+	
 	setTimeout(function(){
-		var heroi = retornaCarta(jogador, line, slot);		
-		
-		if(heroi.arma != null){		
-			destruirArma(jogador, line, slot, "true");
-		}
-		
-		if(line == "front"){
-			jogador.campo.front[slot] = null;
-		} else {
-			jogador.campo.back[slot] = null;
-		}
-		
+		//o que tá fora tava aqui
 		jogador.descarte.push(heroi);
 		escreveLog(heroi.carta.nome + ' foi derrotado!', 'a');	
 		drawDestruirCarta(jogador, heroi);
@@ -431,8 +464,7 @@ function destruirHeroi(jogador, line, slot){
 }
 
 function destruirArma(jogador, line, slot, porBatalha){
-	var heroi = retornaCarta(jogador, line, slot);
-	
+	var heroi = retornaCarta(jogador, line, slot);	
 	var arma = heroi.arma;
 	
 	if(arma.carta.id == 87){ //perpectus
@@ -441,9 +473,11 @@ function destruirArma(jogador, line, slot, porBatalha){
 	if(porBatalha && heroi.carta.id == 29 && heroi.efeitos[54] != true){ //ryoma
 		//retorna pra mão
 	} else {
-		heroi.arma = null;
-		jogador.descarte.push(arma);
-		drawDestruirCarta(jogador, arma);
+		setTimeout(function(){
+			heroi.arma = null;
+			jogador.descarte.push(arma);
+			drawDestruirCarta(jogador, arma);
+		},1100);		
 	}
 }
 
