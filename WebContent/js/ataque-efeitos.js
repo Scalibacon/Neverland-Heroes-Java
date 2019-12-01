@@ -2,15 +2,19 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 	var atacante = retornaCarta(atacante_jogador, atacante_line, atacante_slot);
 	var alvo = retornaCarta(alvo_jogador, alvo_line, alvo_slot);	
 	
-	var danoF = buscaAtributo(atacante_jogador, atacante_line, atacante_slot, "FOR");
+	if(atacante.carta.id == 104 && atacante.efeitos[54] != true && atacante.usouMagia > 0){ //reyson
+		var danoF = buscaAtributo(atacante_jogador, atacante_line, atacante_slot, "POD");
+	} else {
+		var danoF = buscaAtributo(atacante_jogador, atacante_line, atacante_slot, "FOR");
+	}
 	var foiCritico = critar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
 	var foiDesviado = desviar(atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
 	
-	if(atacante.carta.id == "?"){
-	
+	if(atacante.carta.id == 72 && atacante.efeitos[54] != true){ //hawkeye
+		atacante.carta.critico += 2;
 	}
 	
-	if(alvo.carta.id == 52 && alvo.efeitos[54] != true && alvo.foiAtacado > 0){
+	if(alvo.carta.id == 52 && alvo.efeitos[54] != true && alvo.foiAtacado > 0){ //jakob
 		escreveLog('Alvo inválido para atacar!', 'e');
 		return false;
 	}
@@ -21,9 +25,13 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 	
 	if(!foiDesviado){
 		alvo.foiAtacado++;
+		
+		//alvo magia
 		if(alvo.efeitos[96] == true){ //magma
 			causarDanoVerdadeiro(1, alvo_jogador, alvo_line, alvo_slot, atacante_jogador, atacante_line, atacante_slot);
 		}
+		
+		//alvo atacado
 		if(alvo.carta.id == 27 && alvo.efeitos[54] != true){ //soleil
 			puxarCarta(alvo_jogador);
 		} else 
@@ -31,6 +39,7 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 			danoF = 0;
 		}
 		
+		//atacante
 		if(atacante.carta.id == 23 && alvo.arma == null && atacante.efeitos[54] != true){ //flora
 			danoF += 2;
 		} else 
@@ -52,12 +61,41 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 			if(alvo.arma != null && alvo.arma.carta.tipo_arma == "LANCA"){
 				danoF += 2;
 			}
+		} else 
+		if(atacante.carta.id == 66 && atacante.efeitos[54] != true && alvo.carta.afinidade == "LUZ"){ //corrin
+			danoF += 2;
+			for(var i = 0; i < 3; i++){
+				(function(j){
+					if(atacante_jogador.campo.front[j] != null){
+						buffar(2, "HP", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "front", j);
+					}
+				}(i));
+				(function(j){
+					if(atacante_jogador.campo.back[j] != null){
+						buffar(2, "HP", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, "back", j);
+					}
+				}(i));
+			}
 		}
 		
+		//arma atacante
+		if(atacante.arma != null && atacante.arma.carta.id == 7 && alvo.carta.afinidade == "AGUA"){ //harpe
+			danoF += 2;
+		} else 
+		if(atacante.arma != null && atacante.arma.carta.id == 9){ //cortius
+			if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") > buscaAtributo(atacante_jogador, atacante_line, atacante_slot, "HP")){
+				danoF += 1;
+			}				
+		}
 		
-		if(foiCritico){ //efeitos de crítico
+		//efeitos de crítico
+		if(foiCritico){ 
 			danoF = danoF * 2;
 			escreveLog("O ataque foi um acerto crítico!", "a");
+			
+			if(atacante.arma != null && atacante.arma.carta.id == 8){ //harpe
+				danoF += 2;
+			}
 			
 			if(atacante.carta.id == 5 && atacante.efeitos[54] != true){ //rebecca
 				puxarCarta(atacante_jogador);
@@ -103,7 +141,7 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 		var alvo_def_before = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "DEF");
 		var alvo_res_before = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "RES");
 		
-		if(atacante.carta.id == 59 && atacante.efeitos[54] != true && atacante.usouMagia > 0){
+		if(atacante.carta.id == 59 && atacante.efeitos[54] != true && atacante.usouMagia > 0){ //alm archer
 			var dano_causado = causarDanoMagico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot, "NEUTRO");
 		} else {
 			var dano_causado = causarDanoFisico(danoF, atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
@@ -151,14 +189,25 @@ function efeitoAtaque(atacante_jogador, atacante_line, atacante_slot, alvo_jogad
 		if(atacante.carta.id == 48 && atacante.efeitos[54] != true && atacante.arma == null){ //kagero
 			setTimeout(function() { buscarNoDeck("ARMA", "ADAGA") },500);
 		} else 
-		if(atacante.carta.id == 64 && atacante.efeitos[54] != true){ //surt
+		if(atacante.carta.id == 64 && atacante.efeitos[54] != true){ //surtur
 			if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null || buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
 				buffar(alvo_def_before, "DEF", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, atacante_line, atacante_slot);
 				buffar(alvo_res_before, "RES", atacante_jogador, atacante_line, atacante_slot, atacante_jogador, atacante_line, atacante_slot);
 			}
+		} else 
+		if(atacante.carta.id == 65 && atacante.efeitos[54] != true && retornaCarta(alvo_jogador, alvo_line, alvo_slot) != null){ //cordelia
+			var debuff = -1;
+			if(foiCritico){
+				debuff = -2;
+			}
+			buffar(debuff, "FOR", atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+			buffar(debuff, "POD", atacante_jogador, atacante_line, atacante_slot, alvo_jogador, alvo_line, alvo_slot);
+		} else 
+		if(atacante.carta.id == 66 && atacante.efeitos[54] != true && retornaCarta(alvo_jogador, alvo_line, alvo_slot) != null){ //corrin
+			console.log('mudou pora luz');
+			alvo.carta.afinidade = "LUZ";
 		}
-		
-		
+				
 			
 	} else {
 		escreveLog("O ataque foi esquivado!", "a");

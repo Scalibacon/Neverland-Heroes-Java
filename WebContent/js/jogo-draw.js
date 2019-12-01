@@ -123,7 +123,7 @@ function desenhaLateralDireita(){
 	var createdBtnPassar = document.createElement("div");
 	createdBtnPassar.setAttribute("class", "ingame-btn");
 	createdBtnPassar.setAttribute("id", "btn-passar");
-	createdBtnPassar.addEventListener("click", function(){ passarTurno(); });
+	createdBtnPassar.addEventListener("click", function(){ passarTurno(jogo.jogador1); });
 	createdBtnPassar.innerHTML = "Passar";
 	document.getElementById('game-container').appendChild(createdBtnPassar);
 	

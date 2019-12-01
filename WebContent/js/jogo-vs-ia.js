@@ -268,11 +268,15 @@ function finalizaTurno(jogador){
 				heroi.efeitos[18] = null;
 				heroi.efeitos[30] = null;
 				heroi.efeitos[58] = null;
+				heroi.efeitos[54] = null;
+				
+				if(heroi.arma != null && heroi.arma.carta.id == 32){ //excalibur
+					buffar(2, "HP", jogador, line[k], i, jogador, line[k], i);
+				}
 				
 				if(heroi.carta.id == 25 && heroi.efeitos[54] != true && heroi.ataques_disponiveis > 0){ //granmarg
 					buffar(2, "HP", jogador, line[k], i, jogador, line[k], i);
-				} else 
-					
+				} else 					
 				if(heroi.carta.id == 45 && heroi.efeitos[54] != true && heroi.arma != null && heroi.arma.carta.tipo_arma == "ESPADA"){ //arthur
 					for(var j = 0; j < 3; j++){
 						if(jogador.campo.front[j] != null && jogador.campo.front[j] != heroi){
@@ -284,18 +288,14 @@ function finalizaTurno(jogador){
 					}				
 				}			
 			}
-			if(jogador.campo.back[i] != null){
-				
-			}
 		}
 	}
 	jogador.estado == game_status.OBSERVANDO;
 }
 
-function passarTurno(){
-	if(jogo.jogador1.estado = game_status.JOGANDO){
-		//alert('passou o turno');
-		finalizaTurno(jogo.jogador1);
+function passarTurno(jogador){
+	if(jogador.estado = game_status.JOGANDO){
+		finalizaTurno(jogador);
 	}
 }
 
@@ -386,40 +386,47 @@ function verificaExistencia(jogador, line){
 }
 
 function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
+	var temAfinidade = false;
+	var temMana = false
 	var usuario = retornaCarta(usuario_jogador, usuario_line, usuario_slot);
-		
+	
 	if(buscaAtributo(usuario_jogador, usuario_line, usuario_slot,"MANA") >= magia.carta.custo){
-		if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO" || (usuario.carta.id == 44 && magia.carta.afinidade == "AGUA")){ //azura
-			efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
-			return true;
-		} else 
-		if(magia.carta.afinidade == "LUZ"){ //Lucius
-			var temLucius = false;
-			for(var i = 0; i < 3; i++){
-				var heroi = retornaCarta(usuario_jogador, "front", i);
-				if(heroi != null && heroi.carta.id == 51 && heroi.efeitos[54] != true){
-					temLucius = true;
-				}	
-				var heroi = retornaCarta(usuario_jogador, "back", i);
-				if(heroi != null && heroi.carta.id == 51 && heroi.efeitos[54] != true){
-					temLucius = true;
-				}
-			}
-			if(temLucius){
-				efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
-				return true;
-			} else {
-				escreveLog('Afinidades divergentes!', 'e');
-				limparEscolha();
-				return false;
-			}		
-		} else {
-			escreveLog('Afinidades divergentes!', 'e');
-			limparEscolha();
-			return false;
-		}		
+		temMana = true;
 	} else {
 		escreveLog('Mana Insuficiente!', 'e');
+		limparEscolha();
+		return false;
+	}
+	
+	if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO" 
+	|| (usuario.carta.id == 44 && magia.carta.afinidade == "AGUA") //azura
+	|| (usuario.carta.id == 71 && magia.carta.afinidade == "LUZ") //gunnthra
+	|| (usuario.carta.id == 73 && magia.carta.afinidade == "TREVAS") //robin
+	|| (usuario.carta.id == 104 && magia.carta.afinidade != "TREVAS")
+	|| (usuario.arma != null && usuario.arma.carta.id == 11 && magia.carta.afinidade == "FOGO")){ //solaris
+		temAfinidade = true;
+	} else 
+	if(magia.carta.afinidade == "LUZ"){ //Lucius
+		var temLucius = false;
+		for(var i = 0; i < 3; i++){
+			var heroi = retornaCarta(usuario_jogador, "front", i);
+			if(heroi != null && heroi.carta.id == 51 && heroi.efeitos[54] != true){
+				temLucius = true;
+			}	
+			var heroi = retornaCarta(usuario_jogador, "back", i);
+			if(heroi != null && heroi.carta.id == 51 && heroi.efeitos[54] != true){
+				temLucius = true;
+			}
+		}
+		if(temLucius){
+			temAfinidade = true;
+		}		
+	} 
+	
+	if(temMana && temAfinidade){
+		efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot);
+	} else {
+		escreveLog('Afinidades divergentes!', 'e');
 		limparEscolha();
 		return false;
 	}
@@ -467,6 +474,9 @@ function destruirArma(jogador, line, slot, porBatalha){
 	var heroi = retornaCarta(jogador, line, slot);	
 	var arma = heroi.arma;
 	
+	if(arma.carta.id == 32 && !porBatalha){
+		return false;
+	} else
 	if(arma.carta.id == 87){ //perpectus
 		//retorna pra mão
 	} else 

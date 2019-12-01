@@ -528,5 +528,26 @@ function attUsarMagia(jogador, line, slot, magia){
 				}
 			}(i));
 		}
+	} else 
+	if(usuario.carta.id == 69 && usuario.efeitos[54] != true){ //gharnef
+		puxarCarta(jogador);
+	} else 
+	if(usuario.carta.id == 70 && usuario.efeitos[54] != true){ //olivia
+		buffar(1, "FOR", jogador, line, slot, jogador, line, slot);
+		buffar(2, "HP", jogador, line, slot, jogador, line, slot);
+	} else 
+	if(usuario.carta.id == 71 && usuario.efeitos[54] != true){ //gunnthra
+		for(var i = 0; i < 3; i++){
+			(function(j){
+				if(jogador.campo.front[j] != null){
+					buffar(1, "DEF", jogador, line, slot, jogador, "front", j);
+				}
+			}(i));
+			(function(j){
+				if(jogador.campo.back[j] != null){
+					buffar(1, "DEF", jogador, line, slot, jogador, "back", j);
+				}
+			}(i));
+		}
 	}
 }
