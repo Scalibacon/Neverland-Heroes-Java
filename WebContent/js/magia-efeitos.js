@@ -40,7 +40,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 							alvo.arma = null;
 							drawBuff(1, alvo, "ARMA", false);
 							selecionando.alvo.jogador.mao.push(arma);
-							drawPuxarCarta(usuario_jogador, arma);
+							drawPuxarCarta(selecionando.alvo.jogador, arma);
 						}													
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
@@ -119,7 +119,7 @@ function efeitoMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 						attUsarMagia(usuario_jogador, usuario_line, usuario_slot, magia);
 						var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);						
 						alvo.efeitos[18] = true;
-						drawBuff(1, alvo, "SILÊNCIO", false);				
+						drawBuff(-1, alvo, "SILÊNCIO", false);				
 						enviarPraRecarga(usuario_jogador, magia);						
 					}
 					limparEscolha();
@@ -549,5 +549,24 @@ function attUsarMagia(jogador, line, slot, magia){
 				}
 			}(i));
 		}
+	}
+	
+	//armas
+	if(usuario.arma != null && usuario.arma.carta.id == 55){ //staffar
+		for(var i = 0; i < 3; i++){
+			(function(j){
+				if(jogador.campo.front[j] != null){
+					buffar(1, "HP", jogador, line, slot, jogador, "front", j);
+				}
+			}(i));
+			(function(j){
+				if(jogador.campo.back[j] != null){
+					buffar(1, "HP", jogador, line, slot, jogador, "back", j);
+				}
+			}(i));
+		}
+	} else 
+	if(usuario.arma != null && usuario.arma.carta.id == 87){ //perpectus
+		buffar(3, "PROT", jogador, line, slot, jogador, line, slot);
 	}
 }

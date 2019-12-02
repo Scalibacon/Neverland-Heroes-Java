@@ -72,7 +72,7 @@ function efeitoAoEquipar(jogador, line, slot){
 		
 		case 50:
 			arma_buff.forca += 3 + checaPericia(heroi);
-			arma_buff.esquiva += -1 + checaPericia(heroi);
+			arma_buff.esquiva += -2 + checaPericia(heroi);
 		break;
 		
 		case 54:
@@ -215,7 +215,7 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 		var alvo = alvo_jogador.campo.back[alvo_slot];
 	}
 	
-	if(alvo.carta.protecao > 0){
+	if(alvo.carta.protecao > 0 && (usuario.arma == null || usuario.arma.carta.id != 75)){ //gae dearg
 		var aux = JSON.parse(JSON.stringify(alvo.carta.protecao));
 		alvo.carta.protecao -= dano;
 		if(alvo.carta.protecao <= 0){
@@ -227,10 +227,27 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 		dano -= aux;
 	}
 	
-	dano_em_si = dano - buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "DEF");
+	var defesa_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "DEF");
+	
+	if(usuario.arma != null && usuario.arma.carta.id == 76){
+		defesa_alvo -= 3;
+		if(defesa_alvo < 0){
+			defesa_alvo = 0;
+		}
+	}	
+	
+	dano_em_si = dano - defesa_alvo;
 	if(dano_em_si <= 0){
 		dano_em_si = 0;
 	}
+	
+	if(alvo.arma != null && alvo.arma.carta.id == 79 && usuario.carta.rank < alvo.carta.rank){ //caliburn
+		dano_em_si -= 2;
+		if(dano_em_si <= 0){
+			dano_em_si = 0;
+		}
+	}
+	
 	alvo.carta.dano_recebido += dano_em_si;
 	escreveLog(alvo.carta.nome + " recebeu dano físico = " + dano_em_si, "a");
 	drawPhysicalDamage(dano_em_si, usuario, alvo);
@@ -252,14 +269,49 @@ function causarDanoFisico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 				}(i));
 			}
 		}
+		
+		if(usuario.arma != null && usuario.arma.carta.id == 74){ //gae buidhe
+			alvo.efeitos[74] = true;
+		} else 
+		if(usuario.arma != null && usuario.arma.carta.id == 75){ //gae dearg
+			buffar(-2, "RES", usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot);
+		} else 
+		if(usuario.arma != null && usuario.arma.carta.id == 77){ //arondight dark
+			buffar(-3, "MANA", usuario_jogador, usuario_line, usuario_slot, alvo_jogador, alvo_line, alvo_slot);
+		} else 
+		if(usuario.arma != null && usuario.arma.carta.id == 78){ //arondight
+			for(var i = 0; i < 3; i++){
+				(function(j){
+					if(usuario_jogador.campo.front[j] != null){
+						buffar(1, "HP", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "front", j);
+					}
+					if(usuario_jogador.campo.back[j] != null){
+						buffar(1, "HP", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, "back", j);
+					}				
+				}(i));
+			}
+		}
+		
+		if(alvo.arma != null && alvo.arma.carta.id == 81){ //clypeus
+			puxarCarta(alvo_jogador);
+		} else 
+		if(alvo.arma != null && alvo.arma.carta.id == 83){ //fallent
+			buffar(1, "FOR", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+			buffar(1, "POD", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+		}
 	}
 	
-	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
+	//se o alvo morreu
+	if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null || buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
 		var pod_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "POD");
 		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
 		
 		if(usuario.carta.id == 40 && usuario.efeitos[54] != true){ //aversa
 			buffar(pod_alvo, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
+		}
+		
+		if(usuario.arma != null && usuario.arma.carta.id == 63){ //imperium
+			buffar(1, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
 		}
 			
 	}
@@ -297,6 +349,13 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 		dano_em_si = 0;
 	}
 	
+	if(alvo.arma != null && alvo.arma.carta.id == 79 && usuario.carta.rank < alvo.carta.rank){ //caliburn
+		dano_em_si -= 2;
+		if(dano_em_si <= 0){
+			dano_em_si = 0;
+		}
+	}
+	
 	if(alvo.carta.id == 1 && alvo.efeitos[54] != true && afinidade == "TREVAS"){ //Leanne
 		dano_em_si = 0;
 	}
@@ -326,9 +385,21 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 				}(i));
 			}
 		}
+		
+		if(alvo.arma != null && alvo.arma.carta.id == 80){ //schut
+			buffar(2, "PROT", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+		} else 
+		if(alvo.arma != null && alvo.arma.carta.id == 81){ //clypeus
+			puxarCarta(alvo_jogador);
+		} else 
+		if(alvo.arma != null && alvo.arma.carta.id == 83){ //fallent
+			buffar(1, "FOR", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+			buffar(1, "POD", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+		}
 	}
 	
-	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){ //se destruir o alvo com dano mágico
+	//se o alvo morreu
+	if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null || buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
 		var pod_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "POD");
 		
 		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);
@@ -336,6 +407,9 @@ function causarDanoMagico(dano, usuario_jogador, usuario_line, usuario_slot, alv
 		//armas
 		if(usuario.arma != null && usuario.arma.carta.id == 11){ //solaris
 			buffar(usuario.carta.mana_gasta, "MANA", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
+		} else 
+		if(usuario.arma != null && usuario.arma.carta.id == 63){ //imperium
+			buffar(1, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
 		}
 		
 		if(usuario.carta.id == 4 && usuario.efeitos[54] != true){ //raigh
@@ -379,6 +453,11 @@ function causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot,
 	if(dano_em_si <= 0){
 		dano_em_si = 0;
 	}
+	
+	if(alvo.arma != null && alvo.arma.carta.id == 82){ //viridian
+		dano_em_si = 0;
+	}
+	
 	alvo.carta.dano_recebido += dano_em_si;
 	escreveLog(alvo.carta.nome + " recebeu dano verdadeiro = " + dano_em_si, "a");
 	drawTrueDamage(dano_em_si, usuario, alvo);
@@ -396,15 +475,28 @@ function causarDanoVerdadeiro(dano, usuario_jogador, usuario_line, usuario_slot,
 				}(i));
 			}
 		}
+		
+		if(alvo.arma != null && alvo.arma.carta.id == 81){ //clypeus
+			puxarCarta(alvo_jogador);
+		} else 
+		if(alvo.arma != null && alvo.arma.carta.id == 83){ //fallent
+			buffar(1, "FOR", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+			buffar(1, "POD", alvo_jogador, alvo_line, alvo_slot, alvo_jogador, alvo_line, alvo_slot);
+		}
 	}
 	
-	if(buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
+	//se o alvo morreu
+	if(retornaCarta(alvo_jogador, alvo_line, alvo_slot) == null || buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "HP") <= 0){
 		var pod_alvo = buscaAtributo(alvo_jogador, alvo_line, alvo_slot, "POD");	
 		destruirHeroi(alvo_jogador, alvo_line, alvo_slot);			
 		
 		if(usuario.carta.id == 40 && usuario.efeitos[54] != true){ //aversa
 			buffar(pod_alvo, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
-		}		
+		}	
+		
+		if(usuario.arma != null && usuario.arma.carta.id == 63){ //imperium
+			buffar(1, "POD", usuario_jogador, usuario_line, usuario_slot, usuario_jogador, usuario_line, usuario_slot);
+		}
 	}
 	
 	return dano_em_si;
@@ -420,7 +512,10 @@ function buffar(quantidade, atributo, usuario_jogador, usuario_line, usuario_slo
 	
 	var valor;
 	switch(atributo){
-		case "HP":			
+		case "HP":
+			if(alvo.efeitos[74] == true){
+				quantidade = 0;
+			}
 			aux = JSON.parse(JSON.stringify(alvo.carta.dano_recebido));
 			alvo.carta.dano_recebido -= quantidade;
 			if(alvo.carta.dano_recebido < 0){

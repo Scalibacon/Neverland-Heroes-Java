@@ -183,10 +183,12 @@ function buscaAtributo(jogador, line, slot, atributo){
 	if(atributo == "FOR"){
 		var temCelica = false;
 		for(var i = 0; i < 3; i++){
-			if(retornaCarta(jogador, "front", i) != null && retornaCarta(jogador, "front", i).carta.id == 34 && retornaCarta(jogador, "front", i).efeitos[54] != true){
+			var heroi_celica = retornaCarta(jogador, "front", i);
+			if(heroi_celica != null && heroi_celica.carta.id == 34 && heroi_celica.efeitos[54] != true){
 				temCelica = true;
 			}	
-			if(retornaCarta(jogador, "back", i) != null && retornaCarta(jogador, "back", i).carta.id == 34 && retornaCarta(jogador, "back", i).efeitos[54] != true){
+			heroi_celica = retornaCarta(jogador, "back", i);
+			if(heroi_celica != null && heroi_celica.carta.id == 34 && heroi_celica.efeitos[54] != true){
 				temCelica = true;
 			}	
 		}

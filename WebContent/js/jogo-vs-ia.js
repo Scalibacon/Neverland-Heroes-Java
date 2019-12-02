@@ -173,6 +173,8 @@ function moverHeroi(jogador, line, slot){
 			drawPosicionarHeroi(jogador, carta, newLine, newSlot);
 			carta.movimentos_disponiveis--;
 			limparEscolha();
+		} else {
+			return false;
 		}
 	} else {
 		var carta = jogador.campo.back[slot];	
@@ -185,6 +187,8 @@ function moverHeroi(jogador, line, slot){
 			drawPosicionarHeroi(jogador, carta, newLine, newSlot);
 			carta.movimentos_disponiveis--;
 			limparEscolha();
+		} else {
+			return false;
 		}
 	}	
 	
@@ -272,6 +276,26 @@ function finalizaTurno(jogador){
 				
 				if(heroi.arma != null && heroi.arma.carta.id == 32){ //excalibur
 					buffar(2, "HP", jogador, line[k], i, jogador, line[k], i);
+				} else 
+				if(heroi.arma != null && heroi.arma.carta.id == 63){ //imperium
+					causarDanoVerdadeiro(2, jogador, line[k], i, jogador, line[k], i);
+					buffar(-2, "MANA", jogador, line[k], i, jogador, line[k], i);
+				} else 
+				if(heroi.arma != null && heroi.arma.carta.id == 77){ //arondight dark
+					buffar(-2, "MANA", jogador, line[k], i, jogador, line[k], i);
+				} else 
+				if(heroi.arma != null && heroi.arma.carta.id == 78){ //arondight
+					for(var j = 0; j < 3; j++){
+						if(jogador.campo.front[j] != null && jogador.campo.front[j] != heroi){
+							buffar(3, "MANA", jogador, line[k], i, jogador, "front", j);
+						}
+						if(jogador.campo.back[j] != null && jogador.campo.back[j] != heroi){
+							buffar(3, "MANA", jogador, line[k], i, jogador, "back", j);
+						}				
+					}
+				}else 
+				if(heroi.arma != null && heroi.arma.carta.id == 90 && heroi.carta.rank < 4){ //ea
+					causarDanoVerdadeiro(10, jogador, line[k], i, jogador, line[k], i);
 				}
 				
 				if(heroi.carta.id == 25 && heroi.efeitos[54] != true && heroi.ataques_disponiveis > 0){ //granmarg
@@ -316,11 +340,7 @@ function atacar(jogador, line, slot){
 	selecionando.alvo = false;
 	interval_selecionando = setInterval(function(){
 		if(selecionando.alvo){
-			if(selecionando.alvo.line == "front"){
-				var alvo = selecionando.alvo.jogador.campo.front[selecionando.alvo.slot];
-			} else {
-				var alvo = selecionando.alvo.jogador.campo.back[selecionando.alvo.slot];
-			}
+			var alvo = retornaCarta(selecionando.alvo.jogador, selecionando.alvo.line, selecionando.alvo.slot);
 			
 			//Validar ataque
 			var podeAtacar = true;
@@ -399,11 +419,14 @@ function usarMagia(magia, usuario_jogador, usuario_line, usuario_slot){
 	}
 	
 	if(usuario.carta.afinidade == magia.carta.afinidade || magia.carta.afinidade == "NEUTRO" 
-	|| (usuario.carta.id == 44 && magia.carta.afinidade == "AGUA") //azura
-	|| (usuario.carta.id == 71 && magia.carta.afinidade == "LUZ") //gunnthra
-	|| (usuario.carta.id == 73 && magia.carta.afinidade == "TREVAS") //robin
-	|| (usuario.carta.id == 104 && magia.carta.afinidade != "TREVAS")
-	|| (usuario.arma != null && usuario.arma.carta.id == 11 && magia.carta.afinidade == "FOGO")){ //solaris
+	|| (usuario.carta.id == 44 && magia.carta.afinidade == "AGUA" && usuario.efeitos[54] != true) //azura
+	|| (usuario.carta.id == 71 && magia.carta.afinidade == "LUZ" && usuario.efeitos[54] != true) //gunnthra
+	|| (usuario.carta.id == 73 && magia.carta.afinidade == "TREVAS" && usuario.efeitos[54] != true) //robin
+	|| (usuario.carta.id == 104 && magia.carta.afinidade != "TREVAS" && usuario.efeitos[54] != true) //reyson
+	|| (usuario.arma != null && usuario.arma.carta.id == 11 && magia.carta.afinidade == "FOGO") //solaris
+	|| (usuario.arma != null && usuario.arma.carta.id == 63 && magia.carta.afinidade == "FOGO") //imperium
+	|| (usuario.arma != null && usuario.arma.carta.id == 87 && magia.carta.afinidade == "AGUA") //perpectus
+	|| (usuario.arma != null && usuario.arma.carta.id == 89 && magia.carta.afinidade == "VENTO")){ //pluma
 		temAfinidade = true;
 	} else 
 	if(magia.carta.afinidade == "LUZ"){ //Lucius
@@ -474,19 +497,40 @@ function destruirArma(jogador, line, slot, porBatalha){
 	var heroi = retornaCarta(jogador, line, slot);	
 	var arma = heroi.arma;
 	
-	if(arma.carta.id == 32 && !porBatalha){
+	if(arma.carta.id == 32 && !porBatalha){ //excalibur
 		return false;
-	} else
-	if(arma.carta.id == 87){ //perpectus
-		//retorna pra mão
 	} else 
-	if(porBatalha && heroi.carta.id == 29 && heroi.efeitos[54] != true){ //ryoma
-		//retorna pra mão
+	if((heroi.carta.id == 29 && porBatalha && heroi.efeitos[54] != true) //ryoma
+	|| arma.carta.id == 87){ //perpectus
+		document.getElementById(arma.id_div).remove();
+		heroi.arma = null;
+		jogador.mao.push(arma);
+		drawPuxarCarta(jogador, arma);
 	} else {
 		setTimeout(function(){
 			heroi.arma = null;
 			jogador.descarte.push(arma);
 			drawDestruirCarta(jogador, arma);
+			
+			if(arma.carta.id == 76){ //gae bolg
+				for(var i = 0; i < 3; i++){
+					(function(j){
+						if(jogo.jogador1.campo.front[j] != null){
+							causarDanoVerdadeiro(2, jogo.jogador1, "front", j, jogo.jogador1, "front", j);
+						}
+						if(jogo.jogador1.campo.back[j] != null){
+							causarDanoVerdadeiro(2, jogo.jogador1, "back", j, jogo.jogador1, "back", j);
+						}
+						if(jogo.jogador2.campo.front[j] != null){
+							causarDanoVerdadeiro(2, jogo.jogador2, "front", j, jogo.jogador2, "front", j);
+						}
+						if(jogo.jogador2.campo.back[j] != null){
+							causarDanoVerdadeiro(2, jogo.jogador2, "back", j, jogo.jogador2, "back", j);
+						}				
+					}(i));
+				}
+			}
+			
 		},1100);		
 	}
 }
