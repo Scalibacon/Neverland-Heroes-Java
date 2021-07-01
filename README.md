@@ -27,7 +27,7 @@ As partidas são disputadas entre 2 jogadores e vence aquele que deixar o campo 
 
 ### Exemplo de arma
 
-<img width="550px" style="background-color: rgba(222,222,222,1)" alt="herói" src="./WebContent/img/help-weapon.png">
+<img width="550px" style="background-color: white;" alt="herói" src="./WebContent/img/help-weapon.png">
 
 
 ## Tá, mas e aí?
