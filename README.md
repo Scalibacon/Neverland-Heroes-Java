@@ -5,6 +5,7 @@
 <img align="left" alt="css3" src="https://img.shields.io/badge/-css3-1572B6?logo=css3&logoColor=white&style=for-the-badge" />
 <img align="left" alt="html5" src="https://img.shields.io/badge/-html5-E34F26?logo=html5&logoColor=white&style=for-the-badge" />
 
+<br>
 ## Detalhes
 
 - Este projeto foi feito como parte de um trabalho para a disciplina de Laboratório de Engenharia de Software da faculdade. Nele devíamos utilizar várias tecnologias em conjunto, como back-end, front-end e banco de dados, além dos diagramas da UML. Eu decidi fazer um jogo de cartas estilo TCG, como Hearthstone ou Yu-gi-oh. 
@@ -22,7 +23,9 @@ As partidas são disputadas entre 2 jogadores e vence aquele que deixar o campo 
 
 ### Exemplo de herói
 
-<img width="550px" style="background-color: rgba(222,222,222,1)" alt="herói" src="./WebContent/img/help-hero.png">
+<div style="background-color: rgba(222,222,222,1);">
+<img width="550px" alt="herói" src="./WebContent/img/help-hero.png">
+</div>                                                                         
 
 
 ### Exemplo de magia
