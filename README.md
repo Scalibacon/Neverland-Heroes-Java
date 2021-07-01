@@ -6,6 +6,7 @@
 <img align="left" alt="html5" src="https://img.shields.io/badge/-html5-E34F26?logo=html5&logoColor=white&style=for-the-badge" />
 
 <br>
+<br>
 
 ## Detalhes
 
@@ -19,14 +20,13 @@ Nesse jogo é possível criar uma conta, ganhar cartas e jogar (jura?). Existem 
 
 ## Resuminho aqui também
 
-As partidas são disputadas entre 2 jogadores e vence aquele que deixar o campo do adversário sem nenhuma carta de herói. Cada baralho deve ter 1 campeão, que nada mais é do que um herói que já vai começar no seu campo. Cartas de magia devem ser usadas por um herói em campo e que tenha a mesma afinidade elemental EEEE mana suficiente. Heróis podem ser equipados por 1 carta de arma, que deve ser do mesmo tipo mostrado na carta do herói. Não vou falar tudo aqui se não vai virar um livro, mas vou deixar algumas imagens que ilustram bem como funciona o jogo.
+As partidas são disputadas entre 2 jogadores e vence aquele que deixar o campo do adversário sem nenhuma carta de herói. Cada baralho deve ter 1 campeão, que nada mais é do que um herói que já vai começar no seu campo. Cartas de magia devem ser usadas por um herói em campo e que tenha a mesma afinidade elemental EEEE mana suficiente. Heróis podem ser equipados por 1 carta de arma, que deve ser do mesmo tipo mostrado na carta do herói. Não vou falar tudo aqui se não vai virar um livro, mas vou deixar algumas imagens que ilustram bem como funciona o jogo. 
+PS: Se tiver usando um tema escuro talvez o texto das imagens fique um pouco ilegívei.
 
 
 ### Exemplo de herói
 
-<p style="background-color: rgba(222,222,222,1);">
-<img width="550px" alt="herói" src="./WebContent/img/help-hero.png">
-</p>                                                                         
+<img width="550px" alt="herói" src="./WebContent/img/help-hero.png">                                                   
 
 
 ### Exemplo de magia
