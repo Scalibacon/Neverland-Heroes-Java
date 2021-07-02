@@ -39,6 +39,6 @@ PS: Se tiver usando um tema escuro talvez o texto das imagens fique um pouco ile
 <img width="550px" style="background-color: white;" alt="herói" src="./WebContent/img/help-weapon.png">
 
 
-## Tá, mas e aí?
+## O triste fim de Neverland Heroes 😔
 
 Infelizmente esse projeto não pôde ver a sua conclusão. A apresentação do trabalho foi adiantada, então algumas features que ainda faltavam ser implementadas não foram (e eu não ia fazer isso durante as minhas férias u.u). Mas como foi um erro no cronograma da aula esses detalhes foram relevados e deu pra tirar aquele 10 gostosinho. Só que... como eu disse, o código tá bem emaranhado e asqueroso, então dar manutenção ou adicionar as funções que restaram ficou beeem difícil. E por isso não finalizei esse jogo. 2 meses depois não entendia quase nada do que tinha escrito kkk.
